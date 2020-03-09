@@ -1,6 +1,7 @@
 package com.gaalf.presenter;
 
 import com.gaalf.GaalfGame;
+import com.gaalf.view.BaseGameView;
 import com.gaalf.view.BaseView;
 import com.gaalf.view.GameView;
 
@@ -10,6 +11,7 @@ public class GamePresenter extends BaseGamePresenter {
     private BaseView view;
 
     public GamePresenter(final GaalfGame game){
+        super();
         this.game = game;
         view = new GameView(game.getBatch(), this);
 
@@ -17,7 +19,7 @@ public class GamePresenter extends BaseGamePresenter {
 
 
     @Override
-    public BaseView getView() {
+    public BaseGameView getView() {
         return null;
     }
 }

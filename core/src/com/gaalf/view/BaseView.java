@@ -1,13 +1,12 @@
 package com.gaalf.view;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.gaalf.GaalfGame;
 import com.gaalf.presenter.BasePresenter;
 
-public abstract class BaseView extends Stage implements Screen {
+public abstract class BaseView extends Stage{
 
     public static ExtendViewport viewport = new ExtendViewport(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT);
     public BasePresenter presenter;
@@ -19,15 +18,13 @@ public abstract class BaseView extends Stage implements Screen {
 
     public abstract void update(float delta);
 
-    @Override
     public final void resize(int width, int height){
         getViewport().update(width, height);
     }
 
-    @Override
     public void render(float delta){
-        super.getCamera().update();
-        super.getBatch().setProjectionMatrix(this.getCamera().combined);
+//        super.getCamera().update();
+//        super.getBatch().setProjectionMatrix(this.getCamera().combined);
         super.act();
         super.draw();
     }

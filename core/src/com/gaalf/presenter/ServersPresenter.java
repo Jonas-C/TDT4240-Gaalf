@@ -14,6 +14,6 @@ public class ServersPresenter extends BaseMenuPresenter {
     }
     @Override
     public BaseView getView() {
-        return null;
+        return view;
     }
 }

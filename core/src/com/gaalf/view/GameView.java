@@ -1,7 +1,6 @@
 package com.gaalf.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.gaalf.presenter.BasePresenter;
 import com.gaalf.presenter.GamePresenter;
 
 public class GameView extends BaseGameView {
@@ -9,6 +8,8 @@ public class GameView extends BaseGameView {
     public GameView(SpriteBatch batch, GamePresenter presenter){
         super(batch, presenter);
     }
+
+
     @Override
     public void update(float delta) {
 
@@ -16,11 +17,6 @@ public class GameView extends BaseGameView {
 
     @Override
     public void show() {
-
-    }
-
-    @Override
-    public void render(float delta) {
 
     }
 
