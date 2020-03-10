@@ -6,11 +6,10 @@ import com.gaalf.view.SettingsView;
 
 public class SettingsPresenter extends BaseMenuPresenter {
 
-    private final GaalfGame game;
     private BaseView view;
 
     public SettingsPresenter(final GaalfGame game){
-        this.game = game;
+        super(game);
         view = new SettingsView(game.getBatch(), this);
     }
 

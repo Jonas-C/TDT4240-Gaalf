@@ -6,11 +6,10 @@ import com.gaalf.view.LobbyView;
 
 public class LobbyPresenter extends BaseMenuPresenter {
 
-    private final GaalfGame game;
     private BaseView view;
 
     public LobbyPresenter(final GaalfGame game){
-        this.game = game;
+        super(game);
         view = new LobbyView(game.getBatch(), this);
 
     }

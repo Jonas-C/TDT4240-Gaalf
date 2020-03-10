@@ -14,7 +14,7 @@ public class MainMenuView extends BaseMenuView {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("try");
+                presenter.play();
             }
         });
         getTable().add(playButton).padTop(50);

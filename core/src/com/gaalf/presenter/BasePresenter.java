@@ -1,9 +1,16 @@
 package com.gaalf.presenter;
 
 import com.badlogic.gdx.ScreenAdapter;
+import com.gaalf.GaalfGame;
 import com.gaalf.view.BaseView;
 
 public abstract class BasePresenter extends ScreenAdapter {
+
+    final GaalfGame game;
+
+    public BasePresenter(final GaalfGame game){
+        this.game = game;
+    }
 
 
 
