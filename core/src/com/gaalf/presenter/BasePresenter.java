@@ -1,6 +1,5 @@
 package com.gaalf.presenter;
 
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.gaalf.view.BaseView;
 
@@ -9,7 +8,6 @@ public abstract class BasePresenter extends ScreenAdapter {
 
 
     public abstract BaseView getView();
-
 
     @Override
     public void render(float delta) {

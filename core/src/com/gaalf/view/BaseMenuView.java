@@ -9,7 +9,7 @@ import com.gaalf.presenter.BaseMenuPresenter;
 public abstract class BaseMenuView extends BaseView {
 
     Table table;
-    Skin skin = new Skin(Gdx.files.internal("skin/flat-earth-ui.json"));
+    private Skin skin = new Skin(Gdx.files.internal("skin/flat-earth-ui.json"));
 
     public BaseMenuView(SpriteBatch batch, BaseMenuPresenter presenter){
         super(batch, presenter);

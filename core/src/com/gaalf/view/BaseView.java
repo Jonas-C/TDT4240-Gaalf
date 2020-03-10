@@ -1,5 +1,6 @@
 package com.gaalf.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -8,12 +9,13 @@ import com.gaalf.presenter.BasePresenter;
 
 public abstract class BaseView extends Stage{
 
-    public static ExtendViewport viewport = new ExtendViewport(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT);
-    public BasePresenter presenter;
+    private static ExtendViewport viewport = new ExtendViewport(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT);
+    private BasePresenter presenter;
 
     BaseView(SpriteBatch batch, BasePresenter presenter){
         super(viewport, batch);
         this.presenter = presenter;
+        Gdx.input.setInputProcessor(this);
     }
 
     public abstract void update(float delta);

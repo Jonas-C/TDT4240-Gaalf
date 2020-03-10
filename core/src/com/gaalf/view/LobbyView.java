@@ -13,5 +13,4 @@ public class LobbyView extends BaseMenuView {
     public void update(float delta) {
 
     }
-
 }

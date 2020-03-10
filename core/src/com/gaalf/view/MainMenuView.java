@@ -14,12 +14,11 @@ public class MainMenuView extends BaseMenuView {
         playButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                presenter.play();
+                System.out.println("try");
             }
         });
         getTable().add(playButton).padTop(50);
         addActor(table);
-
     }
 
     @Override

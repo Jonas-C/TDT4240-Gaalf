@@ -11,18 +11,18 @@ public class GaalfGame extends Game {
 	SpriteBatch batch;
 	Texture img;
 
-	public static int V_WIDTH = 1920;
-	public static int V_HEIGHT = 1080;
+	public static int V_WIDTH = 960;
+	public static int V_HEIGHT = 540;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
 		img = new Texture("badlogic.jpg");
+		setScreen(new MainMenuPresenter(this));
 	}
 
 	@Override
 	public void render () {
-		setScreen(new MainMenuPresenter(this));
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		super.render();
 //		Gdx.gl.glClearColor(1, 0, 0, 1);
