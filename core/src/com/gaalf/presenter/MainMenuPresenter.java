@@ -10,6 +10,7 @@ public class MainMenuPresenter extends BaseMenuPresenter {
     private BaseView view;
 
     public MainMenuPresenter(final GaalfGame game){
+        System.out.println("hi");
         this.game = game;
         view = new MainMenuView(game.getBatch(), this);
     }
