@@ -42,7 +42,7 @@ public abstract class BaseView extends Stage{
     }
 
 
-    public Skin getSkin(){
+    Skin getSkin(){
         return skin;
     }
 

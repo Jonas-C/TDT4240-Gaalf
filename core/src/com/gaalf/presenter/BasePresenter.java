@@ -8,7 +8,7 @@ public abstract class BasePresenter extends ScreenAdapter {
 
     final GaalfGame game;
 
-    public BasePresenter(final GaalfGame game){
+    BasePresenter(final GaalfGame game){
         this.game = game;
     }
 

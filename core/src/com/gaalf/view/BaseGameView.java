@@ -9,14 +9,14 @@ public abstract class BaseGameView extends BaseView implements Screen {
 
     Table table;
 
-    public BaseGameView(SpriteBatch batch, BaseGamePresenter presenter){
+    BaseGameView(SpriteBatch batch, BaseGamePresenter presenter){
         super(batch, presenter);
         table = new Table();
         table.top();
         table.setFillParent(true);
     }
 
-    public Table getTable(){
+    Table getTable(){
         return table;
     }
 }

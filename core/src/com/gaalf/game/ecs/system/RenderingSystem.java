@@ -36,7 +36,9 @@ public class RenderingSystem extends IteratingSystem {
         textureMapper = ComponentMapper.getFor(TextureComponent.class);
         transformMapper = ComponentMapper.getFor(TransformComponent.class);
 
-//        cam = new OrthographicCamera(PPM_WIDTH, PPM_HEIGHT);
+        cam = new OrthographicCamera();
+        viewport = new ExtendViewport(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT, cam);
+        viewport.apply(true);
 //        cam.position.set(PPM_WIDTH / 2, PPM_HEIGHT/2, 0);
         cam = new OrthographicCamera();
         viewport = new ExtendViewport(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT, cam);
@@ -61,8 +63,8 @@ public class RenderingSystem extends IteratingSystem {
 
     @Override
     public void update(float delta){
-//        batch.setProjectionMatrix(cam.combined);
-//        cam.update();
+        batch.setProjectionMatrix(cam.combined);
+        cam.update();
         batch.begin();
         super.update(delta);
         batch.end();
