@@ -20,16 +20,16 @@ public abstract class BaseView extends Stage{
         Gdx.input.setInputProcessor(this);
     }
 
-    public abstract void update(float delta);
-
     public final void resize(int width, int height){
         getViewport().update(width, height);
     }
 
-    public void render(float delta){
-//        super.getCamera().update();
-//        super.getBatch().setProjectionMatrix(this.getCamera().combined);
-        super.act();
+    public void update(float delta){
+        super.act(delta);
+    }
+
+    @Override
+    public void draw(){
         super.draw();
     }
 

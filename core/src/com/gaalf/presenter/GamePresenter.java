@@ -2,7 +2,6 @@ package com.gaalf.presenter;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -12,7 +11,6 @@ import com.gaalf.game.ecs.component.TextureComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.game.ecs.system.RenderingSystem;
 import com.gaalf.view.BaseGameView;
-import com.gaalf.view.BaseView;
 import com.gaalf.view.GameView;
 
 public class GamePresenter extends BaseGamePresenter {
@@ -27,7 +25,6 @@ public class GamePresenter extends BaseGamePresenter {
         view = new GameView(game.getBatch(), this);
         world = new World(new Vector2(-9.81f, 0), true);
         engine = new Engine();
-        cam = new OrthographicCamera();
 
         RenderingSystem renderingSystem = new RenderingSystem(game.getBatch());
         TextureComponent textureComponent = new TextureComponent();
@@ -48,14 +45,16 @@ public class GamePresenter extends BaseGamePresenter {
 
     }
 
+    @Override
     public void update(float delta){
+        System.out.println("hi");
         engine.update(delta);
-        getView().update(delta);
+        //getView().update(delta);
     }
 
-
     @Override
-    public BaseGameView getView() {
-        return view;
+    public void render(float delta){
+        engine.update(delta);
+        getView().render(delta);
     }
 }

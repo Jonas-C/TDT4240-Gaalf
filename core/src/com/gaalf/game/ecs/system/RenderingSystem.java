@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.gaalf.GaalfGame;
 import com.gaalf.game.ecs.component.TextureComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
@@ -21,12 +22,12 @@ public class RenderingSystem extends IteratingSystem {
 
     private ComponentMapper<TextureComponent> textureMapper;
     private ComponentMapper<TransformComponent> transformMapper;
+    private ExtendViewport viewport;
 
     private OrthographicCamera cam;
 
 
     public SpriteBatch batch;
-    Texture tex;
 
     public RenderingSystem(SpriteBatch batch){
         super(Family.all(TextureComponent.class).get());
@@ -35,9 +36,11 @@ public class RenderingSystem extends IteratingSystem {
         textureMapper = ComponentMapper.getFor(TextureComponent.class);
         transformMapper = ComponentMapper.getFor(TransformComponent.class);
 
-        cam = new OrthographicCamera(PPM_WIDTH, PPM_HEIGHT);
-        cam.position.set(PPM_WIDTH / 2, PPM_HEIGHT/2, 0);
-        tex = new Texture("badlogic.jpg");
+//        cam = new OrthographicCamera(PPM_WIDTH, PPM_HEIGHT);
+//        cam.position.set(PPM_WIDTH / 2, PPM_HEIGHT/2, 0);
+        cam = new OrthographicCamera();
+        viewport = new ExtendViewport(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT, cam);
+        viewport.apply(true);
 
     }
 
@@ -52,18 +55,21 @@ public class RenderingSystem extends IteratingSystem {
         float originY = height * 0.5f;
         float x = transform.pos.x - originX;
         float y = transform.pos.y - originY;
-        System.out.println("drawing at: " + x + " " + y);
-        batch.draw(texture.texture, x, y, originX, originY, width, height,  transform.scale.x * P2M,
-                transform.scale.y * P2M, transform.rotation);
-        batch.draw(tex, 250, 250);
+        batch.draw(texture.texture, x, y, originX, originY, width, height,  transform.scale.x,
+                transform.scale.y, transform.rotation);
     }
 
     @Override
     public void update(float delta){
-        batch.setProjectionMatrix(cam.combined);
-        cam.update();
+//        batch.setProjectionMatrix(cam.combined);
+//        cam.update();
         batch.begin();
         super.update(delta);
         batch.end();
+    }
+
+    public void resize(int width, int height){
+        viewport.update(width, height, true);
+        cam.position.set(GaalfGame.V_WIDTH / 2, GaalfGame.V_HEIGHT / 2, 0);
     }
 }

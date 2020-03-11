@@ -12,14 +12,12 @@ public abstract class BasePresenter extends ScreenAdapter {
         this.game = game;
     }
 
-
-
     public abstract BaseView getView();
 
     @Override
     public void render(float delta) {
         getView().update(delta);
-        getView().render(delta);
+        getView().draw();
     }
 
     @Override
@@ -31,4 +29,5 @@ public abstract class BasePresenter extends ScreenAdapter {
     public void dispose() {
         getView().dispose();
     }
+
 }
