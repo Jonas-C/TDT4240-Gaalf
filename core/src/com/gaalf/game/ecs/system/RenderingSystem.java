@@ -4,10 +4,13 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.gaalf.GaalfGame;
 import com.gaalf.game.ecs.component.TextureComponent;
@@ -27,42 +30,47 @@ public class RenderingSystem extends IteratingSystem {
     private OrthographicCamera cam;
 
 
+
     public SpriteBatch batch;
 
     public RenderingSystem(SpriteBatch batch){
         super(Family.all(TextureComponent.class).get());
         this.batch = batch;
 
+
+
         textureMapper = ComponentMapper.getFor(TextureComponent.class);
         transformMapper = ComponentMapper.getFor(TransformComponent.class);
 
         cam = new OrthographicCamera();
-        viewport = new ExtendViewport(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT, cam);
+        cam.setToOrtho(false, PPM_WIDTH, PPM_HEIGHT);
+        viewport = new ExtendViewport(PPM_WIDTH, PPM_HEIGHT, cam);
+//        viewport.setScreenHeight(Gdx.graphics.getHeight());
+//        viewport.setScreenWidth(Gdx.graphics.getWidth());
+//        viewport.setWorldHeight(GaalfGame.V_HEIGHT / PPM);
+//        viewport.setWorldWidth(GaalfGame.V_WIDTH / PPM);
         viewport.apply(true);
-//        cam.position.set(PPM_WIDTH / 2, PPM_HEIGHT/2, 0);
-        cam = new OrthographicCamera();
-        viewport = new ExtendViewport(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT, cam);
-        viewport.apply(true);
-
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         TransformComponent transform = transformMapper.get(entity);
         TextureComponent texture = textureMapper.get(entity);
-        TextureRegion region = texture.texture;
-        float width = region.getRegionWidth();
-        float height = region.getRegionHeight();
+        Sprite sprite = texture.sprite;
+        float width = sprite.getRegionWidth();
+        float height = sprite.getRegionHeight();
         float originX = width * 0.5f;
         float originY = height * 0.5f;
         float x = transform.pos.x - originX;
         float y = transform.pos.y - originY;
-        batch.draw(texture.texture, x, y, originX, originY, width, height,  transform.scale.x,
-                transform.scale.y, transform.rotation);
+        batch.draw(texture.sprite, x, y, originX, originY, width, height,  transform.scale.x * P2M,
+                transform.scale.y * P2M, transform.rotation);
+//        batch.draw(texture.texture, x, y, originX, originY, width, height, transform.scale.x, transform.scale.y, transform.rotation);
     }
 
     @Override
     public void update(float delta){
+//        System.out.println(cam.viewportHeight);
         batch.setProjectionMatrix(cam.combined);
         cam.update();
         batch.begin();
@@ -70,8 +78,17 @@ public class RenderingSystem extends IteratingSystem {
         batch.end();
     }
 
+    public OrthographicCamera getCam(){
+        return cam;
+    }
+
     public void resize(int width, int height){
+//        System.out.println("resize called");
+//        System.out.println(width + " " + height);
+//        System.out.println(viewport.getScreenWidth());
         viewport.update(width, height, true);
-        cam.position.set(GaalfGame.V_WIDTH / 2, GaalfGame.V_HEIGHT / 2, 0);
+//        System.out.println(viewport.getScreenWidth());
+//        cam.position.set((cam.viewportWidth / PPM / 2) / 2, (cam.viewportHeight/PPM) /2, 0);
+        cam.update();
     }
 }
