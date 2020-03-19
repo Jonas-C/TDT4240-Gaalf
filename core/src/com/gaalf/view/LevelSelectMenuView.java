@@ -1,22 +1,20 @@
 package com.gaalf.view;
 
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.gaalf.presenter.SettingsPresenter;
+import com.gaalf.presenter.LevelSelectMenuPresenter;
 
+public class LevelSelectMenuView extends BaseMenuView {
 
-public class SettingsView extends BaseMenuView {
+    private final String TAG = MainMenuView.class.getSimpleName();
 
-    private static final String TAG = SettingsView.class.getSimpleName();
-
-    public SettingsView(SpriteBatch batch, final SettingsPresenter presenter){
+    public LevelSelectMenuView(SpriteBatch batch, final LevelSelectMenuPresenter presenter) {
         super(batch, presenter);
 
-        Label titleLabel = new Label("Settings", getSkin(), "title");
+        Label titleLabel = new Label("Select level", getSkin(), "title");
         getTable().add(titleLabel).padBottom(TITLE_BTM_PADDING);
 
         getTable().row();
@@ -29,16 +27,10 @@ public class SettingsView extends BaseMenuView {
         });
         getTable().add(backButton)
                 .width(BUTTON_WIDTH)
-                .padBottom(BUTTON_BTM_PADDING)
-                .padTop(BACK_BUTTON_TOP_PADDING);
+                .padTop(BACK_BUTTON_TOP_PADDING)
+                .padBottom(BUTTON_BTM_PADDING);
+
 
         addActor(table);
-    }
-
-
-
-    @Override
-    public void update(float delta) {
-
     }
 }

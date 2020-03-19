@@ -20,7 +20,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.gaalf.GaalfGame;
-import com.gaalf.game.MapBodyBuilder;
 import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.TextureComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
@@ -41,7 +40,6 @@ public abstract class BaseGamePresenter extends BasePresenter {
     BodyComponent bodyComponent;
     private TiledMap tileMap;
     private OrthogonalTiledMapRenderer tmr;
-    private MapBodyBuilder mapBodyBuilder;
 
     public static int PPM = RenderingSystem.PPM;
     private float tileSize;
