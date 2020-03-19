@@ -2,13 +2,10 @@ package com.gaalf.Input;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.gaalf.game.ecs.component.MovementComponent;
 
 public class ControllerInputHandler implements InputProcessor {
-    private PooledEngine engine;
     private Entity playerEntity;
 
     private float inputXDown = 0;
@@ -59,10 +56,7 @@ public class ControllerInputHandler implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        /*MovementComponent movementComponent = ComponentMapper.getFor(MovementComponent.class).get(playerEntity);
-        movementComponent.setForceX(screenX);
-        movementComponent.setForceY(screenY);
-        movementComponent.setMoved(true);*/
+        // TODO: endre på en indikator pil.
 
         return false;
     }

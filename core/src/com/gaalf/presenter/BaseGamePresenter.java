@@ -3,10 +3,10 @@ package com.gaalf.presenter;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -79,9 +79,12 @@ public abstract class BaseGamePresenter extends BasePresenter {
         e.add(transformComponent);
         e.add(textureComponent);
 
+        InputMultiplexer multiplexer = new InputMultiplexer();
         ControllerInputHandler inputHandler = new ControllerInputHandler();
         inputHandler.setControlledEntity(e);
-        Gdx.input.setInputProcessor(inputHandler);
+        multiplexer.addProcessor(view);
+        multiplexer.addProcessor(inputHandler);
+        Gdx.input.setInputProcessor(multiplexer);
 
         bodyComponent = new BodyComponent();
         BodyDef bodyDef = new BodyDef();
