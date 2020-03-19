@@ -10,16 +10,16 @@ public class GameView extends BaseGameView {
 
     public GameView(SpriteBatch batch, BaseGamePresenter presenter) {
     super(batch, presenter);
-//    TextButton playButton = new TextButton("Settings", getSkin());
-//        playButton.addListener(new ChangeListener() {
-//        @Override
-//        public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-//            System.out.println("hihi");
-//        }
-//    });
-//    getTable().add(playButton).left().padTop(50);
-//    getTable().row();
-//    addActor(table);
+        TextButton playButton = new TextButton("Settings", getSkin());
+        playButton.addListener(new ChangeListener() {
+        @Override
+        public void changed(ChangeListener.ChangeEvent event, Actor actor) {
+            System.out.println("hihi");
+        }
+    });
+    getTable().add(playButton).left().padTop(50);
+    getTable().row();
+    addActor(table);
 
     }
 
