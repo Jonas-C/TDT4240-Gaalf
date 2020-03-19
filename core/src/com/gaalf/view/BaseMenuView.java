@@ -1,8 +1,11 @@
 package com.gaalf.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.gaalf.presenter.BaseMenuPresenter;
+
 
 abstract class BaseMenuView extends BaseView {
 
@@ -26,5 +29,30 @@ abstract class BaseMenuView extends BaseView {
         return table;
     }
 
+    public void addTitle(String title) {
+        Label titleLabel = new Label(title, getSkin(), "title");
+        getTable().add(titleLabel).padBottom(TITLE_BTM_PADDING);
+    }
 
+    public TextButton addMenuButton(String text) {
+        table.row();
+        TextButton menuButton = new TextButton(text, getSkin());
+        table.add(menuButton)
+                .width(BUTTON_WIDTH)
+                .padBottom(BUTTON_BTM_PADDING);
+
+        return menuButton;
+    }
+
+    public TextButton addBackButton() {
+        getTable().row();
+        TextButton backButton = new TextButton("Back", getSkin());
+
+        getTable().add(backButton)
+                .width(BUTTON_WIDTH)
+                .padTop(BACK_BUTTON_TOP_PADDING)
+                .padBottom(BUTTON_BTM_PADDING);
+
+        return backButton;
+    }
 }
