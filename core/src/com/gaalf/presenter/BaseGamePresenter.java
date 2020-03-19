@@ -20,9 +20,12 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.gaalf.GaalfGame;
+import com.gaalf.Input.ControllerInputHandler;
 import com.gaalf.game.ecs.component.BodyComponent;
+import com.gaalf.game.ecs.component.MovementComponent;
 import com.gaalf.game.ecs.component.TextureComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
+import com.gaalf.game.ecs.system.MovementSystem;
 import com.gaalf.game.ecs.system.PhysicsDebugSystem;
 import com.gaalf.game.ecs.system.PhysicsSystem;
 import com.gaalf.game.ecs.system.RenderingSystem;
@@ -51,9 +54,11 @@ public abstract class BaseGamePresenter extends BasePresenter {
         world = new World(new Vector2(0, -9.81f), true);
 
         renderingSystem = new RenderingSystem(game.getBatch());
+        MovementSystem movementSystem = new MovementSystem(world);
         PhysicsSystem physicsSystem = new PhysicsSystem(world);
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, renderingSystem.getCam());
 
+        engine.addSystem(movementSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(renderingSystem);
         engine.addSystem(physicsDebugSystem);
@@ -70,14 +75,19 @@ public abstract class BaseGamePresenter extends BasePresenter {
         transformComponent.visible = true;
 
         Entity e = new Entity();
+        e.add(new MovementComponent());
         e.add(transformComponent);
         e.add(textureComponent);
+
+        ControllerInputHandler inputHandler = new ControllerInputHandler();
+        inputHandler.setControlledEntity(e);
+        Gdx.input.setInputProcessor(inputHandler);
 
         bodyComponent = new BodyComponent();
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(transformComponent.pos.x, transformComponent.pos.y / PPM);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.fixedRotation = false;
+        bodyDef.fixedRotation = true;
         bodyDef.angle = 75f;
         bodyComponent.body = world.createBody(bodyDef);
         CircleShape cshape = new CircleShape();
@@ -101,7 +111,7 @@ public abstract class BaseGamePresenter extends BasePresenter {
         tmr = new OrthogonalTiledMapRenderer(tileMap);
 
         TiledMapTileLayer layer = (TiledMapTileLayer) tileMap.getLayers().get("terrain");
-        createTiledBodies(layer);
+        //createTiledBodies(layer);
     }
 
     private void createTiledBodies(TiledMapTileLayer layer){
