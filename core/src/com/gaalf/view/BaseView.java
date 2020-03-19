@@ -47,8 +47,8 @@ public abstract class BaseView extends Stage{
         return skin;
     }
 
-    public void log(String msg, String tag) {
-        Gdx.app.log(this.TAG, msg);
+    public void log(String tag, String msg) {
+        Gdx.app.log(tag, msg);
     }
 
 }

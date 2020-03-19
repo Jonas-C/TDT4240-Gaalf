@@ -15,6 +15,14 @@ public class MainMenuView extends BaseMenuView {
 
         addTitle("GALF");
 
+        TextButton startTestLevelButton = addMenuButton("Start test level");
+        startTestLevelButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                presenter.startTestLevel();
+            }
+        });
+
         TextButton startSpGameButton = addMenuButton("Start single-player game");
         startSpGameButton.addListener(new ChangeListener() {
             @Override
