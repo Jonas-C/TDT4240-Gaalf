@@ -5,11 +5,10 @@ import com.gaalf.view.BaseView;
 import com.gaalf.view.ServersView;
 
 public class ServersPresenter extends BaseMenuPresenter {
-    private final GaalfGame game;
     private BaseView view;
 
     public ServersPresenter(final GaalfGame game){
-        this.game = game;
+        super(game);
         view = new ServersView(game.getBatch(), this);
     }
     @Override
