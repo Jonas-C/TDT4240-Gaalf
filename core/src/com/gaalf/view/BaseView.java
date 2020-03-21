@@ -20,7 +20,7 @@ public abstract class BaseView extends Stage{
         Gdx.input.setInputProcessor(this);
     }
 
-    public final void resize(int width, int height){
+    public void resize(int width, int height){
         getViewport().update(width, height);
     }
 

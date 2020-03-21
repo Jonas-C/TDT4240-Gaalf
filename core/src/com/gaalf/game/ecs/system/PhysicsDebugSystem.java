@@ -21,13 +21,7 @@ public class PhysicsDebugSystem extends IteratingSystem {
     }
 
     @Override
-    public void update(float delta){
-        super.update(delta);
-        debugRenderer.render(world, cam.combined);
-    }
-
-    @Override
     protected void processEntity(Entity entity, float deltaTime) {
-
+        debugRenderer.render(world, cam.combined);
     }
 }
