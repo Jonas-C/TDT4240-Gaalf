@@ -7,8 +7,10 @@ import com.gaalf.GaalfGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = GaalfGame.V_WIDTH;
-		config.height = GaalfGame.V_HEIGHT;
+		//config.width = GaalfGame.V_WIDTH;
+//		config.height = GaalfGame.V_HEIGHT;
+		config.width = 1280;
+		config.height = 720;
 		new LwjglApplication(new GaalfGame(), config);
 	}
 }
