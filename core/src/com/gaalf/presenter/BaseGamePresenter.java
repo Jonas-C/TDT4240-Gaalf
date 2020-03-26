@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
@@ -17,18 +18,18 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.gaalf.GaalfGame;
-import com.gaalf.Input.ControllerInputHandler;
 import com.gaalf.game.ecs.component.BodyComponent;
-import com.gaalf.game.ecs.component.MovementComponent;
+import com.gaalf.game.ecs.component.ShootableComponent;
 import com.gaalf.game.ecs.component.TextureComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
-import com.gaalf.game.ecs.system.MovementSystem;
 import com.gaalf.game.ecs.system.PhysicsDebugSystem;
 import com.gaalf.game.ecs.system.PhysicsSystem;
 import com.gaalf.game.ecs.system.RenderingSystem;
+import com.gaalf.game.ecs.system.ShootableSystem;
 import com.gaalf.game.util.B2dDebugUtil;
 import com.gaalf.game.util.TiledObjectUtil;
 import com.gaalf.view.GameView;
+import com.gaalf.game.input.*;
 import static com.gaalf.game.constants.B2DConstants.*;
 
 public abstract class BaseGamePresenter extends BasePresenter {
@@ -38,6 +39,8 @@ public abstract class BaseGamePresenter extends BasePresenter {
     private World world;
     private OrthographicCamera b2dCam;
     private ExtendViewport b2dViewport;
+    Vector2 playerPos;
+    TiledMap tiledMap;
 
 
     BaseGamePresenter(final GaalfGame game) {
@@ -49,32 +52,35 @@ public abstract class BaseGamePresenter extends BasePresenter {
         b2dViewport = new ExtendViewport(GaalfGame.V_WIDTH / PPM, GaalfGame.V_HEIGHT / PPM, b2dCam);
         b2dViewport.update(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT, true);
 
-
-        TiledMap tileMap = new TmxMapLoader().load(Gdx.files.internal("test.tmx").path());
-        TiledObjectUtil.parseTiledObjectLayer(world, tileMap.getLayers().get("collision").getObjects());
+        playerPos = new Vector2();
 
 
-        RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), b2dCam, tileMap);
-        MovementSystem movementSystem = new MovementSystem();
+        tiledMap = new TmxMapLoader().load(Gdx.files.internal("test.tmx").path());
+        TiledObjectUtil.parseTiledObjectLayer(world, tiledMap.getLayers().get("collision").getObjects());
+
+        RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), b2dCam, tiledMap);
+        ShootableSystem shootableSystem = new ShootableSystem();
         PhysicsSystem physicsSystem = new PhysicsSystem();
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, b2dCam);
 
-        engine.addSystem(movementSystem);
+        engine.addSystem(shootableSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(renderingSystem);
         engine.addSystem(physicsDebugSystem);
 
 
         Entity e = createBall();
+        Entity e1 = createShotIndicator(e.getComponent(TransformComponent.class));
         InputMultiplexer multiplexer = new InputMultiplexer();
-        ControllerInputHandler inputHandler = new ControllerInputHandler();
-        inputHandler.setControlledEntity(e);
+        ShotInputHandler shotInputHandler = new ShotInputHandler();
         multiplexer.addProcessor(view);
-        multiplexer.addProcessor(inputHandler);
+        multiplexer.addProcessor(shotInputHandler);
         Gdx.input.setInputProcessor(multiplexer);
 
+        shotInputHandler.addObserver(shootableSystem);
 
         engine.addEntity(e);
+//        engine.addEntity(e1);
         B2dDebugUtil.createWalls(world);
 
     }
@@ -134,7 +140,8 @@ public abstract class BaseGamePresenter extends BasePresenter {
         Texture texture = new Texture("badlogic.jpg");
         textureComponent.sprite = new Sprite(texture);
         TransformComponent transformComponent = new TransformComponent();
-        transformComponent.pos.set(GaalfGame.V_WIDTH / 2, GaalfGame.V_HEIGHT / 2);
+        MapProperties mapProperties = tiledMap.getLayers().get("objects").getObjects().get("startPos").getProperties();
+        transformComponent.pos.set((float)mapProperties.get("x") / PPM, (float)mapProperties.get("y") / PPM);
         transformComponent.scale.set(0.1f, 0.1f);
         transformComponent.rotation = 0f;
         transformComponent.visible = true;
@@ -142,10 +149,11 @@ public abstract class BaseGamePresenter extends BasePresenter {
         BodyComponent bodyComponent = new BodyComponent();
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set((transformComponent.pos.x -
-                textureComponent.sprite.getRegionWidth() * 2) / PPM, transformComponent.pos.y / PPM);
+                (textureComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         bodyDef.fixedRotation = false;
+        bodyDef.angularDamping = 1f;
 //        bodyDef.angle = 75f;
         bodyComponent.body = world.createBody(bodyDef);
         CircleShape cshape = new CircleShape();
@@ -155,16 +163,34 @@ public abstract class BaseGamePresenter extends BasePresenter {
                 (textureComponent.sprite.getRegionHeight() / 2f) * transformComponent.scale.y / PPM);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = cshape;
-        fixtureDef.density = 5;
-//        fixtureDef.friction = .4f;
-        fixtureDef.restitution = 0.5f;
+        fixtureDef.density = 8;
+        fixtureDef.friction = 100.6f;
+        fixtureDef.restitution = .5f;
         bodyComponent.body.createFixture(fixtureDef);
 
         Entity e = new Entity();
-        e.add(new MovementComponent());
+//        e.add(new MovementComponent());
+        e.add(new ShootableComponent());
         e.add(transformComponent);
         e.add(textureComponent);
         e.add(bodyComponent);
+        return e;
+    }
+
+    private Entity createShotIndicator(TransformComponent playerTransformComponent){
+        TextureComponent textureComponent = new TextureComponent();
+        Texture texture = new Texture("arrow.png");
+        textureComponent.sprite = new Sprite(texture);
+
+        TransformComponent transformComponent = new TransformComponent();
+        transformComponent.pos.set(playerTransformComponent.pos.x + 10, playerTransformComponent.pos.y + 10);
+        transformComponent.scale.set(0.5f, 0.5f);
+        transformComponent.rotation = 0;
+        transformComponent.visible = false;
+
+        Entity e = new Entity();
+        e.add(textureComponent);
+        e.add(transformComponent);
         return e;
     }
 }

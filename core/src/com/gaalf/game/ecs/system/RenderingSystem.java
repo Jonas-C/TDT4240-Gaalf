@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -40,15 +41,17 @@ public class RenderingSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         TransformComponent transform = transformMapper.get(entity);
         TextureComponent texture = textureMapper.get(entity);
-        Sprite sprite = texture.sprite;
-        float width = sprite.getRegionWidth();
-        float height = sprite.getRegionHeight();
-        float originX = width * 0.5f;
-        float originY = height * 0.5f;
-        float x = transform.pos.x - originX;
-        float y = transform.pos.y - originY;
-        batch.draw(texture.sprite, x, y, originX, originY, width, height,  transform.scale.x * P2M,
-                transform.scale.y * P2M, transform.rotation);
+        if(transform.visible) {
+            Sprite sprite = texture.sprite;
+            float width = sprite.getRegionWidth();
+            float height = sprite.getRegionHeight();
+            float originX = width * 0.5f;
+            float originY = height * 0.5f;
+            float x = transform.pos.x - originX;
+            float y = transform.pos.y - originY;
+            batch.draw(texture.sprite, x, y, originX, originY, width, height, transform.scale.x * P2M,
+                    transform.scale.y * P2M, transform.rotation);
+        }
     }
 
     @Override
@@ -56,6 +59,7 @@ public class RenderingSystem extends IteratingSystem {
         tmr.setView(b2dCam);
         tmr.render();
         batch.begin();
+        Gdx.gl.glClearColor(135/255f, 206/255f, 235/255f, 1);
         super.update(delta);
         batch.end();
     }
