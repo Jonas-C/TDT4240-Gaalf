@@ -6,7 +6,9 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.gaalf.game.ecs.component.BodyComponent;
+import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShootableComponent;
+import com.gaalf.presenter.BaseGamePresenter;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -15,14 +17,18 @@ public class ShootableSystem extends IteratingSystem implements Observer{
 
     private ComponentMapper<BodyComponent> bodyMapper;
     private ComponentMapper<ShootableComponent> shootableMapper;
+    private ComponentMapper<PlayerComponent> playerMapper;
     private boolean touchUp = false;
     private Vector2 prevTouch;
     private Vector2 distanceDragged;
+    private BaseGamePresenter presenter;
 
-    public ShootableSystem(){
-        super(Family.all(BodyComponent.class, ShootableComponent.class).get());
+    public ShootableSystem(BaseGamePresenter presenter){
+        super(Family.all(BodyComponent.class, ShootableComponent.class, PlayerComponent.class).get());
+        this.presenter = presenter;
         bodyMapper = ComponentMapper.getFor(BodyComponent.class);
         shootableMapper = ComponentMapper.getFor(ShootableComponent.class);
+        playerMapper = ComponentMapper.getFor(PlayerComponent.class);
         prevTouch = new Vector2();
         distanceDragged = new Vector2(0, 0);
     }
@@ -30,6 +36,7 @@ public class ShootableSystem extends IteratingSystem implements Observer{
     protected void processEntity(Entity entity, float deltaTime) {
         BodyComponent bodyComponent = bodyMapper.get(entity);
         ShootableComponent shootableComponent = shootableMapper.get(entity);
+        PlayerComponent playerComponent = playerMapper.get(entity);
         shootableComponent.force.set(distanceDragged);
         if (touchUp){
             System.out.println("shooting");
@@ -39,6 +46,8 @@ public class ShootableSystem extends IteratingSystem implements Observer{
             touchUp = false;
             prevTouch.set(0, 0);
             distanceDragged.set(0, 0);
+            playerComponent.playerScore++;
+            presenter.setScoreLabel(playerComponent.playerNumber, playerComponent.playerName + ": " + playerComponent.playerScore);
         }
     }
 

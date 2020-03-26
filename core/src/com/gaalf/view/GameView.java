@@ -12,8 +12,7 @@ import java.util.HashMap;
 
 public class GameView extends BaseGameView {
 
-    Label scoreLabelPlayer1;
-    HashMap playerScoreLabels;
+    private HashMap<Integer, Label> playerScoreLabels = new HashMap<Integer, Label>();
 
     public GameView(SpriteBatch batch, BaseGamePresenter presenter) {
     super(batch, presenter);
@@ -24,10 +23,8 @@ public class GameView extends BaseGameView {
             System.out.println("hihi");
         }
     });
-        scoreLabelPlayer1 = new Label("Score: 0", getSkin());
     getTable().add(playButton).left().padTop(50);
     getTable().row();
-    getTable().add(scoreLabelPlayer1);
     addActor(table);
 
     }
@@ -57,7 +54,14 @@ public class GameView extends BaseGameView {
 
     }
 
-    public void setScoreLabel(String s){
-        scoreLabelPlayer1.setText(s);
+    public void addScoreLabel(int playerNumber, String playerName){
+        Label scoreLabel = new Label(playerName + ": 0", getSkin());
+        getTable().add(scoreLabel);
+        getTable().row();
+        playerScoreLabels.put(playerNumber, scoreLabel);
+    }
+
+    public void setPlayerLabelText(int playerNumber, String newText){
+        playerScoreLabels.get(playerNumber).setText(newText);
     }
 }

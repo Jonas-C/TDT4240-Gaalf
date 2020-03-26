@@ -1,0 +1,9 @@
+package com.gaalf.game.ecs.component;
+
+import com.badlogic.ashley.core.Component;
+
+public class PlayerComponent implements Component {
+    public int playerNumber;
+    public String playerName;
+    public int playerScore = 0;
+}

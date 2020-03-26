@@ -19,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.gaalf.GaalfGame;
 import com.gaalf.game.ecs.component.BodyComponent;
+import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShootableComponent;
 import com.gaalf.game.ecs.component.TextureComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
@@ -59,7 +60,7 @@ public abstract class BaseGamePresenter extends BasePresenter {
         TiledObjectUtil.parseTiledObjectLayer(world, tiledMap.getLayers().get("collision").getObjects());
 
         RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), b2dCam, tiledMap);
-        ShootableSystem shootableSystem = new ShootableSystem();
+        ShootableSystem shootableSystem = new ShootableSystem(this);
         PhysicsSystem physicsSystem = new PhysicsSystem();
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, b2dCam);
 
@@ -168,12 +169,20 @@ public abstract class BaseGamePresenter extends BasePresenter {
         fixtureDef.restitution = .5f;
         bodyComponent.body.createFixture(fixtureDef);
 
+        PlayerComponent playerComponent = new PlayerComponent();
+        playerComponent.playerName = "Brage";
+        playerComponent.playerNumber = 1;
+
         Entity e = new Entity();
 //        e.add(new MovementComponent());
         e.add(new ShootableComponent());
+        e.add(playerComponent);
         e.add(transformComponent);
         e.add(textureComponent);
         e.add(bodyComponent);
+
+        getView().addScoreLabel(playerComponent.playerNumber, playerComponent.playerName);
+        getView().addScoreLabel(2,"Trym");
 
         return e;
     }
@@ -195,5 +204,9 @@ public abstract class BaseGamePresenter extends BasePresenter {
         e.add(transformComponent);
         return e;
 
+    }
+
+    public void setScoreLabel(int playerNumber, String newText){
+        getView().setPlayerLabelText(playerNumber, newText);
     }
 }
