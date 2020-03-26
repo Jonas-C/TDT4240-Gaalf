@@ -13,8 +13,16 @@ public class MainMenuPresenter extends BaseMenuPresenter {
         view = new MainMenuView(game.getBatch(), this);
     }
 
-    public void play(){
+    public void startTestLevel(){
         game.setScreen(new GamePresenter(game));
+    }
+
+    public void openLevelSelectMenu() {
+        game.setScreen(new LevelSelectMenuPresenter(game));
+    }
+
+    public void openSettingsView() {
+        game.setScreen(new SettingsPresenter(game));
     }
 
     @Override
