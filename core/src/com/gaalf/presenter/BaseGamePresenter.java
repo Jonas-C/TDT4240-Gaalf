@@ -165,6 +165,12 @@ public abstract class BaseGamePresenter extends BasePresenter {
         e.add(transformComponent);
         e.add(textureComponent);
         e.add(bodyComponent);
+
+        testScore();
         return e;
+    }
+
+    public void testScore(){
+        getView().setScoreLabel("Score: 1");
     }
 }
