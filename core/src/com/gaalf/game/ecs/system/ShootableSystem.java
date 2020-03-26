@@ -47,7 +47,7 @@ public class ShootableSystem extends IteratingSystem implements Observer{
     public void update(Observable observable, Object o) {
         if(o instanceof String){
             if( o == "touchUp"){
-                System.out.println("asdasd up");
+//                System.out.println("asdasd up");
                 touchUp = true;
             }
         } else if(o instanceof Vector2){
@@ -56,7 +56,7 @@ public class ShootableSystem extends IteratingSystem implements Observer{
             }
             distanceDragged.add(((Vector2) o).x - prevTouch.x, ((Vector2) o).y - prevTouch.y);
             prevTouch.set((Vector2)o);
-            System.out.println(distanceDragged);
+//            System.out.println(distanceDragged);
         }
 
     }
