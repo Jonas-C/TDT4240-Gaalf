@@ -174,7 +174,6 @@ public abstract class BaseGamePresenter extends BasePresenter {
         playerComponent.playerNumber = 1;
 
         Entity e = new Entity();
-//        e.add(new MovementComponent());
         e.add(new ShootableComponent());
         e.add(playerComponent);
         e.add(transformComponent);
