@@ -6,9 +6,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.gaalf.game.ecs.component.BodyComponent;
-import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShootableComponent;
-import com.gaalf.presenter.BaseGamePresenter;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -48,6 +46,7 @@ public class ShootableSystem extends IteratingSystem implements Observer{
             distanceDragged.set(0, 0);
             playerComponent.playerScore++;
             presenter.setScoreLabel(playerComponent.playerNumber, playerComponent.playerName + ": " + playerComponent.playerScore);
+            addShootSound(entity);
         }
     }
 
@@ -56,7 +55,7 @@ public class ShootableSystem extends IteratingSystem implements Observer{
     public void update(Observable observable, Object o) {
         if(o instanceof String){
             if( o == "touchUp"){
-                System.out.println("asdasd up");
+//                System.out.println("asdasd up");
                 touchUp = true;
             }
         } else if(o instanceof Vector2){
@@ -65,8 +64,11 @@ public class ShootableSystem extends IteratingSystem implements Observer{
             }
             distanceDragged.add(((Vector2) o).x - prevTouch.x, ((Vector2) o).y - prevTouch.y);
             prevTouch.set((Vector2)o);
-            System.out.println(distanceDragged);
+//            System.out.println(distanceDragged);
         }
 
+    }
+    private void addShootSound(Entity entity){
+        entity.add(new SoundEffectComponent());
     }
 }
