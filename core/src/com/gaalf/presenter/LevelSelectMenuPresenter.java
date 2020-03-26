@@ -2,21 +2,20 @@ package com.gaalf.presenter;
 
 import com.gaalf.GaalfGame;
 import com.gaalf.view.BaseView;
-import com.gaalf.view.SettingsView;
+import com.gaalf.view.LevelSelectMenuView;
 
-public class SettingsPresenter extends BaseMenuPresenter {
+public class LevelSelectMenuPresenter extends BaseMenuPresenter {
 
     private BaseView view;
 
-    public SettingsPresenter(final GaalfGame game){
+    public LevelSelectMenuPresenter(final GaalfGame game) {
         super(game);
-        view = new SettingsView(game.getBatch(), this);
+        view = new LevelSelectMenuView(game.getBatch(), this);
     }
 
     public void openMainMenuView() {
         game.setScreen(new MainMenuPresenter(game));
     }
-
 
     @Override
     public BaseView getView() {

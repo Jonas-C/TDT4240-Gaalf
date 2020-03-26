@@ -8,16 +8,40 @@ import com.gaalf.presenter.MainMenuPresenter;
 
 public class MainMenuView extends BaseMenuView {
 
+    private final String TAG = MainMenuView.class.getSimpleName();
+
     public MainMenuView(SpriteBatch batch, final MainMenuPresenter presenter){
         super(batch, presenter);
-        TextButton playButton = new TextButton("Play SP", getSkin());
-        playButton.addListener(new ChangeListener() {
+
+        addTitle("GALF");
+
+        TextButton startTestLevelButton = addMenuButton("Start test level");
+        startTestLevelButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                presenter.play();
+                presenter.startTestLevel();
             }
         });
-        getTable().add(playButton).padTop(50);
+
+        TextButton startSpGameButton = addMenuButton("Start single-player game");
+        startSpGameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                presenter.openLevelSelectMenu();
+            }
+        });
+
+        addMenuButton("Start multiplayer game");
+
+        TextButton settingsButton = addMenuButton("Settings");
+        settingsButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                log("Opening settings", TAG);
+                presenter.openSettingsView();
+            }
+        });
+
         addActor(table);
     }
 
