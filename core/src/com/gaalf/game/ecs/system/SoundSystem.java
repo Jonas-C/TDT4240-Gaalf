@@ -23,5 +23,6 @@ public class SoundSystem extends IteratingSystem {
             sound.play();
         }*/
         soundComponent.sound.play();
+        entity.remove(SoundEffectComponent.class);
     }
 }

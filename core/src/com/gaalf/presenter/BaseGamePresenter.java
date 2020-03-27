@@ -27,6 +27,7 @@ import com.gaalf.game.ecs.system.PhysicsDebugSystem;
 import com.gaalf.game.ecs.system.PhysicsSystem;
 import com.gaalf.game.ecs.system.RenderingSystem;
 import com.gaalf.game.ecs.system.ShootableSystem;
+import com.gaalf.game.ecs.system.SoundSystem;
 import com.gaalf.game.util.B2dDebugUtil;
 import com.gaalf.game.util.TiledObjectUtil;
 import com.gaalf.view.GameView;
@@ -67,6 +68,7 @@ public abstract class BaseGamePresenter extends BasePresenter {
         engine.addSystem(shootableSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(renderingSystem);
+        engine.addSystem(new SoundSystem());
         engine.addSystem(physicsDebugSystem);
 
 

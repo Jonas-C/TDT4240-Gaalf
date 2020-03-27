@@ -6,7 +6,10 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.gaalf.game.ecs.component.BodyComponent;
+import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShootableComponent;
+import com.gaalf.game.ecs.component.SoundEffectComponent;
+import com.gaalf.presenter.BaseGamePresenter;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -39,7 +42,7 @@ public class ShootableSystem extends IteratingSystem implements Observer{
         if (touchUp){
             System.out.println("shooting");
 //            if(shootableComponent.force.y )
-            bodyComponent.body.applyForceToCenter(-(shootableComponent.force.x), (shootableComponent.force.y), true);
+            bodyComponent.body.applyForceToCenter(-(shootableComponent.force.x), -(shootableComponent.force.y), true);
             shootableComponent.force.set(0, 0);
             touchUp = false;
             prevTouch.set(0, 0);

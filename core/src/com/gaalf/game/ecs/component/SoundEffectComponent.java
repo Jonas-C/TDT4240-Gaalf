@@ -8,5 +8,5 @@ import java.util.ArrayList;
 
 public class SoundEffectComponent implements Component {
     public ArrayList<Sound> sounds = new ArrayList<Sound>();
-    public Sound sound = Gdx.audio.newSound(Gdx.files.internal("JumpSound.wav"));
+    public Sound sound = Gdx.audio.newSound(Gdx.files.internal("sounds/JumpSound.wav"));
 }
