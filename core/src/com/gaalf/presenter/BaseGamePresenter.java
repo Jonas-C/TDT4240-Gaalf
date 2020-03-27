@@ -28,6 +28,7 @@ import com.gaalf.game.ecs.system.PhysicsSystem;
 import com.gaalf.game.ecs.system.RenderingSystem;
 import com.gaalf.game.ecs.system.ShootableSystem;
 import com.gaalf.game.ecs.system.SoundSystem;
+import com.gaalf.game.ecs.system.WinConSystem;
 import com.gaalf.game.util.B2dDebugUtil;
 import com.gaalf.game.util.TiledObjectUtil;
 import com.gaalf.view.GameView;
@@ -71,6 +72,14 @@ public abstract class BaseGamePresenter extends BasePresenter {
         engine.addSystem(new SoundSystem());
         engine.addSystem(physicsDebugSystem);
 
+
+        TransformComponent transformComponentGoal = new TransformComponent();
+        MapProperties goalProperties = tiledMap.getLayers().get("objects").getObjects().get("endPos").getProperties();
+        transformComponentGoal.pos.set((float)goalProperties.get("x") / PPM, (float)goalProperties.get("y") / PPM);
+        Entity goal = new Entity();
+        goal.add(transformComponentGoal);
+        engine.addEntity(goal);
+        engine.addSystem(new WinConSystem(goal));
 
         Entity e = createBall();
         Entity e1 = createShotIndicator(e.getComponent(TransformComponent.class));
