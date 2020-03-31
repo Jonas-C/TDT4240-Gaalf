@@ -10,6 +10,7 @@ import com.gaalf.presenter.BasePresenter;
 
 public abstract class BaseView extends Stage{
 
+    private final String TAG = BaseView.class.getSimpleName();
     private static ExtendViewport viewport = new ExtendViewport(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT);
     private BasePresenter presenter;
 
@@ -20,7 +21,7 @@ public abstract class BaseView extends Stage{
         Gdx.input.setInputProcessor(this);
     }
 
-    public final void resize(int width, int height){
+    public void resize(int width, int height){
         getViewport().update(width, height);
     }
 
@@ -44,6 +45,10 @@ public abstract class BaseView extends Stage{
 
     Skin getSkin(){
         return skin;
+    }
+
+    public void log(String tag, String msg) {
+        Gdx.app.log(tag, msg);
     }
 
 }

@@ -13,9 +13,13 @@ public class SettingsPresenter extends BaseMenuPresenter {
         view = new SettingsView(game.getBatch(), this);
     }
 
+    public void openMainMenuView() {
+        game.setScreen(new MainMenuPresenter(game));
+    }
+
 
     @Override
     public BaseView getView() {
-        return null;
+        return view;
     }
 }

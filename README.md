@@ -9,3 +9,5 @@ In multiplayer, there will be additional configuration options. Players can for 
 Both game modes will also support changing ball shapes. Planned shapes are squares and triangles. These alternative shapes can impact the size and speed of the ball, whilst also affecting how collisions will impact ball trajectory.
 
 The ball object will be controlled with touch \& drag, where a player can touch and drag in the opposite direction of where they intend to go. The power of the shot is dependent on how far the player decides to drag. A tiny indicator will give the player a general idea of their shot trajectory and strength.
+
+![Android CI](https://github.com/Jonas-C/TDT4240-Gaalf/workflows/Android%20CI/badge.svg)

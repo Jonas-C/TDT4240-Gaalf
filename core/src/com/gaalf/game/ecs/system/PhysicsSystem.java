@@ -4,19 +4,16 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.physics.box2d.World;
 import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 
 public class PhysicsSystem extends IteratingSystem {
 
-    World world;
-    ComponentMapper<TransformComponent> transformMapper;
-    ComponentMapper<BodyComponent> bodyMapper;
+    private ComponentMapper<TransformComponent> transformMapper;
+    private ComponentMapper<BodyComponent> bodyMapper;
 
-    public PhysicsSystem(World world){
+    public PhysicsSystem(){
         super(Family.all(BodyComponent.class, TransformComponent.class).get());
-        this.world = world;
         transformMapper = ComponentMapper.getFor(TransformComponent.class);
         bodyMapper = ComponentMapper.getFor(BodyComponent.class);
     }
