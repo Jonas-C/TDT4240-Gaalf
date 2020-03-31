@@ -2,10 +2,13 @@ package com.gaalf.presenter;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -21,22 +24,30 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.gaalf.GaalfGame;
 import com.gaalf.game.ecs.component.BodyComponent;
+import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShootableComponent;
 import com.gaalf.game.ecs.component.ShotIndicatorComponent;
+import com.gaalf.game.ecs.component.SoundComponent;
 import com.gaalf.game.ecs.component.TextureComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.game.ecs.system.PhysicsDebugSystem;
 import com.gaalf.game.ecs.system.PhysicsSystem;
 import com.gaalf.game.ecs.system.RenderingSystem;
 import com.gaalf.game.ecs.system.ShootableSystem;
+import com.gaalf.game.ecs.system.SoundSystem;
+import com.gaalf.game.ecs.system.WinConSystem;
 import com.gaalf.game.ecs.system.ShotIndicatorSystem;
 import com.gaalf.game.util.B2dDebugUtil;
 import com.gaalf.game.util.TiledObjectUtil;
 import com.gaalf.view.GameView;
 import com.gaalf.game.input.*;
+
+import java.util.Observable;
+import java.util.Observer;
+
 import static com.gaalf.game.constants.B2DConstants.*;
 
-public abstract class BaseGamePresenter extends BasePresenter {
+public abstract class BaseGamePresenter extends BasePresenter implements Observer {
 
     private GameView view;
     private Engine engine;
@@ -44,6 +55,7 @@ public abstract class BaseGamePresenter extends BasePresenter {
     private OrthographicCamera b2dCam;
     private ExtendViewport b2dViewport;
     private TiledMap tiledMap;
+    private Music gameMusic;
     protected boolean paused = false;
 
 
@@ -64,18 +76,33 @@ public abstract class BaseGamePresenter extends BasePresenter {
         PhysicsSystem physicsSystem = new PhysicsSystem();
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, b2dCam);
         Entity e = createBall();
+        SoundComponent ballSoundComponent = new SoundComponent();
+        ballSoundComponent.sound = (game.assetManager.manager.get(game.assetManager.jumpSound));
+        e.add(ballSoundComponent);
         ShotIndicatorSystem shotIndicatorSystem = new ShotIndicatorSystem(e.getComponent(TransformComponent.class));
 
 
         engine.addSystem(shootableSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(renderingSystem);
+        engine.addSystem(new SoundSystem());
         engine.addSystem(physicsDebugSystem);
         engine.addSystem(shotIndicatorSystem);
 
 
+        TransformComponent transformComponentGoal = new TransformComponent();
+        MapProperties goalProperties = tiledMap.getLayers().get("objects").getObjects().get("endPos").getProperties();
+        transformComponentGoal.pos.set((float)goalProperties.get("x") / PPM, (float)goalProperties.get("y") / PPM);
+        Entity goal = new Entity();
+        SoundComponent goalSoundComponent = new SoundComponent();
+        goalSoundComponent.sound = game.assetManager.manager.get(game.assetManager.finishSound);
+        goal.add(goalSoundComponent);
+        goal.add(transformComponentGoal);
+        engine.addEntity(goal);
+        engine.addSystem(new WinConSystem(goal));
 
         Entity e1 = createShotIndicator();
+
         InputMultiplexer multiplexer = new InputMultiplexer();
         ShotInputHandler shotInputHandler = new ShotInputHandler();
         multiplexer.addProcessor(view);
@@ -84,13 +111,18 @@ public abstract class BaseGamePresenter extends BasePresenter {
 
         shotInputHandler.addObserver(shootableSystem);
         shotInputHandler.addObserver(shotIndicatorSystem);
+        shotInputHandler.addObserver(this);
 
         engine.addEntity(e);
         engine.addEntity(e1);
         B2dDebugUtil.createWalls(world);
 
-    }
+        gameMusic = game.assetManager.manager.get(game.assetManager.levelOneMusic);
+        gameMusic.setLooping(true);
+        gameMusic.setVolume(0.5f);
+        gameMusic.play();
 
+    }
 
     private void update(float delta){
         if(!paused) {
@@ -143,6 +175,18 @@ public abstract class BaseGamePresenter extends BasePresenter {
         getView().dispose();
     }
 
+    public void update(Observable observable, Object o){
+        if(o instanceof String){
+            if( o == "touchUp"){
+                ImmutableArray<Entity> playerEntities = engine.getEntitiesFor(Family.all(PlayerComponent.class).get());
+                for (Entity entity : playerEntities){
+                    PlayerComponent playerComponent = entity.getComponent(PlayerComponent.class);
+                    setScoreLabel(playerComponent.playerNumber, playerComponent.playerName + ": " + playerComponent.playerScore);
+                }
+            }
+        }
+    }
+
     private Entity createBall(){
         TextureComponent textureComponent = new TextureComponent();
         Texture texture = new Texture("badlogic.jpg");
@@ -176,13 +220,23 @@ public abstract class BaseGamePresenter extends BasePresenter {
         fixtureDef.restitution = .5f;
         bodyComponent.body.createFixture(fixtureDef);
 
+        PlayerComponent playerComponent = new PlayerComponent();
+        playerComponent.playerName = "Brage";
+        playerComponent.playerNumber = 1;
+
         Entity e = new Entity();
         e.add(new ShootableComponent());
+        e.add(playerComponent);
         e.add(transformComponent);
         e.add(textureComponent);
         e.add(bodyComponent);
+
+        getView().addScoreLabel(playerComponent.playerNumber, playerComponent.playerName);
+        getView().addScoreLabel(2,"Trym");
+
         return e;
     }
+
 
     private Entity createShotIndicator(){
         TextureComponent textureComponent = new TextureComponent();
@@ -200,13 +254,20 @@ public abstract class BaseGamePresenter extends BasePresenter {
         e.add(transformComponent);
         e.add(new ShotIndicatorComponent());
         return e;
+
+    }
+
+    public void setScoreLabel(int playerNumber, String newText){
+        getView().setPlayerLabelText(playerNumber, newText);
     }
 
     public void exitLevelSelectMenu() {
+        gameMusic.dispose();
         game.setScreen(new LevelSelectMenuPresenter(game));
     }
 
     public void exitMainMenu(){
+        gameMusic.dispose();
         game.setScreen(new MainMenuPresenter(game));
     }
 }
