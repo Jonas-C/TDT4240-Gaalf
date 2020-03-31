@@ -8,14 +8,10 @@ import com.gaalf.view.BaseView;
 public class MainMenuPresenter extends BaseMenuPresenter {
 
     private BaseView view;
-    private Music menuMusic;
 
     public MainMenuPresenter(final GaalfGame game){
         super(game);
-        menuMusic = game.assetManager.manager.get(game.assetManager.menuMusic);
-        menuMusic.setLooping(true);
-        menuMusic.setVolume(0.5f);
-        menuMusic.play();
+
         view = new MainMenuView(game.getBatch(), this);
     }
 

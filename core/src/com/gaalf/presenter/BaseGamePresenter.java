@@ -2,6 +2,8 @@ package com.gaalf.presenter;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.audio.Music;
@@ -37,9 +39,13 @@ import com.gaalf.game.util.B2dDebugUtil;
 import com.gaalf.game.util.TiledObjectUtil;
 import com.gaalf.view.GameView;
 import com.gaalf.game.input.*;
+
+import java.util.Observable;
+import java.util.Observer;
+
 import static com.gaalf.game.constants.B2DConstants.*;
 
-public abstract class BaseGamePresenter extends BasePresenter {
+public abstract class BaseGamePresenter extends BasePresenter implements Observer {
 
     private GameView view;
     private Engine engine;
@@ -63,7 +69,7 @@ public abstract class BaseGamePresenter extends BasePresenter {
         TiledObjectUtil.parseTiledObjectLayer(world, tiledMap.getLayers().get("collision").getObjects());
 
         RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), b2dCam, tiledMap);
-        ShootableSystem shootableSystem = new ShootableSystem(this);
+        ShootableSystem shootableSystem = new ShootableSystem();
         PhysicsSystem physicsSystem = new PhysicsSystem();
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, b2dCam);
         Entity e = createBall();
@@ -102,6 +108,7 @@ public abstract class BaseGamePresenter extends BasePresenter {
 
         shotInputHandler.addObserver(shootableSystem);
         shotInputHandler.addObserver(shotIndicatorSystem);
+        shotInputHandler.addObserver(this);
 
         engine.addEntity(e);
         engine.addEntity(e1);
@@ -113,7 +120,6 @@ public abstract class BaseGamePresenter extends BasePresenter {
         gameMusic.play();
 
     }
-
 
     private void update(float delta){
         world.step(delta, 6, 2);
@@ -162,6 +168,18 @@ public abstract class BaseGamePresenter extends BasePresenter {
     @Override
     public void dispose(){
         getView().dispose();
+    }
+
+    public void update(Observable observable, Object o){
+        if(o instanceof String){
+            if( o == "touchUp"){
+                ImmutableArray<Entity> playerEntities = engine.getEntitiesFor(Family.all(PlayerComponent.class).get());
+                for (Entity entity : playerEntities){
+                    PlayerComponent playerComponent = entity.getComponent(PlayerComponent.class);
+                    setScoreLabel(playerComponent.playerNumber, playerComponent.playerName + ": " + playerComponent.playerScore);
+                }
+            }
+        }
     }
 
     private Entity createBall(){

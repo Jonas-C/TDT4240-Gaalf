@@ -22,11 +22,9 @@ public class ShootableSystem extends IteratingSystem implements Observer{
     private boolean touchUp = false;
     private Vector2 prevTouch;
     private Vector2 distanceDragged;
-    private BaseGamePresenter presenter;
 
-    public ShootableSystem(BaseGamePresenter presenter){
+    public ShootableSystem(){
         super(Family.all(BodyComponent.class, ShootableComponent.class, PlayerComponent.class).get());
-        this.presenter = presenter;
         bodyMapper = ComponentMapper.getFor(BodyComponent.class);
         shootableMapper = ComponentMapper.getFor(ShootableComponent.class);
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
@@ -48,7 +46,6 @@ public class ShootableSystem extends IteratingSystem implements Observer{
             prevTouch.set(0, 0);
             distanceDragged.set(0, 0);
             playerComponent.playerScore++;
-            presenter.setScoreLabel(playerComponent.playerNumber, playerComponent.playerName + ": " + playerComponent.playerScore);
             playShootSound(entity);
         }
     }
