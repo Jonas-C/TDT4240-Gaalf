@@ -2,7 +2,6 @@ package com.gaalf.presenter;
 
 import com.badlogic.gdx.ScreenAdapter;
 import com.gaalf.GaalfGame;
-import com.gaalf.manager.GameAssetManager;
 import com.gaalf.view.BaseView;
 
 public abstract class BasePresenter extends ScreenAdapter {

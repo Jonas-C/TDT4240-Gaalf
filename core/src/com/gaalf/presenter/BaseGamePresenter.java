@@ -34,7 +34,6 @@ import com.gaalf.game.ecs.system.WinConSystem;
 import com.gaalf.game.ecs.system.ShotIndicatorSystem;
 import com.gaalf.game.util.B2dDebugUtil;
 import com.gaalf.game.util.TiledObjectUtil;
-import com.gaalf.manager.GameAssetManager;
 import com.gaalf.view.GameView;
 import com.gaalf.game.input.*;
 import static com.gaalf.game.constants.B2DConstants.*;

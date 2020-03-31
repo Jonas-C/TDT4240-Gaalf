@@ -1,6 +1,5 @@
 package com.gaalf.presenter;
 
-import com.gaalf.manager.GameAssetManager;
 import com.gaalf.view.BaseView;
 import com.gaalf.GaalfGame;
 import com.gaalf.view.LobbyView;

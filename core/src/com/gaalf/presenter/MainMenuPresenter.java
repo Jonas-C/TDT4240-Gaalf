@@ -1,9 +1,7 @@
 package com.gaalf.presenter;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.gaalf.GaalfGame;
-import com.gaalf.manager.GameAssetManager;
 import com.gaalf.view.MainMenuView;
 import com.gaalf.view.BaseView;
 
