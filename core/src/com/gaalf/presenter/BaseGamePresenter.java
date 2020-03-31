@@ -4,6 +4,8 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.audio.Music;
@@ -54,6 +56,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
     private ExtendViewport b2dViewport;
     private TiledMap tiledMap;
     private Music gameMusic;
+    protected boolean paused = false;
 
 
     BaseGamePresenter(final GaalfGame game) {
@@ -122,7 +125,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
     }
 
     private void update(float delta){
-        world.step(delta, 6, 2);
+        if(!paused) {
+            world.step(delta, 6, 2);
+        }
         engine.update(delta);
         getView().update(delta);
     }
@@ -256,8 +261,13 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         getView().setPlayerLabelText(playerNumber, newText);
     }
 
-    public void openLevelSelectMenu() {
+    public void exitLevelSelectMenu() {
         gameMusic.dispose();
         game.setScreen(new LevelSelectMenuPresenter(game));
+    }
+
+    public void exitMainMenu(){
+        gameMusic.dispose();
+        game.setScreen(new MainMenuPresenter(game));
     }
 }

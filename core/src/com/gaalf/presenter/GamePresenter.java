@@ -13,4 +13,16 @@ public class GamePresenter extends BaseGamePresenter {
 
 
     }
+
+    @Override
+    public void pause() {
+        paused = true;
+        getView().pause();
+    }
+
+    @Override
+    public void resume() {
+        paused = false;
+        getView().resume();
+    }
 }
