@@ -5,11 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.gaalf.manager.GameAssetManager;
+import com.gaalf.manager.SettingsManager;
 import com.gaalf.presenter.MainMenuPresenter;
 
 public class GaalfGame extends Game {
 	SpriteBatch batch;
 	public GameAssetManager assetManager = new GameAssetManager();
+	public SettingsManager settingsManager;
 
 
 	public static int V_WIDTH = 1280;
@@ -21,6 +23,7 @@ public class GaalfGame extends Game {
 		assetManager.loadMusic();
 		assetManager.loadSound();
 		assetManager.manager.finishLoading();
+		settingsManager = new SettingsManager();
 		setScreen(new MainMenuPresenter(this));
 	}
 
