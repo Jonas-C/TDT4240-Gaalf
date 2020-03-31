@@ -20,14 +20,14 @@ public abstract class BaseGameView extends BaseView implements Screen {
     private BaseGamePresenter presenter;
 
 
-    BaseGameView(SpriteBatch batch, BaseGamePresenter presenter){
+    BaseGameView(SpriteBatch batch, final BaseGamePresenter presenter){
         super(batch, presenter);
         this.presenter = presenter;
 
         pauseButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeListener.ChangeEvent event, Actor actor) {
-                openPauseMenu();
+                presenter.pause();
             }
         });
 
@@ -44,17 +44,6 @@ public abstract class BaseGameView extends BaseView implements Screen {
         return table;
     }
 
-    private void openPauseMenu() {
-        addActor(pauseWindow);
-        pauseButton.remove();
-
-    }
-
-    private void closePauseMenu() {
-        pauseWindow.remove();
-        getTable().add(pauseButton).right().padTop(20);
-    }
-
     private void createPauseMenu() {
         pauseWindow.setModal(true);
         pauseWindow.setResizable(false);
@@ -67,25 +56,59 @@ public abstract class BaseGameView extends BaseView implements Screen {
         Table titleTable = pauseWindow.getTitleTable();
         titleTable.pad(20);
 
-        TextButton exitButton = new TextButton("Exit", getSkin());
-        exitButton.setWidth(pauseWindow.getWidth() / 2);
-        exitButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                presenter.openLevelSelectMenu();
-            }
-        });
-        pauseWindow.add(exitButton).width(pauseWindow.getWidth() / 2).padBottom(15);
-
-        pauseWindow.row();
         TextButton resumeButton = new TextButton("Resume", getSkin());
         resumeButton.setWidth(pauseWindow.getWidth() / 2);
         resumeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                closePauseMenu();
+                presenter.resume();
             }
         });
         pauseWindow.add(resumeButton).width(pauseWindow.getWidth() / 2).padBottom(15);
+        pauseWindow.row();
+
+        TextButton exitLevelSelectButton = new TextButton("Exit to Level Select", getSkin());
+        exitLevelSelectButton.setWidth(pauseWindow.getWidth() / 2);
+        exitLevelSelectButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                presenter.exitLevelSelectMenu();
+            }
+        });
+        pauseWindow.add(exitLevelSelectButton).width(pauseWindow.getWidth() / 2).padBottom(15);
+        pauseWindow.row();
+
+        TextButton exitMainMenuButton = new TextButton("Exit to Main Menu", getSkin());
+        exitMainMenuButton.setWidth(pauseWindow.getWidth() / 2);
+        exitMainMenuButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                presenter.exitMainMenu();
+            }
+        });
+        pauseWindow.add(exitMainMenuButton).width(pauseWindow.getWidth() / 2).padBottom(15);
+
+    }
+
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void pause() {
+        addActor(pauseWindow);
+        pauseButton.remove();
+    }
+
+    @Override
+    public void resume() {
+        pauseWindow.remove();
+        getTable().add(pauseButton).right().padTop(20);
+    }
+
+    @Override
+    public void hide() {
+
     }
 }
