@@ -4,8 +4,8 @@ import com.gaalf.GaalfGame;
 
 public class GamePresenter extends BaseGamePresenter {
 
-    public GamePresenter(final GaalfGame game){
-        super(game);
+    public GamePresenter(final GaalfGame game, String levelFilePath){
+        super(game, levelFilePath);
     }
 
     @Override

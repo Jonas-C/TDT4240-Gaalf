@@ -17,7 +17,7 @@ public class LevelSelectMenuView extends BaseMenuView {
 
         addTitle("Select level");
 
-        addLevelSelectButtons();
+        addLevelSelectButtons(presenter);
 
         TextButton backButton = addBackButton();
         backButton.addListener(new ChangeListener() {
@@ -30,10 +30,16 @@ public class LevelSelectMenuView extends BaseMenuView {
         addActor(table);
     }
 
-    public void addLevelSelectButtons() {
+    public void addLevelSelectButtons(final LevelSelectMenuPresenter presenter) {
         FileHandle[] fileHandles = Gdx.files.internal("levels").list(".tmx");
-        for(FileHandle fileHandle : fileHandles) {
+        for(final FileHandle fileHandle : fileHandles) {
             TextButton selectLevelButton = addMenuButton(fileHandle.name().split("\\.")[0]);
+            selectLevelButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    presenter.startLevel(fileHandle.path());
+                }
+            });
 
             // ADD SELECT LEVEL LOGIC
         }

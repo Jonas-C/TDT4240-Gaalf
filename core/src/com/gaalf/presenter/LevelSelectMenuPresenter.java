@@ -21,4 +21,8 @@ public class LevelSelectMenuPresenter extends BaseMenuPresenter {
     public BaseView getView() {
         return view;
     }
+
+    public void startLevel(String levelFilePath){
+        game.setScreen(new GamePresenter(game, levelFilePath));
+    }
 }

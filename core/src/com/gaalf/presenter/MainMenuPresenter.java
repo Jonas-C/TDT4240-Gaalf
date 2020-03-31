@@ -14,7 +14,7 @@ public class MainMenuPresenter extends BaseMenuPresenter {
     }
 
     public void startTestLevel(){
-        game.setScreen(new GamePresenter(game));
+        game.setScreen(new GamePresenter(game, "test.tmx"));
     }
 
     public void openLevelSelectMenu() {

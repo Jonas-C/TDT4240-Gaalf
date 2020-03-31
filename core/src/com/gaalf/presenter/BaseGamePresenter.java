@@ -2,8 +2,6 @@ package com.gaalf.presenter;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -44,10 +42,10 @@ public abstract class BaseGamePresenter extends BasePresenter {
     private OrthographicCamera b2dCam;
     private ExtendViewport b2dViewport;
     private TiledMap tiledMap;
-    protected boolean paused = false;
+    boolean paused = false;
 
 
-    BaseGamePresenter(final GaalfGame game) {
+    BaseGamePresenter(final GaalfGame game, String levelFilePath) {
         super(game);
         view = new GameView(game.getBatch(),this);
         engine = new Engine();
@@ -56,8 +54,7 @@ public abstract class BaseGamePresenter extends BasePresenter {
         b2dViewport = new ExtendViewport(GaalfGame.V_WIDTH / PPM, GaalfGame.V_HEIGHT / PPM, b2dCam);
         b2dViewport.update(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT, true);
 
-        tiledMap = new TmxMapLoader().load(Gdx.files.internal("test.tmx").path());
-        TiledObjectUtil.parseTiledObjectLayer(world, tiledMap.getLayers().get("collision").getObjects());
+        initMap(levelFilePath);
 
         RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), b2dCam, tiledMap);
         ShootableSystem shootableSystem = new ShootableSystem();
@@ -65,7 +62,6 @@ public abstract class BaseGamePresenter extends BasePresenter {
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, b2dCam);
         Entity e = createBall();
         ShotIndicatorSystem shotIndicatorSystem = new ShotIndicatorSystem(e.getComponent(TransformComponent.class));
-
 
         engine.addSystem(shootableSystem);
         engine.addSystem(physicsSystem);
@@ -141,6 +137,11 @@ public abstract class BaseGamePresenter extends BasePresenter {
     @Override
     public void dispose(){
         getView().dispose();
+    }
+
+    private void initMap(String levelFilePath){
+        tiledMap = new TmxMapLoader().load(Gdx.files.internal(levelFilePath).path());
+        TiledObjectUtil.parseTiledObjectLayer(world, tiledMap.getLayers().get("collision").getObjects());
     }
 
     private Entity createBall(){
