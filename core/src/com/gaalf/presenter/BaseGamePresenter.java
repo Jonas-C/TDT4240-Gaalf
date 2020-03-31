@@ -4,8 +4,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.ashley.core.EntitySystem;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.audio.Music;
@@ -56,7 +54,8 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
     private ExtendViewport b2dViewport;
     private TiledMap tiledMap;
     private Music gameMusic;
-    protected boolean paused = false;
+    boolean paused = false;
+    private Entity playerEntity;
 
 
     BaseGamePresenter(final GaalfGame game) {
@@ -130,6 +129,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         }
         engine.update(delta);
         getView().update(delta);
+        if(playerEntity.getComponent(PlayerComponent.class).isFinished){
+            levelCleared();
+        }
     }
 
     @Override
@@ -173,6 +175,10 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
     @Override
     public void dispose(){
         getView().dispose();
+    }
+
+    public void levelCleared(){
+        getView().levelCleared();
     }
 
     public void update(Observable observable, Object o){
@@ -224,17 +230,17 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         playerComponent.playerName = "Brage";
         playerComponent.playerNumber = 1;
 
-        Entity e = new Entity();
-        e.add(new ShootableComponent());
-        e.add(playerComponent);
-        e.add(transformComponent);
-        e.add(textureComponent);
-        e.add(bodyComponent);
+        playerEntity = new Entity();
+        playerEntity.add(new ShootableComponent());
+        playerEntity.add(playerComponent);
+        playerEntity.add(transformComponent);
+        playerEntity.add(textureComponent);
+        playerEntity.add(bodyComponent);
 
         getView().addScoreLabel(playerComponent.playerNumber, playerComponent.playerName);
         getView().addScoreLabel(2,"Trym");
 
-        return e;
+        return playerEntity;
     }
 
 
@@ -257,7 +263,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
 
     }
 
-    public void setScoreLabel(int playerNumber, String newText){
+    private void setScoreLabel(int playerNumber, String newText){
         getView().setPlayerLabelText(playerNumber, newText);
     }
 
@@ -269,5 +275,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
     public void exitMainMenu(){
         gameMusic.dispose();
         game.setScreen(new MainMenuPresenter(game));
+    }
+
+    public void initLevel(){
+
     }
 }
