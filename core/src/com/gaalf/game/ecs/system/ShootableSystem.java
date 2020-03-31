@@ -36,18 +36,19 @@ public class ShootableSystem extends IteratingSystem implements Observer{
         BodyComponent bodyComponent = bodyMapper.get(entity);
         ShootableComponent shootableComponent = shootableMapper.get(entity);
         PlayerComponent playerComponent = playerMapper.get(entity);
-        shootableComponent.force.set(distanceDragged);
-        if (touchUp){
-            System.out.println("shooting");
-//            if(shootableComponent.force.y )
+
+        System.out.println(distanceDragged);
+        if(touchUp && !distanceDragged.isZero()){
+            shootableComponent.force.set(distanceDragged);
             bodyComponent.body.applyForceToCenter(-(shootableComponent.force.x), -(shootableComponent.force.y), true);
             shootableComponent.force.set(0, 0);
-            touchUp = false;
-            prevTouch.set(0, 0);
-            distanceDragged.set(0, 0);
             playerComponent.playerScore++;
             playShootSound(entity);
+            prevTouch.set(0, 0);
+            distanceDragged.set(0, 0);
         }
+            touchUp = false;
+
     }
 
 
@@ -55,7 +56,6 @@ public class ShootableSystem extends IteratingSystem implements Observer{
     public void update(Observable observable, Object o) {
         if(o instanceof String){
             if( o == "touchUp"){
-//                System.out.println("asdasd up");
                 touchUp = true;
             }
         } else if(o instanceof Vector2){
@@ -64,7 +64,6 @@ public class ShootableSystem extends IteratingSystem implements Observer{
             }
             distanceDragged.add(((Vector2) o).x - prevTouch.x, ((Vector2) o).y - prevTouch.y);
             prevTouch.set((Vector2)o);
-//            System.out.println(distanceDragged);
         }
 
     }
