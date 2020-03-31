@@ -8,8 +8,8 @@ import com.gaalf.view.ServersView;
 public class ServersPresenter extends BaseMenuPresenter {
     private BaseView view;
 
-    public ServersPresenter(final GaalfGame game, GameAssetManager assetManager){
-        super(game, assetManager);
+    public ServersPresenter(final GaalfGame game){
+        super(game);
         view = new ServersView(game.getBatch(), this);
     }
     @Override

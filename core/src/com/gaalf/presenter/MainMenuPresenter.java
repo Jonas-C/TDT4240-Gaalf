@@ -12,9 +12,9 @@ public class MainMenuPresenter extends BaseMenuPresenter {
     private BaseView view;
     private Music menuMusic;
 
-    public MainMenuPresenter(final GaalfGame game, GameAssetManager assetManager){
-        super(game, assetManager);
-        menuMusic = assetManager.manager.get(assetManager.menuMusic);
+    public MainMenuPresenter(final GaalfGame game){
+        super(game);
+        menuMusic = game.assetManager.manager.get(game.assetManager.menuMusic);
         menuMusic.setLooping(true);
         menuMusic.setVolume(0.5f);
         menuMusic.play();
@@ -23,15 +23,15 @@ public class MainMenuPresenter extends BaseMenuPresenter {
 
     public void startTestLevel(){
         menuMusic.dispose();
-        game.setScreen(new GamePresenter(game, assetManager));
+        game.setScreen(new GamePresenter(game));
     }
 
     public void openLevelSelectMenu() {
-        game.setScreen(new LevelSelectMenuPresenter(game, assetManager));
+        game.setScreen(new LevelSelectMenuPresenter(game));
     }
 
     public void openSettingsView() {
-        game.setScreen(new SettingsPresenter(game, assetManager));
+        game.setScreen(new SettingsPresenter(game));
     }
 
     @Override

@@ -9,7 +9,8 @@ import com.gaalf.presenter.MainMenuPresenter;
 
 public class GaalfGame extends Game {
 	SpriteBatch batch;
-	GameAssetManager assetManager = new GameAssetManager();
+	public GameAssetManager assetManager = new GameAssetManager();
+
 
 	public static int V_WIDTH = 1280;
 	public static int V_HEIGHT = 720;
@@ -20,7 +21,7 @@ public class GaalfGame extends Game {
 		assetManager.loadMusic();
 		assetManager.loadSoundd();
 		assetManager.manager.finishLoading();
-		setScreen(new MainMenuPresenter(this, assetManager));
+		setScreen(new MainMenuPresenter(this));
 	}
 
 	@Override

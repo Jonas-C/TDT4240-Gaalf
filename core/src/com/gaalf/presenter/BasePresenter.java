@@ -8,11 +8,9 @@ import com.gaalf.view.BaseView;
 public abstract class BasePresenter extends ScreenAdapter {
 
     final GaalfGame game;
-    final GameAssetManager assetManager;
 
-    BasePresenter(final GaalfGame game, final GameAssetManager assetManager){
+    BasePresenter(final GaalfGame game){
         this.game = game;
-        this.assetManager = assetManager;
     }
 
     public abstract BaseView getView();

@@ -9,13 +9,13 @@ public class SettingsPresenter extends BaseMenuPresenter {
 
     private BaseView view;
 
-    public SettingsPresenter(final GaalfGame game, GameAssetManager assetManager){
-        super(game, assetManager);
+    public SettingsPresenter(final GaalfGame game){
+        super(game);
         view = new SettingsView(game.getBatch(), this);
     }
 
     public void openMainMenuView() {
-        game.setScreen(new MainMenuPresenter(game, assetManager));
+        game.setScreen(new MainMenuPresenter(game));
     }
 
 

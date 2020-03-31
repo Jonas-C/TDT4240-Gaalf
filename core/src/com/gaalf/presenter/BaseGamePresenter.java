@@ -49,8 +49,8 @@ public abstract class BaseGamePresenter extends BasePresenter {
     private TiledMap tiledMap;
 
 
-    BaseGamePresenter(final GaalfGame game, GameAssetManager assetManager) {
-        super(game, assetManager);
+    BaseGamePresenter(final GaalfGame game) {
+        super(game);
         view = new GameView(game.getBatch(), this);
         engine = new Engine();
         world = new World(new Vector2(0, -9.81f), true);
@@ -67,7 +67,7 @@ public abstract class BaseGamePresenter extends BasePresenter {
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, b2dCam);
         Entity e = createBall();
         SoundComponent ballSoundComponent = new SoundComponent();
-        ballSoundComponent.sound = (assetManager.manager.get(assetManager.jumpSound));
+        ballSoundComponent.sound = (game.assetManager.manager.get(game.assetManager.jumpSound));
         e.add(ballSoundComponent);
         ShotIndicatorSystem shotIndicatorSystem = new ShotIndicatorSystem(e.getComponent(TransformComponent.class));
 
@@ -85,7 +85,7 @@ public abstract class BaseGamePresenter extends BasePresenter {
         transformComponentGoal.pos.set((float)goalProperties.get("x") / PPM, (float)goalProperties.get("y") / PPM);
         Entity goal = new Entity();
         SoundComponent goalSoundComponent = new SoundComponent();
-        goalSoundComponent.sound = assetManager.manager.get(assetManager.finishSound);
+        goalSoundComponent.sound = game.assetManager.manager.get(game.assetManager.finishSound);
         goal.add(goalSoundComponent);
         goal.add(transformComponentGoal);
         engine.addEntity(goal);

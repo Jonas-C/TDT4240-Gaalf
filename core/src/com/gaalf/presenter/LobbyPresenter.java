@@ -9,8 +9,8 @@ public class LobbyPresenter extends BaseMenuPresenter {
 
     private BaseView view;
 
-    public LobbyPresenter(final GaalfGame game, GameAssetManager assetManager){
-        super(game, assetManager);
+    public LobbyPresenter(final GaalfGame game){
+        super(game);
         view = new LobbyView(game.getBatch(), this);
 
     }
