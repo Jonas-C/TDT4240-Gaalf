@@ -8,4 +8,5 @@ public class TransformComponent implements Component {
     public Vector2 scale = new Vector2();
     public boolean visible = true;
     public float rotation = 0.0f;
+    public Vector2 origin = new Vector2();
 }
