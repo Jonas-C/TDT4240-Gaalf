@@ -19,7 +19,7 @@ public class GaalfGame extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		assetManager.loadMusic();
-		assetManager.loadSoundd();
+		assetManager.loadSound();
 		assetManager.manager.finishLoading();
 		setScreen(new MainMenuPresenter(this));
 	}

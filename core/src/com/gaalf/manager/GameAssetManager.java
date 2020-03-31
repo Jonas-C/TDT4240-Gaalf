@@ -20,7 +20,7 @@ public class GameAssetManager {
         manager.load(levelOneMusic, Music.class);
     }
 
-    public void loadSoundd(){
+    public void loadSound(){
         manager.load(jumpSound, Sound.class);
         manager.load(finishSound, Sound.class);
     }
