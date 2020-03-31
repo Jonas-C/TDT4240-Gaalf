@@ -11,15 +11,14 @@ public abstract class BaseMenuPresenter extends BasePresenter {
     BaseMenuPresenter(GaalfGame game) {
         super(game);
         // hent preferences her:
-        Preferences preferences;
+        Preferences preferences = Gdx.app.getPreferences("Settings.preferences");;
         menuMusic = game.assetManager.manager.get(game.assetManager.menuMusic);
         menuMusic.setLooping(true);
-        menuMusic.setVolume(Gdx.app.getPreferences("Settings.preferences").getFloat("volume", 0.5f)); // bruk preferences.getFloat.
-
-        preferences = Gdx.app.getPreferences("Settings.preferences");
-
-        //if preferences boolean isMusicEnabled menumusic.play();
-
+        menuMusic.setVolume(preferences.getFloat("volume")); // bruk preferences.getFloat.
         menuMusic.play();
+        //if preferences boolean isMusicEnabled menumusic.play();
+        if (!preferences.getBoolean("music.enabled", true)){
+            menuMusic.pause();
+        }
     }
 }
