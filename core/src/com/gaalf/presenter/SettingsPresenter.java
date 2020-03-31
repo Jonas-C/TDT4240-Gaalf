@@ -13,7 +13,7 @@ public class SettingsPresenter extends BaseMenuPresenter {
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOL = "sound";
-    private static final String PREFS_NAME = "b2dtut";
+    private static final String PREFS_NAME = "Settings.preferences";
 
 
     protected Preferences getPreferences() {
@@ -33,7 +33,12 @@ public class SettingsPresenter extends BaseMenuPresenter {
     }
 
     public void setMusicEnabled(boolean musicEnabled) {
-        // if musicEnabled menuMusi.play(); else pause();
+        if (musicEnabled){
+            menuMusic.play();
+        }
+        else{
+            menuMusic.pause();
+        }
         getPreferences().putBoolean(PREF_MUSIC_ENABLED, musicEnabled);
         getPreferences().flush();
     }
@@ -46,6 +51,7 @@ public class SettingsPresenter extends BaseMenuPresenter {
         getPreferences().putFloat(PREF_MUSIC_VOLUME, volume);
         getPreferences().flush(); //written to disk and saved (forhåpentligvis)
     }
+
 
     public float getSoundVolume(){
         return getPreferences().getFloat(PREF_SOUND_VOL, 0.5f);
@@ -61,6 +67,7 @@ public class SettingsPresenter extends BaseMenuPresenter {
     public SettingsPresenter(final GaalfGame game){
         super(game);
         view = new SettingsView(game.getBatch(), this);
+
     }
 
     public void openMainMenuView() {
