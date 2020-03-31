@@ -33,6 +33,7 @@ public class SettingsPresenter extends BaseMenuPresenter {
     }
 
     public void setMusicEnabled(boolean musicEnabled) {
+        // if musicEnabled menuMusi.play(); else pause();
         getPreferences().putBoolean(PREF_MUSIC_ENABLED, musicEnabled);
         getPreferences().flush();
     }
@@ -41,6 +42,7 @@ public class SettingsPresenter extends BaseMenuPresenter {
     }
 
     public void setMusicVolume(float volume){
+        menuMusic.setVolume(volume);
         getPreferences().putFloat(PREF_MUSIC_VOLUME, volume);
         getPreferences().flush(); //written to disk and saved (forhåpentligvis)
     }

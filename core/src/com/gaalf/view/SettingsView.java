@@ -38,7 +38,7 @@ public class SettingsView extends BaseMenuView {
         volumeSoundSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                presenter.setMusicVolume(volumeSoundSlider.getValue());
+                presenter.setSoundVolume(volumeSoundSlider.getValue());
                 return false;
             }
         });
