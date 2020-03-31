@@ -10,10 +10,7 @@ public class GamePresenter extends BaseGamePresenter {
     public GamePresenter(final GaalfGame game){
         super(game);
 
-        menuMusic = game.assetManager.manager.get(game.assetManager.levelOneMusic);
-        menuMusic.setLooping(true);
-        menuMusic.setVolume(0.5f);
-        menuMusic.play();
+
 
     }
 }

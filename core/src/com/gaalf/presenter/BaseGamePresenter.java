@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -46,11 +47,12 @@ public abstract class BaseGamePresenter extends BasePresenter {
     private OrthographicCamera b2dCam;
     private ExtendViewport b2dViewport;
     private TiledMap tiledMap;
+    private Music gameMusic;
 
 
     BaseGamePresenter(final GaalfGame game) {
         super(game);
-        view = new GameView(game.getBatch(), this);
+        view = new GameView(game.getBatch(),this);
         engine = new Engine();
         world = new World(new Vector2(0, -9.81f), true);
         b2dCam = new OrthographicCamera();
@@ -104,6 +106,11 @@ public abstract class BaseGamePresenter extends BasePresenter {
         engine.addEntity(e);
         engine.addEntity(e1);
         B2dDebugUtil.createWalls(world);
+
+        gameMusic = game.assetManager.manager.get(game.assetManager.levelOneMusic);
+        gameMusic.setLooping(true);
+        gameMusic.setVolume(0.5f);
+        gameMusic.play();
 
     }
 
@@ -229,5 +236,10 @@ public abstract class BaseGamePresenter extends BasePresenter {
 
     public void setScoreLabel(int playerNumber, String newText){
         getView().setPlayerLabelText(playerNumber, newText);
+    }
+
+    public void openLevelSelectMenu() {
+        gameMusic.dispose();
+        game.setScreen(new LevelSelectMenuPresenter(game));
     }
 }
