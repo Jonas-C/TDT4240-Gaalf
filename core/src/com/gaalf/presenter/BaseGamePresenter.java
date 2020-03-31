@@ -46,7 +46,7 @@ public abstract class BaseGamePresenter extends BasePresenter {
 
     BaseGamePresenter(final GaalfGame game) {
         super(game);
-        view = new GameView(game.getBatch(), this);
+        view = new GameView(game.getBatch(),this);
         engine = new Engine();
         world = new World(new Vector2(0, -9.81f), true);
         b2dCam = new OrthographicCamera();
@@ -195,5 +195,9 @@ public abstract class BaseGamePresenter extends BasePresenter {
         e.add(transformComponent);
         e.add(new ShotIndicatorComponent());
         return e;
+    }
+
+    public void openLevelSelectMenu() {
+        game.setScreen(new LevelSelectMenuPresenter(game));
     }
 }
