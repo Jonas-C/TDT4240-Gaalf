@@ -22,6 +22,7 @@ import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShootableComponent;
 import com.gaalf.game.ecs.component.ShotIndicatorComponent;
+import com.gaalf.game.ecs.component.SoundComponent;
 import com.gaalf.game.ecs.component.TextureComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.game.ecs.system.PhysicsDebugSystem;
@@ -33,6 +34,7 @@ import com.gaalf.game.ecs.system.WinConSystem;
 import com.gaalf.game.ecs.system.ShotIndicatorSystem;
 import com.gaalf.game.util.B2dDebugUtil;
 import com.gaalf.game.util.TiledObjectUtil;
+import com.gaalf.manager.GameAssetManager;
 import com.gaalf.view.GameView;
 import com.gaalf.game.input.*;
 import static com.gaalf.game.constants.B2DConstants.*;
@@ -47,8 +49,8 @@ public abstract class BaseGamePresenter extends BasePresenter {
     private TiledMap tiledMap;
 
 
-    BaseGamePresenter(final GaalfGame game) {
-        super(game);
+    BaseGamePresenter(final GaalfGame game, GameAssetManager assetManager) {
+        super(game, assetManager);
         view = new GameView(game.getBatch(), this);
         engine = new Engine();
         world = new World(new Vector2(0, -9.81f), true);
@@ -64,6 +66,9 @@ public abstract class BaseGamePresenter extends BasePresenter {
         PhysicsSystem physicsSystem = new PhysicsSystem();
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, b2dCam);
         Entity e = createBall();
+        SoundComponent ballSoundComponent = new SoundComponent();
+        ballSoundComponent.sound = (assetManager.manager.get(assetManager.jumpSound));
+        e.add(ballSoundComponent);
         ShotIndicatorSystem shotIndicatorSystem = new ShotIndicatorSystem(e.getComponent(TransformComponent.class));
 
 
@@ -79,6 +84,9 @@ public abstract class BaseGamePresenter extends BasePresenter {
         MapProperties goalProperties = tiledMap.getLayers().get("objects").getObjects().get("endPos").getProperties();
         transformComponentGoal.pos.set((float)goalProperties.get("x") / PPM, (float)goalProperties.get("y") / PPM);
         Entity goal = new Entity();
+        SoundComponent goalSoundComponent = new SoundComponent();
+        goalSoundComponent.sound = assetManager.manager.get(assetManager.finishSound);
+        goal.add(goalSoundComponent);
         goal.add(transformComponentGoal);
         engine.addEntity(goal);
         engine.addSystem(new WinConSystem(goal));

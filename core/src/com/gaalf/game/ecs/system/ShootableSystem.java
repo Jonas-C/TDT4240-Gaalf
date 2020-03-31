@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShootableComponent;
-import com.gaalf.game.ecs.component.SoundEffectComponent;
+import com.gaalf.game.ecs.component.SoundComponent;
 import com.gaalf.presenter.BaseGamePresenter;
 
 import java.util.Observable;
@@ -49,7 +49,7 @@ public class ShootableSystem extends IteratingSystem implements Observer{
             distanceDragged.set(0, 0);
             playerComponent.playerScore++;
             presenter.setScoreLabel(playerComponent.playerNumber, playerComponent.playerName + ": " + playerComponent.playerScore);
-            addShootSound(entity);
+            playShootSound(entity);
         }
     }
 
@@ -71,7 +71,7 @@ public class ShootableSystem extends IteratingSystem implements Observer{
         }
 
     }
-    private void addShootSound(Entity entity){
-        entity.add(new SoundEffectComponent());
+    private void playShootSound(Entity entity){
+        entity.getComponent(SoundComponent.class).shouldBePlayed = true;
     }
 }

@@ -4,10 +4,12 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.gaalf.manager.GameAssetManager;
 import com.gaalf.presenter.MainMenuPresenter;
 
 public class GaalfGame extends Game {
 	SpriteBatch batch;
+	GameAssetManager assetManager = new GameAssetManager();
 
 	public static int V_WIDTH = 1280;
 	public static int V_HEIGHT = 720;
@@ -15,7 +17,10 @@ public class GaalfGame extends Game {
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		setScreen(new MainMenuPresenter(this));
+		assetManager.loadMusic();
+		assetManager.loadSoundd();
+		assetManager.manager.finishLoading();
+		setScreen(new MainMenuPresenter(this, assetManager));
 	}
 
 	@Override

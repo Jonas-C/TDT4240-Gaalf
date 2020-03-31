@@ -1,5 +1,6 @@
 package com.gaalf.presenter;
 
+import com.gaalf.manager.GameAssetManager;
 import com.gaalf.view.BaseView;
 import com.gaalf.GaalfGame;
 import com.gaalf.view.LobbyView;
@@ -8,8 +9,8 @@ public class LobbyPresenter extends BaseMenuPresenter {
 
     private BaseView view;
 
-    public LobbyPresenter(final GaalfGame game){
-        super(game);
+    public LobbyPresenter(final GaalfGame game, GameAssetManager assetManager){
+        super(game, assetManager);
         view = new LobbyView(game.getBatch(), this);
 
     }

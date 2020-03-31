@@ -5,10 +5,5 @@ import com.badlogic.gdx.audio.Sound;
 
 public class SoundComponent implements Component {
     public Sound sound;
-
-    public void setSound(Sound sound){
-        this.sound = sound;
-    }
-
-    public Sound getSound(){return sound;}
+    public boolean shouldBePlayed = false;
 }
