@@ -21,6 +21,7 @@ public class GaalfGame extends Game {
 	@Override
 	public void render () {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		Gdx.gl.glClearColor(0, 0,0, 0);
 		super.render();
 	}
 	

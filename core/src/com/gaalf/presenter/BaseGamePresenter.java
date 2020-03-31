@@ -2,6 +2,8 @@ package com.gaalf.presenter;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -42,6 +44,7 @@ public abstract class BaseGamePresenter extends BasePresenter {
     private OrthographicCamera b2dCam;
     private ExtendViewport b2dViewport;
     private TiledMap tiledMap;
+    protected boolean paused = false;
 
 
     BaseGamePresenter(final GaalfGame game) {
@@ -90,7 +93,9 @@ public abstract class BaseGamePresenter extends BasePresenter {
 
 
     private void update(float delta){
-        world.step(delta, 6, 2);
+        if(!paused) {
+            world.step(delta, 6, 2);
+        }
         engine.update(delta);
         getView().update(delta);
     }
@@ -197,7 +202,11 @@ public abstract class BaseGamePresenter extends BasePresenter {
         return e;
     }
 
-    public void openLevelSelectMenu() {
+    public void exitLevelSelectMenu() {
         game.setScreen(new LevelSelectMenuPresenter(game));
+    }
+
+    public void exitMainMenu(){
+        game.setScreen(new MainMenuPresenter(game));
     }
 }
