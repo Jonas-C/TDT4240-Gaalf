@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.SoundEffectComponent;
+import com.gaalf.game.ecs.component.SoundFinishComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 
 public class WinConSystem  extends IteratingSystem {
@@ -36,7 +37,7 @@ public class WinConSystem  extends IteratingSystem {
             if ((posPlayer.y < posGoal.y + 0.2f) && (posPlayer.y > posGoal.y - 0.2f)){
                 if (!playerMapper.get(entity).isFinished){
                     playerMapper.get(entity).isFinished = true;
-                    entity.add(new SoundEffectComponent());
+                    entity.add(new SoundFinishComponent());
                     System.out.println("Goal");
                     Body playerBody = entity.getComponent(BodyComponent.class).body;
                     playerBody.setAwake(false);

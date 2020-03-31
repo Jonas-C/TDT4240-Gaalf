@@ -1,6 +1,7 @@
 package com.gaalf.game.ecs.component;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 
