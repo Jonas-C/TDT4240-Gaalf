@@ -7,25 +7,28 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class LevelManager {
 
     private ArrayList<FileHandle> levels;
     private ArrayList<FileHandle> mapPacks;
-    private String levelPack;
+    private String mapPack;
     private int level;
     private TmxMapLoader tmxMapLoader;
+    private Random random;
 
     public LevelManager(){
         levels = new ArrayList<>();
         mapPacks = new ArrayList<>();
         mapPacks.addAll(Arrays.asList(Gdx.files.internal("levels").list()));
         tmxMapLoader = new TmxMapLoader();
+        random = new Random();
     }
 
     public TiledMap loadLevel(FileHandle level){
         this.level = Integer.parseInt(level.nameWithoutExtension());
-        return tmxMapLoader.load("levels/" + levelPack + "/" + level.name());
+        return tmxMapLoader.load("levels/" + mapPack + "/" + level.name());
     }
 
     public boolean hasNext(){
@@ -34,15 +37,23 @@ public class LevelManager {
 
     public TiledMap nextLevel(){
         level++;
-        return tmxMapLoader.load("levels/" + levelPack + "/" + level + ".tmx");
+        return tmxMapLoader.load("levels/" + mapPack + "/" + level + ".tmx");
+    }
+
+    public FileHandle getRandomLevel(){
+        String mapPack = mapPacks.get(random.nextInt(mapPacks.size())).name();
+        this.mapPack = mapPack;
+        FileHandle[] levels = Gdx.files.internal("levels/" + mapPack + "/").list(".tmx");
+        return levels[random.nextInt(levels.length)];
     }
 
     public ArrayList<FileHandle> getMapPacks(){
+        getRandomLevel();
         return mapPacks;
     }
 
     public void setLevels(String levelPack){
-        this.levelPack = levelPack;
+        this.mapPack = levelPack;
         this.levels.clear();
         this.levels.addAll(Arrays.asList(Gdx.files.internal("levels/" + levelPack + "/").list(".tmx")));
     }

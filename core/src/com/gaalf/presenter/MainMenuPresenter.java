@@ -17,7 +17,8 @@ public class MainMenuPresenter extends BaseMenuPresenter {
     public void startTestLevel(){
         menuMusic.dispose();
 
-        game.setScreen(new GamePresenter(game, game.levelManager.getLevels().get(0) ));
+//        game.setScreen(new GamePresenter(game, game.levelManager.getLevels().get(0) ));
+        game.setScreen(new GamePresenter(game, game.levelManager.getRandomLevel()));
     }
 
     public void openLevelSelectMenu() {
