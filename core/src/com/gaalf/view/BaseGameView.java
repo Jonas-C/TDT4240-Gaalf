@@ -3,6 +3,7 @@ package com.gaalf.view;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.gaalf.GaalfGame;
 import com.gaalf.presenter.BaseGamePresenter;
 
