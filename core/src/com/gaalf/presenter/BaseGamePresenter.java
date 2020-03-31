@@ -21,6 +21,7 @@ import com.gaalf.GaalfGame;
 import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShootableComponent;
+import com.gaalf.game.ecs.component.ShotIndicatorComponent;
 import com.gaalf.game.ecs.component.TextureComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.game.ecs.system.PhysicsDebugSystem;
@@ -29,6 +30,7 @@ import com.gaalf.game.ecs.system.RenderingSystem;
 import com.gaalf.game.ecs.system.ShootableSystem;
 import com.gaalf.game.ecs.system.SoundSystem;
 import com.gaalf.game.ecs.system.WinConSystem;
+import com.gaalf.game.ecs.system.ShotIndicatorSystem;
 import com.gaalf.game.util.B2dDebugUtil;
 import com.gaalf.game.util.TiledObjectUtil;
 import com.gaalf.view.GameView;
@@ -42,8 +44,7 @@ public abstract class BaseGamePresenter extends BasePresenter {
     private World world;
     private OrthographicCamera b2dCam;
     private ExtendViewport b2dViewport;
-    Vector2 playerPos;
-    TiledMap tiledMap;
+    private TiledMap tiledMap;
 
 
     BaseGamePresenter(final GaalfGame game) {
@@ -55,9 +56,6 @@ public abstract class BaseGamePresenter extends BasePresenter {
         b2dViewport = new ExtendViewport(GaalfGame.V_WIDTH / PPM, GaalfGame.V_HEIGHT / PPM, b2dCam);
         b2dViewport.update(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT, true);
 
-        playerPos = new Vector2();
-
-
         tiledMap = new TmxMapLoader().load(Gdx.files.internal("test.tmx").path());
         TiledObjectUtil.parseTiledObjectLayer(world, tiledMap.getLayers().get("collision").getObjects());
 
@@ -65,12 +63,16 @@ public abstract class BaseGamePresenter extends BasePresenter {
         ShootableSystem shootableSystem = new ShootableSystem(this);
         PhysicsSystem physicsSystem = new PhysicsSystem();
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, b2dCam);
+        Entity e = createBall();
+        ShotIndicatorSystem shotIndicatorSystem = new ShotIndicatorSystem(e.getComponent(TransformComponent.class));
+
 
         engine.addSystem(shootableSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(renderingSystem);
         engine.addSystem(new SoundSystem());
         engine.addSystem(physicsDebugSystem);
+        engine.addSystem(shotIndicatorSystem);
 
 
         TransformComponent transformComponentGoal = new TransformComponent();
@@ -81,8 +83,8 @@ public abstract class BaseGamePresenter extends BasePresenter {
         engine.addEntity(goal);
         engine.addSystem(new WinConSystem(goal));
 
-        Entity e = createBall();
-        Entity e1 = createShotIndicator(e.getComponent(TransformComponent.class));
+        Entity e1 = createShotIndicator();
+
         InputMultiplexer multiplexer = new InputMultiplexer();
         ShotInputHandler shotInputHandler = new ShotInputHandler();
         multiplexer.addProcessor(view);
@@ -90,9 +92,10 @@ public abstract class BaseGamePresenter extends BasePresenter {
         Gdx.input.setInputProcessor(multiplexer);
 
         shotInputHandler.addObserver(shootableSystem);
+        shotInputHandler.addObserver(shotIndicatorSystem);
 
         engine.addEntity(e);
-//        engine.addEntity(e1);
+        engine.addEntity(e1);
         B2dDebugUtil.createWalls(world);
 
     }
@@ -198,20 +201,21 @@ public abstract class BaseGamePresenter extends BasePresenter {
     }
 
 
-    private Entity createShotIndicator(TransformComponent playerTransformComponent){
+    private Entity createShotIndicator(){
         TextureComponent textureComponent = new TextureComponent();
         Texture texture = new Texture("arrow.png");
         textureComponent.sprite = new Sprite(texture);
 
         TransformComponent transformComponent = new TransformComponent();
-        transformComponent.pos.set(playerTransformComponent.pos.x + 10, playerTransformComponent.pos.y + 10);
-        transformComponent.scale.set(0.5f, 0.5f);
+        transformComponent.pos.set(3, 3);
+        transformComponent.scale.set(0.2f, 0.2f);
         transformComponent.rotation = 0;
         transformComponent.visible = false;
 
         Entity e = new Entity();
         e.add(textureComponent);
         e.add(transformComponent);
+        e.add(new ShotIndicatorComponent());
         return e;
 
     }
