@@ -9,7 +9,6 @@ import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShootableComponent;
 import com.gaalf.game.ecs.component.SoundComponent;
-import com.gaalf.presenter.BaseGamePresenter;
 
 import java.util.Observable;
 import java.util.Observer;

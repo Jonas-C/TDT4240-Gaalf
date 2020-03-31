@@ -1,6 +1,5 @@
 package com.gaalf.presenter;
 
-import com.badlogic.gdx.audio.Music;
 import com.gaalf.GaalfGame;
 import com.gaalf.view.MainMenuView;
 import com.gaalf.view.BaseView;
@@ -17,11 +16,12 @@ public class MainMenuPresenter extends BaseMenuPresenter {
 
     public void startTestLevel(){
         menuMusic.dispose();
-        game.setScreen(new GamePresenter(game));
+
+        game.setScreen(new GamePresenter(game, game.levelManager.getLevels().get(0) ));
     }
 
     public void openLevelSelectMenu() {
-        game.setScreen(new LevelSelectMenuPresenter(game));
+        game.setScreen(new MapPackSelectPresenter(game));
     }
 
     public void openSettingsView() {

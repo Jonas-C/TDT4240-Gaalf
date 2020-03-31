@@ -21,7 +21,6 @@ public class TiledObjectUtil {
         for(MapObject object : objects){
             if(object instanceof PolylineMapObject){
                 shape = createPolyLine((PolylineMapObject) object);
-                System.out.println(((PolylineMapObject) object).getPolyline());
                 bdef.position.set(((PolylineMapObject) object).getPolyline().getOriginX() / PPM,
                         ((PolylineMapObject) object).getPolyline().getOriginY() / PPM);
 
@@ -43,7 +42,6 @@ public class TiledObjectUtil {
 
         for(int i = 0; i < worldVertices.length; i++){
             worldVertices[i] = new Vector2(vertices[i * 2] / PPM, vertices[i*2 + 1] / PPM);
-            System.out.println(worldVertices[i]);
         }
 
         ChainShape cs = new ChainShape();
