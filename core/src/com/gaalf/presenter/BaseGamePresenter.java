@@ -26,6 +26,10 @@ import com.gaalf.game.ecs.system.PhysicsDebugSystem;
 import com.gaalf.game.ecs.system.PhysicsSystem;
 import com.gaalf.game.ecs.system.RenderingSystem;
 import com.gaalf.game.ecs.system.ShootableSystem;
+import com.gaalf.game.precreatedEntities.balls.Ball;
+import com.gaalf.game.precreatedEntities.balls.BallFactory;
+import com.gaalf.game.precreatedEntities.balls.RoundBall;
+import com.gaalf.game.precreatedEntities.balls.SquareBall;
 import com.gaalf.game.util.B2dDebugUtil;
 import com.gaalf.game.util.TiledObjectUtil;
 import com.gaalf.view.GameView;
@@ -136,6 +140,8 @@ public abstract class BaseGamePresenter extends BasePresenter {
     }
 
     private Entity createBall(){
+        return new BallFactory().createEntity("square", tiledMap, world);
+        /*
         TextureComponent textureComponent = new TextureComponent();
         Texture texture = new Texture("badlogic.jpg");
         textureComponent.sprite = new Sprite(texture);
@@ -175,6 +181,7 @@ public abstract class BaseGamePresenter extends BasePresenter {
         e.add(textureComponent);
         e.add(bodyComponent);
         return e;
+        */
     }
 
     private Entity createShotIndicator(TransformComponent playerTransformComponent){
