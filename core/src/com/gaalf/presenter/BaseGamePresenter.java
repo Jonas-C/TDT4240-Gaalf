@@ -270,9 +270,12 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
     }
 
     private Entity createBall(){
-        return new BallFactory().createEntity("square", "brage", 1, tiledMap, world);
-        // getView().addScoreLabel(playerComponent.playerNumber, playerComponent.playerName);
-        // getView().addScoreLabel(2,"Trym");
+        String player1Name = "Brage";
+        int player1Number = 1;
+        Entity ball = new BallFactory().createEntity("square", player1Name, player1Number, tiledMap, world);
+        getView().addScoreLabel(player1Number, player1Name);
+        getView().addScoreLabel(2,"Trym");
+        return ball;
     }
 
 
