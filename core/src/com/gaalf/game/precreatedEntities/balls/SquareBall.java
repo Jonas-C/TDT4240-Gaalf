@@ -15,8 +15,8 @@ import static com.gaalf.game.constants.B2DConstants.PPM;
 
 public class SquareBall extends Ball {
 
-    public SquareBall(TiledMap tiledMap, World world) {
-        super(tiledMap, world);
+    public SquareBall(String playerName, int playerNumber, TiledMap tiledMap, World world) {
+        super(playerName, playerNumber, tiledMap, world);
         TextureComponent textureComponent = addTextureComponent();
         TransformComponent transformComponent = addTransformComponent(tiledMap);
         addBodyComponent(transformComponent, textureComponent, world);

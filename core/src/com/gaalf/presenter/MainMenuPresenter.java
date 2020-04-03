@@ -10,15 +10,19 @@ public class MainMenuPresenter extends BaseMenuPresenter {
 
     public MainMenuPresenter(final GaalfGame game){
         super(game);
+
         view = new MainMenuView(game.getBatch(), this);
     }
 
     public void startTestLevel(){
-        game.setScreen(new GamePresenter(game));
+        menuMusic.dispose();
+
+//        game.setScreen(new GamePresenter(game, game.levelManager.getLevels().get(0) ));
+        game.setScreen(new GamePresenter(game, game.levelManager.getRandomLevel()));
     }
 
     public void openLevelSelectMenu() {
-        game.setScreen(new LevelSelectMenuPresenter(game));
+        game.setScreen(new MapPackSelectPresenter(game));
     }
 
     public void openSettingsView() {

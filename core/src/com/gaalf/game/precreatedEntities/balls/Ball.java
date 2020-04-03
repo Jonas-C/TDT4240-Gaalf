@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.*;
-import com.gaalf.game.ecs.component.BodyComponent;
-import com.gaalf.game.ecs.component.ShootableComponent;
-import com.gaalf.game.ecs.component.TextureComponent;
-import com.gaalf.game.ecs.component.TransformComponent;
+import com.gaalf.game.ecs.component.*;
 
 import static com.gaalf.game.constants.B2DConstants.PPM;
 
@@ -19,9 +16,10 @@ import static com.gaalf.game.constants.B2DConstants.PPM;
  */
 public abstract class Ball extends Entity {
 
-    protected Ball(TiledMap tiledMap, World world) {
+    protected Ball(String playerName, int playerNumber, TiledMap tiledMap, World world) {
         super();
         this.add(new ShootableComponent());
+        this.addPlayerComponent(playerName, playerNumber);
     }
 
     /**
@@ -38,5 +36,16 @@ public abstract class Ball extends Entity {
         transformComponent.visible = true;
         this.add(transformComponent);
         return transformComponent;
+    }
+
+    /**
+     * Adding info about the player that is controlling the ball
+     */
+    protected PlayerComponent addPlayerComponent(String playerName, int playerNumber) {
+        PlayerComponent playerComponent = new PlayerComponent();
+        playerComponent.playerName = playerName;
+        playerComponent.playerNumber = playerNumber;
+        this.add(playerComponent);
+        return playerComponent;
     }
 }

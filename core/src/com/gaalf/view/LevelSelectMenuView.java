@@ -8,32 +8,39 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.gaalf.presenter.LevelSelectMenuPresenter;
 
+import java.util.ArrayList;
+
 public class LevelSelectMenuView extends BaseMenuView {
 
     private final String TAG = LevelSelectMenuView.class.getSimpleName();
 
-    public LevelSelectMenuView(SpriteBatch batch, final LevelSelectMenuPresenter presenter) {
+    public LevelSelectMenuView(SpriteBatch batch, final LevelSelectMenuPresenter presenter, ArrayList<FileHandle> levels) {
         super(batch, presenter);
 
         addTitle("Select level");
 
-        addLevelSelectButtons();
+        addLevelSelectButtons(presenter, levels);
 
         TextButton backButton = addBackButton();
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                presenter.openMainMenuView();
+                presenter.openMapSelectView();
             }
         });
 
         addActor(table);
     }
 
-    public void addLevelSelectButtons() {
-        FileHandle[] fileHandles = Gdx.files.internal("levels").list(".tmx");
-        for(FileHandle fileHandle : fileHandles) {
-            TextButton selectLevelButton = addMenuButton(fileHandle.name().split("\\.")[0]);
+    public void addLevelSelectButtons(final LevelSelectMenuPresenter presenter, ArrayList<FileHandle> levels) {
+        for(final FileHandle level : levels) {
+            TextButton selectLevelButton = addMenuButton(level.name().split("\\.")[0]);
+            selectLevelButton.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    presenter.selectLevel(level);
+                }
+            });
 
             // ADD SELECT LEVEL LOGIC
         }
