@@ -48,4 +48,15 @@ public abstract class Ball extends Entity {
         this.add(playerComponent);
         return playerComponent;
     }
+
+    protected BodyDef createBodyDef(TransformComponent transformComponent, TextureComponent textureComponent) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set((transformComponent.pos.x -
+                (textureComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1);
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+
+        bodyDef.fixedRotation = false;
+        bodyDef.angularDamping = 1f;
+        return bodyDef;
+    }
 }

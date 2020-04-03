@@ -43,14 +43,7 @@ public class RoundBall extends Ball {
      */
     private BodyComponent addBodyComponent(TransformComponent transformComponent, TextureComponent textureComponent, World world) {
         BodyComponent bodyComponent = new BodyComponent();
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set((transformComponent.pos.x -
-                (textureComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1);
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-
-        bodyDef.fixedRotation = false;
-        bodyDef.angularDamping = 1f;
-        bodyComponent.body = world.createBody(bodyDef);
+        bodyComponent.body = world.createBody(createBodyDef(transformComponent, textureComponent));
         CircleShape cshape = new CircleShape();
         cshape.setRadius(((textureComponent.sprite.getRegionWidth() * transformComponent.scale.x) / 2) / PPM);
         FixtureDef fixtureDef = new FixtureDef();
