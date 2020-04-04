@@ -8,7 +8,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.gaalf.game.ecs.component.TextureComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.game.util.TextureMapObjectRenderer;
@@ -26,14 +25,14 @@ public class RenderingSystem extends IteratingSystem {
 
     public SpriteBatch batch;
 
-    public RenderingSystem(SpriteBatch batch, OrthographicCamera b2dCam, TiledMap tiledMap){
+    public RenderingSystem(SpriteBatch batch, OrthographicCamera b2dCam, TextureMapObjectRenderer tmr){
         super(Family.all(TextureComponent.class).get());
         this.batch = batch;
 
         textureMapper = ComponentMapper.getFor(TextureComponent.class);
         transformMapper = ComponentMapper.getFor(TransformComponent.class);
 
-        tmr = new TextureMapObjectRenderer(tiledMap, batch);
+        this.tmr = tmr;
         this.b2dCam = b2dCam;
     }
 

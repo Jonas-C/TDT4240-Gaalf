@@ -13,11 +13,11 @@ abstract class BaseMenuView extends BaseView {
 
     Table table;
 
-    public final float BUTTON_WIDTH = getViewport().getScreenWidth() / 5;
-    public final float TABLE_PADDING = 20;
-    public final float TITLE_BTM_PADDING = 50; // BTM is BOTTOM if you didn't catch that
-    public final float BUTTON_BTM_PADDING = 15;
-    public final float BACK_BUTTON_TOP_PADDING = 30;
+    private final float BUTTON_WIDTH = getViewport().getScreenWidth() / 5;
+    private final float TABLE_PADDING = 20;
+    private final float TITLE_BTM_PADDING = 50; // BTM is BOTTOM if you didn't catch that
+    private final float BUTTON_BTM_PADDING = 15;
+    private final float BACK_BUTTON_TOP_PADDING = 30;
 
     BaseMenuView(SpriteBatch batch, BaseMenuPresenter presenter){
         super(batch, presenter);
@@ -27,16 +27,16 @@ abstract class BaseMenuView extends BaseView {
         table.setFillParent(true);
     }
 
-    Table getTable(){
+    private Table getTable(){
         return table;
     }
 
-    public void addTitle(String title) {
+    void addTitle(String title) {
         Label titleLabel = new Label(title, getSkin(), "title");
         getTable().add(titleLabel).padBottom(TITLE_BTM_PADDING);
     }
 
-    public TextButton addMenuButton(String text) {
+    TextButton addMenuButton(String text) {
         table.row();
         TextButton menuButton = new TextButton(text, getSkin());
         table.add(menuButton)
@@ -46,7 +46,7 @@ abstract class BaseMenuView extends BaseView {
         return menuButton;
     }
 
-    public TextButton addBackButton() {
+    TextButton addBackButton() {
         getTable().row();
         TextButton backButton = new TextButton("Back", getSkin());
 
