@@ -15,10 +15,6 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -43,6 +39,7 @@ import com.gaalf.game.ecs.system.ShotIndicatorSystem;
 import com.gaalf.game.util.B2dDebugUtil;
 import com.gaalf.game.util.TextureMapObjectRenderer;
 import com.gaalf.game.util.TiledObjectUtil;
+import com.gaalf.model.PlayerInfo;
 import com.gaalf.view.GameView;
 import com.gaalf.game.input.*;
 
@@ -75,7 +72,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         b2dViewport = new ExtendViewport(GaalfGame.V_WIDTH / PPM, GaalfGame.V_HEIGHT / PPM, b2dCam);
         b2dViewport.update(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT, true);
 
-        initMap(game.levelManager.loadLevel(level));
+        setupGame(level);
+        initPlayers();
+
         RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), b2dCam, tmr);
         ShootableSystem shootableSystem = new ShootableSystem();
         PhysicsSystem physicsSystem = new PhysicsSystem();
@@ -94,8 +93,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         engine.addEntity(goal);
         engine.addSystem(new WinConSystem(goal));
 
-        Entity shotIndicator = createShotIndicator();
-
         InputMultiplexer multiplexer = new InputMultiplexer();
         ShotInputHandler shotInputHandler = new ShotInputHandler();
         multiplexer.addProcessor(view);
@@ -106,8 +103,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         shotInputHandler.addObserver(shotIndicatorSystem);
         shotInputHandler.addObserver(this);
 
-        engine.addEntity(playerEntity);
-        engine.addEntity(shotIndicator);
         B2dDebugUtil.createWalls(world);
 
         gameMusic = game.assetManager.manager.get(game.assetManager.levelOneMusic);
@@ -115,6 +110,59 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         gameMusic.setVolume(0.5f);
         gameMusic.play();
 
+    }
+
+    private void setupGame(FileHandle level){
+        world = new World(new Vector2(0, -9.81f), true);
+        ballFactory = new BallFactory(world, game.assetManager);
+        this.tiledMap = game.levelManager.loadLevel(level);
+        tmr = new TextureMapObjectRenderer(tiledMap, game.getBatch());
+        tmr.setMap(tiledMap);
+        TiledObjectUtil.parseTiledObjectLayer(world, tiledMap.getLayers().get("collision").getObjects());
+    }
+
+    private void initPlayers(){
+        for(PlayerInfo player : game.playersManager.getPlayers()){
+            Entity ball = ballFactory.createEntity("golfball", player.getPlayerName(), player.getPlayerID(), tiledMap);
+            if(player.getThisDevice()){
+                engine.addEntity(createShotIndicator());
+                playerEntity = ball;
+            }
+            engine.addEntity(ball);
+            getView().addScoreLabel(player.getPlayerID(), player.getPlayerName());
+        }
+    }
+
+    void newLevel(TiledMap level){
+        this.tiledMap = level;
+        if(world != null){
+            Array<Body> bodies = new Array<>();
+            world.getBodies(bodies);
+            for(Body body : bodies){
+                if(body.getUserData() == "Terrain"){
+                    world.destroyBody(body);
+                }
+            }
+            tmr.setMap(tiledMap);
+            TiledObjectUtil.parseTiledObjectLayer(world, tiledMap.getLayers().get("collision").getObjects());
+            for(Entity ball : engine.getEntitiesFor(Family.all(PlayerComponent.class).get())){
+                resetBall(ball);
+            }
+            levelFinished = false;
+        }
+    }
+
+    private void resetBall(Entity ball){
+        TransformComponent transformComponent = ball.getComponent(TransformComponent.class);
+        TextureComponent textureComponent = ball.getComponent(TextureComponent.class);
+        BodyComponent bodyComponent = ball.getComponent(BodyComponent.class);
+        PlayerComponent playerComponent = ball.getComponent(PlayerComponent.class);
+
+        playerComponent.isFinished = false;
+        MapProperties mapProperties = tiledMap.getLayers().get("objects").getObjects().get("startPos").getProperties();
+        transformComponent.pos.set((float)mapProperties.get("x") / PPM, (float)mapProperties.get("y") / PPM);
+        bodyComponent.body.setTransform(new Vector2((transformComponent.pos.x -
+                (textureComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1), 0);
     }
 
     private Entity createGoalEntity(){
@@ -130,33 +178,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         return goal;
     }
 
-    void initMap(TiledMap tiledMap){
-        this.tiledMap = tiledMap;
-        if(world != null) {
-            Array<Body> bodies = new Array<>();
-            world.getBodies(bodies);
-            for(Body body : bodies){
-                world.destroyBody(body);
-            }
-            world = new World(new Vector2(0, -9.81f), true);
-            initBall(playerEntity);
-            levelFinished = false;
-//            world.dispose();
-        } else {
-            world = new World(new Vector2(0, -9.81f), true);
-            ballFactory = new BallFactory(world, game.assetManager);
-            tmr = new TextureMapObjectRenderer(tiledMap, game.getBatch());
-            playerEntity = createBall();
-        }
-
-
-
-        TiledObjectUtil.parseTiledObjectLayer(world, tiledMap.getLayers().get("collision").getObjects());
-        tmr.setMap(tiledMap);
-
-    }
-
-
     private void update(float delta){
         if(!paused) {
             world.step(delta, 6, 2);
@@ -164,7 +185,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         engine.update(delta);
         getView().update(delta);
         if(playerEntity.getComponent(PlayerComponent.class).isFinished && !levelFinished){
-            System.out.println("finish!!");
             levelCleared();
             levelFinished = true;
         }
@@ -227,52 +247,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         }
     }
 
-    private void initBall(Entity playerEntity){
-        TransformComponent transformComponent = playerEntity.getComponent(TransformComponent.class);
-        TextureComponent textureComponent = playerEntity.getComponent(TextureComponent.class);
-        BodyComponent bodyComponent = playerEntity.getComponent(BodyComponent.class);
-        PlayerComponent playerComponent = playerEntity.getComponent(PlayerComponent.class);
-
-        playerComponent.isFinished = false;
-        MapProperties mapProperties = tiledMap.getLayers().get("objects").getObjects().get("startPos").getProperties();
-        transformComponent.pos.set((float)mapProperties.get("x") / PPM, (float)mapProperties.get("y") / PPM);
-
-        createBody(bodyComponent, transformComponent, textureComponent);
-    }
-
-    private void createBody(BodyComponent bodyComponent, TransformComponent transformComponent, TextureComponent textureComponent){
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set((transformComponent.pos.x -
-                (textureComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1);
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-
-        bodyDef.fixedRotation = false;
-        bodyDef.angularDamping = 1f;
-//        bodyDef.angle = 75f;
-        bodyComponent.body = world.createBody(bodyDef);
-        CircleShape cshape = new CircleShape();
-        cshape.setRadius(((textureComponent.sprite.getRegionWidth() * transformComponent.scale.x) / 2) / PPM);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox((textureComponent.sprite.getRegionWidth() / 2f) * transformComponent.scale.x / PPM,
-                (textureComponent.sprite.getRegionHeight() / 2f) * transformComponent.scale.y / PPM);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = cshape;
-        fixtureDef.density = 8;
-        fixtureDef.friction = 100.6f;
-        fixtureDef.restitution = .5f;
-        bodyComponent.body.createFixture(fixtureDef);
-    }
-
-    private Entity createBall(){
-        String player1Name = "Brage";
-        int player1Number = 1;
-        Entity ball = ballFactory.createEntity("square", player1Name, player1Number, tiledMap);
-        getView().addScoreLabel(player1Number, player1Name);
-        getView().addScoreLabel(2,"Trym");
-        return ball;
-    }
-
-
     private Entity createShotIndicator(){
         TextureComponent textureComponent = new TextureComponent();
         Texture texture = new Texture("arrow.png");
@@ -303,10 +277,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
 
     public void exitMainMenu(){
         gameMusic.dispose();
+        game.playersManager.removePlayer(game.devicePlayer);
         game.setScreen(new MainMenuPresenter(game));
     }
 
     public abstract void nextLevel();
-
-
 }
