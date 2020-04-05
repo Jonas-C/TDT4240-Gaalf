@@ -23,6 +23,7 @@ public class GaalfGame extends Game {
 		levelManager = new LevelManager();
 		assetManager.loadMusic();
 		assetManager.loadSound();
+		assetManager.loadSprites();
 		assetManager.manager.finishLoading();
 		setScreen(new MainMenuPresenter(this));
 	}

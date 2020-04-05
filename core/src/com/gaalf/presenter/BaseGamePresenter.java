@@ -25,7 +25,6 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.gaalf.GaalfGame;
 import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
-import com.gaalf.game.ecs.component.ShootableComponent;
 import com.gaalf.game.ecs.component.ShotIndicatorComponent;
 import com.gaalf.game.ecs.component.SoundComponent;
 import com.gaalf.game.ecs.component.TextureComponent;
@@ -35,10 +34,7 @@ import com.gaalf.game.ecs.system.PhysicsSystem;
 import com.gaalf.game.ecs.system.RenderingSystem;
 import com.gaalf.game.ecs.system.ShootableSystem;
 
-import com.gaalf.game.precreatedEntities.balls.Ball;
 import com.gaalf.game.precreatedEntities.balls.BallFactory;
-import com.gaalf.game.precreatedEntities.balls.RoundBall;
-import com.gaalf.game.precreatedEntities.balls.SquareBall;
 
 import com.gaalf.game.ecs.system.SoundSystem;
 import com.gaalf.game.ecs.system.WinConSystem;
@@ -68,6 +64,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
     private Entity playerEntity;
     private TextureMapObjectRenderer tmr;
     private boolean levelFinished = false;
+    private BallFactory ballFactory;
 
 
     BaseGamePresenter(final GaalfGame game, FileHandle level) {
@@ -79,14 +76,10 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         b2dViewport.update(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT, true);
 
         initMap(game.levelManager.loadLevel(level));
-
         RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), b2dCam, tmr);
         ShootableSystem shootableSystem = new ShootableSystem();
         PhysicsSystem physicsSystem = new PhysicsSystem();
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, b2dCam);
-        SoundComponent ballSoundComponent = new SoundComponent();
-        ballSoundComponent.sound = (game.assetManager.manager.get(game.assetManager.jumpSound));
-        playerEntity.add(ballSoundComponent);
         ShotIndicatorSystem shotIndicatorSystem = new ShotIndicatorSystem(playerEntity.getComponent(TransformComponent.class));
 
         engine.addSystem(shootableSystem);
@@ -151,6 +144,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
 //            world.dispose();
         } else {
             world = new World(new Vector2(0, -9.81f), true);
+            ballFactory = new BallFactory(world, game.assetManager);
             tmr = new TextureMapObjectRenderer(tiledMap, game.getBatch());
             playerEntity = createBall();
         }
@@ -272,7 +266,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
     private Entity createBall(){
         String player1Name = "Brage";
         int player1Number = 1;
-        Entity ball = new BallFactory().createEntity("square", player1Name, player1Number, tiledMap, world);
+        Entity ball = ballFactory.createEntity("square", player1Name, player1Number, tiledMap);
         getView().addScoreLabel(player1Number, player1Name);
         getView().addScoreLabel(2,"Trym");
         return ball;
