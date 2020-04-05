@@ -17,7 +17,8 @@ class GolfBall extends Ball {
         super(playerName, playerNumber, assetManager);
         TransformComponent transformComponent = addTransformComponent(tiledMap, 1.5f);
         TextureComponent textureComponent = addTextureComponent((Texture)assetManager.manager.get(assetManager.golfBallSprite));
-
+        System.out.println("ball");
+        System.out.println(transformComponent.pos);
         CircleShape cshape = new CircleShape();
         cshape.setRadius(((textureComponent.sprite.getRegionWidth() * transformComponent.scale.x) / 2) / PPM);
         FixtureDef fixtureDef = new FixtureDef();

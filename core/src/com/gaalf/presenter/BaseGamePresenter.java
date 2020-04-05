@@ -11,6 +11,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
@@ -25,6 +26,7 @@ import com.gaalf.game.ecs.component.ShotIndicatorComponent;
 import com.gaalf.game.ecs.component.SoundComponent;
 import com.gaalf.game.ecs.component.TextureComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
+import com.gaalf.game.ecs.system.ObstacleSystem;
 import com.gaalf.game.ecs.system.PhysicsDebugSystem;
 import com.gaalf.game.ecs.system.PhysicsSystem;
 import com.gaalf.game.ecs.system.RenderingSystem;
@@ -36,6 +38,7 @@ import com.gaalf.game.ecs.system.SoundSystem;
 import com.gaalf.game.ecs.system.WinConSystem;
 import com.gaalf.game.ecs.system.ShotIndicatorSystem;
 
+import com.gaalf.game.precreatedEntities.obstacles.MovingObstacle;
 import com.gaalf.game.util.B2dDebugUtil;
 import com.gaalf.game.util.TextureMapObjectRenderer;
 import com.gaalf.game.util.TiledObjectUtil;
@@ -43,6 +46,8 @@ import com.gaalf.model.PlayerInfo;
 import com.gaalf.view.GameView;
 import com.gaalf.game.input.*;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -87,6 +92,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         engine.addSystem(new SoundSystem());
         engine.addSystem(physicsDebugSystem);
         engine.addSystem(shotIndicatorSystem);
+        engine.addSystem(new ObstacleSystem());
 
 
         Entity goal = createGoalEntity();
@@ -119,6 +125,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         tmr = new TextureMapObjectRenderer(tiledMap, game.getBatch());
         tmr.setMap(tiledMap);
         TiledObjectUtil.parseTiledObjectLayer(world, tiledMap.getLayers().get("collision").getObjects());
+        addObjects();
     }
 
     private void initPlayers(){
@@ -245,6 +252,17 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
                     setScoreLabel(playerComponent.playerNumber, playerComponent.playerName + ": " + playerComponent.playerScore);
                 }
             }
+        }
+    }
+
+    private void addObjects(){
+        if (tiledMap.getLayers().get("objects") == null){
+            return;
+        }
+        for (MapObject object : tiledMap.getLayers().get("obstacles").getObjects()) {
+            System.out.println(object.getProperties());
+            Entity obstacle = new MovingObstacle(object.getProperties(), game.assetManager, world);
+            engine.addEntity(obstacle);
         }
     }
 

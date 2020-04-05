@@ -16,9 +16,11 @@ public class GameAssetManager {
     public final String jumpSound = "sounds/JumpSound.wav";
     public final String finishSound = "sounds/FinishSound.wav";
 
+    //Sprites
     public final String basketBallSprite = "balls/basketball.png";
     public final String golfBallSprite = "balls/golfball.png";
     public final String soccerBallSprite = "balls/soccerball.png";
+    public final String obstacleSprite = "tnt.jpeg";
 
     public void loadMusic(){
         manager.load(menuMusic, Music.class);

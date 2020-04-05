@@ -33,6 +33,7 @@ public class ShotInputHandler extends Observable implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         setChanged();
+        System.out.println(screenX + "," +  screenY);
         notifyObservers("touchDown");
         clearChanged();
         return true;
