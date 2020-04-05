@@ -161,8 +161,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         playerComponent.isFinished = false;
         MapProperties mapProperties = tiledMap.getLayers().get("objects").getObjects().get("startPos").getProperties();
         transformComponent.pos.set((float)mapProperties.get("x") / PPM, (float)mapProperties.get("y") / PPM);
-        bodyComponent.body.setTransform(new Vector2((transformComponent.pos.x -
-                (textureComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1), 0);
+        bodyComponent.body.setTransform((transformComponent.pos.x -
+                (textureComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1, 0);
+        bodyComponent.body.setLinearVelocity(0f, 0f);
     }
 
     private Entity createGoalEntity(){
