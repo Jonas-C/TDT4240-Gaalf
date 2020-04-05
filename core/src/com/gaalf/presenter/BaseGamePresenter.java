@@ -34,9 +34,16 @@ import com.gaalf.game.ecs.system.PhysicsDebugSystem;
 import com.gaalf.game.ecs.system.PhysicsSystem;
 import com.gaalf.game.ecs.system.RenderingSystem;
 import com.gaalf.game.ecs.system.ShootableSystem;
+
+import com.gaalf.game.precreatedEntities.balls.Ball;
+import com.gaalf.game.precreatedEntities.balls.BallFactory;
+import com.gaalf.game.precreatedEntities.balls.RoundBall;
+import com.gaalf.game.precreatedEntities.balls.SquareBall;
+
 import com.gaalf.game.ecs.system.SoundSystem;
 import com.gaalf.game.ecs.system.WinConSystem;
 import com.gaalf.game.ecs.system.ShotIndicatorSystem;
+
 import com.gaalf.game.util.B2dDebugUtil;
 import com.gaalf.game.util.TextureMapObjectRenderer;
 import com.gaalf.game.util.TiledObjectUtil;
@@ -267,34 +274,12 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
     }
 
     private Entity createBall(){
-        TextureComponent textureComponent = new TextureComponent();
-        Texture texture = new Texture("badlogic.jpg");
-        textureComponent.sprite = new Sprite(texture);
-        TransformComponent transformComponent = new TransformComponent();
-        MapProperties mapProperties = tiledMap.getLayers().get("objects").getObjects().get("startPos").getProperties();
-        transformComponent.pos.set((float)mapProperties.get("x") / PPM, (float)mapProperties.get("y") / PPM);
-        transformComponent.scale.set(0.1f, 0.1f);
-        transformComponent.rotation = 0f;
-        transformComponent.visible = true;
-
-        BodyComponent bodyComponent = new BodyComponent();
-        createBody(bodyComponent, transformComponent, textureComponent);
-
-        PlayerComponent playerComponent = new PlayerComponent();
-        playerComponent.playerName = "Brage";
-        playerComponent.playerNumber = 1;
-
-        playerEntity = new Entity();
-        playerEntity.add(new ShootableComponent());
-        playerEntity.add(playerComponent);
-        playerEntity.add(transformComponent);
-        playerEntity.add(textureComponent);
-        playerEntity.add(bodyComponent);
-
-        getView().addScoreLabel(playerComponent.playerNumber, playerComponent.playerName);
+        String player1Name = "Brage";
+        int player1Number = 1;
+        Entity ball = new BallFactory().createEntity("square", player1Name, player1Number, tiledMap, world);
+        getView().addScoreLabel(player1Number, player1Name);
         getView().addScoreLabel(2,"Trym");
-
-        return playerEntity;
+        return ball;
     }
 
 
