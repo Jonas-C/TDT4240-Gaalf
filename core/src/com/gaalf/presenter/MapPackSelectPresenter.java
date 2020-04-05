@@ -24,8 +24,6 @@ public class MapPackSelectPresenter extends BaseMenuPresenter{
     }
 
     public void selectMapPack(FileHandle mapPack){
-        menuMusic.dispose();
-//        game.levelManager
         game.levelManager.setLevels(mapPack.name());
         game.setScreen(new LevelSelectMenuPresenter(game));
     }

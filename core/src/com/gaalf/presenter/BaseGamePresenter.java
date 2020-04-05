@@ -84,7 +84,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         engine.addSystem(shootableSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(renderingSystem);
-        engine.addSystem(new SoundSystem());
+        engine.addSystem(new SoundSystem(game.settingsManager));
         engine.addSystem(physicsDebugSystem);
         engine.addSystem(shotIndicatorSystem);
 
@@ -107,8 +107,12 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
 
         gameMusic = game.assetManager.manager.get(game.assetManager.levelOneMusic);
         gameMusic.setLooping(true);
-        gameMusic.setVolume(0.5f);
+        gameMusic.setVolume(game.settingsManager.musicVolume);
         gameMusic.play();
+        if (!game.settingsManager.musicIsEnabled){
+            gameMusic.pause();
+        }
+
 
     }
 
