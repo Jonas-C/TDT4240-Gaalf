@@ -14,6 +14,7 @@ public class MapPackSelectPresenter extends BaseMenuPresenter{
     }
 
     public void openMainMenuView() {
+        game.playersManager.removePlayer(game.devicePlayer);
         game.setScreen(new MainMenuPresenter(game));
     }
 

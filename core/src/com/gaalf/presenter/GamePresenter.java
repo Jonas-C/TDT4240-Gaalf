@@ -28,6 +28,7 @@ public class GamePresenter extends BaseGamePresenter {
 
     public void nextLevel(){
             getView().clearWindow();
-            initMap(game.levelManager.nextLevel());
+            newLevel(game.levelManager.nextLevel());
+//            initMap(game.levelManager.nextLevel());
     }
 }

@@ -18,10 +18,15 @@ public class MainMenuPresenter extends BaseMenuPresenter {
         menuMusic.dispose();
 
 //        game.setScreen(new GamePresenter(game, game.levelManager.getLevels().get(0) ));
+        game.playersManager.addPlayer("Jonas", true);
+        game.devicePlayer = game.playersManager.getPlayers().get(0);
         game.setScreen(new GamePresenter(game, game.levelManager.getRandomLevel()));
     }
 
     public void openLevelSelectMenu() {
+        game.playersManager.addPlayer("Jonas", true);
+        game.playersManager.addPlayer("E", false);
+        game.devicePlayer = game.playersManager.getPlayers().get(0);
         game.setScreen(new MapPackSelectPresenter(game));
     }
 
