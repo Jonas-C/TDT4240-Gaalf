@@ -66,9 +66,9 @@ public class SettingsView extends BaseMenuView {
         });
 
         volumeMusicLabel = new Label( "Volume music", getSkin());
-        musicOnOffLabel = new Label( "Music on/off", getSkin() );
-        volumeSoundLabel = new Label( "Volume sound", getSkin() );
-        soundOnOffLabel = new Label( "Sound on/off", getSkin() );
+        musicOnOffLabel = new Label( "Music", getSkin() );
+        volumeSoundLabel = new Label( "Volume sound effects", getSkin() );
+        soundOnOffLabel = new Label( "Sound effects", getSkin() );
 
         table.row();
         table.add(volumeMusicLabel);
