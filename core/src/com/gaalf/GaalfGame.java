@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.gaalf.manager.GameAssetManager;
 import com.gaalf.manager.LevelManager;
 import com.gaalf.manager.SettingsManager;
+import com.gaalf.manager.PlayersManager;
+import com.gaalf.model.PlayerInfo;
 import com.gaalf.presenter.MainMenuPresenter;
 
 public class GaalfGame extends Game {
@@ -14,6 +16,8 @@ public class GaalfGame extends Game {
 	public GameAssetManager assetManager = new GameAssetManager();
 	public SettingsManager settingsManager;
 	public LevelManager levelManager;
+	public PlayersManager playersManager;
+	public PlayerInfo devicePlayer;
 
 
 	public static int V_WIDTH = 1280;
@@ -23,8 +27,10 @@ public class GaalfGame extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		levelManager = new LevelManager();
+		playersManager = new PlayersManager();
 		assetManager.loadMusic();
 		assetManager.loadSound();
+		assetManager.loadSprites();
 		assetManager.manager.finishLoading();
 		settingsManager = new SettingsManager();
 		setScreen(new MainMenuPresenter(this));

@@ -15,6 +15,6 @@ import com.badlogic.gdx.physics.box2d.World;
  * https://www.youtube.com/watch?v=v-GiuMmsXj4&list=PLrhzvIcii6GNjpARdnO4ueTUAVR9eMBpc&index=5
  */
 public abstract class EntityFactory {
-    public abstract Entity createEntity(String type, String playerName, int playerNumber, TiledMap tiledMap, World world);
+    public abstract Entity createEntity(String type, String playerName, int playerNumber, TiledMap tiledMap);
     public abstract Entity createRandomEntity(String playerName, int playerNumber, TiledMap tiledMap, World world);
 }
