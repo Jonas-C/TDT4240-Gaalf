@@ -36,7 +36,6 @@ public class MovingObstacle extends Entity {
     private TransformComponent addTransformComponent(MapProperties obstacleProperties){
         TransformComponent transformComponent = new TransformComponent();
         transformComponent.pos.set((float)obstacleProperties.get("x") / PPM, (float)obstacleProperties.get("y") / PPM);
-        System.out.println(transformComponent.pos);
         transformComponent.scale.set(0.1f, 0.1f);
         transformComponent.rotation = 0f;
         transformComponent.visible = true;
@@ -69,8 +68,6 @@ public class MovingObstacle extends Entity {
         BodyComponent bodyComponent = new BodyComponent();
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(transformComponent.pos.x, transformComponent.pos.y);
-        System.out.println("body");
-        System.out.println(bodyDef.position);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         bodyDef.fixedRotation = false;

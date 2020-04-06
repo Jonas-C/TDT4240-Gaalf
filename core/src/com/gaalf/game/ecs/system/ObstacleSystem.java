@@ -29,7 +29,6 @@ public class ObstacleSystem extends IteratingSystem {
         TransformComponent transformComponent = transformComponentComponentMapper.get(entity);
         BodyComponent bodyComponent = bodyComponentComponentMapper.get(entity);
         Vector2 velocity = bodyComponent.body.getLinearVelocity();
-        System.out.println(velocity);
         if (velocity.x == 0){
             obstacleComponent.horizontalSpeed *= -1;
         }
