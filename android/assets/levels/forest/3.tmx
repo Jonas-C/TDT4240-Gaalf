@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="64" height="36" tilewidth="20" tileheight="20" infinite="0" nextlayerid="8" nextobjectid="912">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="64" height="36" tilewidth="20" tileheight="20" infinite="0" nextlayerid="8" nextobjectid="913">
  <tileset firstgid="1" source="../../tiles_spritesheet.tsx"/>
  <layer id="1" name="Tile Layer 1" width="64" height="36" visible="0">
   <data encoding="base64" compression="zlib">
@@ -18,8 +18,23 @@
   </object>
  </objectgroup>
  <objectgroup id="7" name="obstacles">
-  <object id="910" gid="25" x="859.909" y="579.909" width="20" height="20"/>
-  <object id="911" gid="25" x="1080" y="500.5" width="20" height="20"/>
+  <object id="910" type="obstacle" gid="25" x="859.909" y="579.909" width="20" height="20">
+   <properties>
+    <property name="verticalSpeed" type="float" value="0.6"/>
+   </properties>
+  </object>
+  <object id="911" type="obstacle" gid="25" x="1077.74" y="501.632" width="20" height="20">
+   <properties>
+    <property name="horizontalSpeed" type="float" value="0.4"/>
+   </properties>
+  </object>
+  <object id="912" type="obstacle" x="76.9666" y="104.131">
+   <properties>
+    <property name="horizontalSpeed" type="float" value="0.5"/>
+    <property name="verticalSpeed" type="float" value="0.5"/>
+   </properties>
+   <point/>
+  </object>
  </objectgroup>
  <objectgroup id="4" name="sprites">
   <object id="3" gid="153" x="0" y="720" width="20" height="20"/>

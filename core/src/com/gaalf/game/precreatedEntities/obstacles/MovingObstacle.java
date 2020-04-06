@@ -27,7 +27,7 @@ public class MovingObstacle extends Entity {
     public MovingObstacle(MapProperties obstacleProperties, GameAssetManager assetManager, World world){
         TransformComponent transformComponent = addTransformComponent(obstacleProperties);
         TextureComponent textureComponent = addTextureComponent(assetManager);
-        ObstacleComponent obstacleComponent = addObstacleComponent();
+        ObstacleComponent obstacleComponent = addObstacleComponent(obstacleProperties);
         this.add(obstacleComponent);
         this.add(addSoundComponent());
         addBodyComponent(transformComponent, textureComponent, obstacleComponent, world);
@@ -43,9 +43,14 @@ public class MovingObstacle extends Entity {
         return transformComponent;
     }
 
-    private ObstacleComponent addObstacleComponent(){
+    private ObstacleComponent addObstacleComponent(MapProperties obstacleProperties){
         ObstacleComponent obstacleComponent = new ObstacleComponent();
-        obstacleComponent.verticalSpeed = 0.3f;
+        if (obstacleProperties.get("verticalSpeed", float.class) != null){
+            obstacleComponent.verticalSpeed = obstacleProperties.get("verticalSpeed", float.class);
+        }
+        if (obstacleProperties.get("horizontalSpeed", float.class) != null){
+            obstacleComponent.horizontalSpeed = obstacleProperties.get("horizontalSpeed", float.class);
+        }
         return obstacleComponent;
     }
 
