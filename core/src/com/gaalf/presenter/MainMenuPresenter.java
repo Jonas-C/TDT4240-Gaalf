@@ -1,12 +1,12 @@
 package com.gaalf.presenter;
 
 import com.gaalf.GaalfGame;
+import com.gaalf.view.BaseMenuView;
 import com.gaalf.view.MainMenuView;
-import com.gaalf.view.BaseView;
 
 public class MainMenuPresenter extends BaseMenuPresenter {
 
-    private BaseView view;
+    private BaseMenuView view;
 
     public MainMenuPresenter(final GaalfGame game){
         super(game);
@@ -35,7 +35,7 @@ public class MainMenuPresenter extends BaseMenuPresenter {
     }
 
     @Override
-    public BaseView getView() {
+    public BaseMenuView getView() {
         return view;
     }
 }

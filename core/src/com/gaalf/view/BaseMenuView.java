@@ -1,15 +1,19 @@
 package com.gaalf.view;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Array;
+import com.gaalf.GaalfGame;
 import com.gaalf.presenter.BaseMenuPresenter;
 
 
-abstract class BaseMenuView extends BaseView {
+public abstract class BaseMenuView extends BaseView {
 
     Table table;
 
@@ -44,6 +48,15 @@ abstract class BaseMenuView extends BaseView {
                 .padBottom(BUTTON_BTM_PADDING);
 
         return menuButton;
+    }
+
+    public void drawBackground(Sprite background, Array<Sprite> clouds){
+        getBatch().begin();
+        getBatch().draw(background, 0, 0, GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT);
+        for(Sprite cloud : clouds){
+            getBatch().draw(cloud, cloud.getX(), cloud.getY());
+        }
+        getBatch().end();
     }
 
     TextButton addBackButton() {

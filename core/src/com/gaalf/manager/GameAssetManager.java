@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
 public class GameAssetManager {
     public final AssetManager manager = new AssetManager();
@@ -20,6 +21,10 @@ public class GameAssetManager {
     public final String golfBallSprite = "balls/golfball.png";
     public final String soccerBallSprite = "balls/soccerball.png";
 
+    public final String cloudsAtlas = "clouds.atlas";
+
+    public final String background = "background.png";
+
     public void loadMusic(){
         manager.load(menuMusic, Music.class);
         manager.load(levelOneMusic, Music.class);
@@ -34,5 +39,13 @@ public class GameAssetManager {
         manager.load(basketBallSprite, Texture.class);
         manager.load(golfBallSprite, Texture.class);
         manager.load(soccerBallSprite, Texture.class);
+    }
+
+    public void loadBackground(){
+        manager.load(background, Texture.class);
+    }
+
+    public void loadClouds(){
+        manager.load(cloudsAtlas, TextureAtlas.class);
     }
 }
