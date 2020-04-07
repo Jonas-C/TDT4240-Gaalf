@@ -1,7 +1,6 @@
 package com.gaalf.game.precreatedEntities.balls;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.World;
 import com.gaalf.game.precreatedEntities.EntityFactory;
@@ -23,10 +22,14 @@ public class BallFactory extends EntityFactory {
     @Override
     public Entity createEntity(String type, String playerName, int playerNumber, TiledMap tiledMap) {
         switch (type) {
-            case "golfBall":
+            case "Golfball":
                 return new GolfBall(playerName, playerNumber, tiledMap, world, assetManager);
-            case "square":
+            case "Square":
                 return new SquareBall(playerName, playerNumber, tiledMap, world, assetManager);
+            case "Basketball":
+                return new BasketBall(playerName, playerNumber, tiledMap, world, assetManager);
+            case "Soccerball":
+                return new SoccerBall(playerName, playerNumber, tiledMap, world, assetManager);
             default:
                 return new GolfBall(playerName, playerNumber, tiledMap, world, assetManager);
         }

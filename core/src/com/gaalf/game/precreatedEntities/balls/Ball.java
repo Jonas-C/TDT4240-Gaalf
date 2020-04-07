@@ -3,7 +3,6 @@ package com.gaalf.game.precreatedEntities.balls;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -47,9 +46,9 @@ abstract class Ball extends Entity {
         return soundComponent;
     }
 
-    TextureComponent addTextureComponent(Texture texture){
+    TextureComponent addTextureComponent(Sprite sprite){
         TextureComponent textureComponent = new TextureComponent();
-        textureComponent.sprite = new Sprite(texture);
+        textureComponent.sprite = sprite;
         this.add(textureComponent);
         return textureComponent;
     }
