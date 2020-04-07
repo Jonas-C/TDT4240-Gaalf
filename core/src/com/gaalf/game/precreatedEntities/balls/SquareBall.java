@@ -16,7 +16,7 @@ class SquareBall extends Ball {
         super(playerName, playerNumber, assetManager);
         TransformComponent transformComponent = addTransformComponent(tiledMap, 1.5f);
         TextureAtlas textureAtlas = assetManager.manager.get(assetManager.ballSpriteAtlas);
-        Sprite sprite = textureAtlas.createSprite("Square");
+        Sprite sprite = textureAtlas.createSprite("Square ball");
         TextureComponent textureComponent = addTextureComponent(sprite);
 
         PolygonShape shape = new PolygonShape();

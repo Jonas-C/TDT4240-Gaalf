@@ -11,23 +11,23 @@ Basketball
   orig: 18, 18
   offset: 0, 0
   index: -1
-Golfball
-  rotate: false
-  xy: 2, 2
-  size: 18, 18
-  orig: 18, 18
-  offset: 0, 0
-  index: -1
-Soccerball
+Golf ball
   rotate: false
   xy: 22, 2
   size: 18, 18
   orig: 18, 18
   offset: 0, 0
   index: -1
-Square
+Soccer ball
   rotate: false
   xy: 62, 2
+  size: 18, 18
+  orig: 18, 18
+  offset: 0, 0
+  index: -1
+Square ball
+  rotate: false
+  xy: 2, 2
   size: 18, 18
   orig: 18, 18
   offset: 0, 0

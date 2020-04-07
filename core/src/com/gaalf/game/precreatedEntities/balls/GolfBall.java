@@ -18,7 +18,7 @@ class GolfBall extends Ball {
         super(playerName, playerNumber, assetManager);
         TransformComponent transformComponent = addTransformComponent(tiledMap, 1.5f);
         TextureAtlas textureAtlas = assetManager.manager.get(assetManager.ballSpriteAtlas);
-        Sprite sprite = textureAtlas.createSprite("Golfball");
+        Sprite sprite = textureAtlas.createSprite("Golf ball");
         TextureComponent textureComponent = addTextureComponent(sprite);
 
         CircleShape cshape = new CircleShape();

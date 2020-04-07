@@ -21,14 +21,15 @@ public class BallFactory extends EntityFactory {
 
     @Override
     public Entity createEntity(String type, String playerName, int playerNumber, TiledMap tiledMap) {
+            System.out.println(type);
         switch (type) {
-            case "Golfball":
+            case "Golf ball":
                 return new GolfBall(playerName, playerNumber, tiledMap, world, assetManager);
-            case "Square":
+            case "Square ball":
                 return new SquareBall(playerName, playerNumber, tiledMap, world, assetManager);
             case "Basketball":
                 return new BasketBall(playerName, playerNumber, tiledMap, world, assetManager);
-            case "Soccerball":
+            case "Soccer ball":
                 return new SoccerBall(playerName, playerNumber, tiledMap, world, assetManager);
             default:
                 return new GolfBall(playerName, playerNumber, tiledMap, world, assetManager);
