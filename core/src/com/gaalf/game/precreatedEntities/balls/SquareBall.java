@@ -17,18 +17,18 @@ class SquareBall extends Ball {
         TransformComponent transformComponent = addTransformComponent(tiledMap, 1.5f);
         TextureAtlas textureAtlas = assetManager.manager.get(assetManager.ballSpriteAtlas);
         Sprite sprite = textureAtlas.createSprite("Square ball");
-        SpriteComponent textureComponent = addSpriteComponent(sprite);
+        SpriteComponent spriteComponent = addSpriteComponent(sprite);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox((textureComponent.sprite.getRegionWidth() / 2f * transformComponent.scale.x) / PPM,
-                (textureComponent.sprite.getRegionHeight() / 2f * transformComponent.scale.y) / PPM);
+        shape.setAsBox((spriteComponent.sprite.getRegionWidth() / 2f * transformComponent.scale.x) / PPM,
+                (spriteComponent.sprite.getRegionHeight() / 2f * transformComponent.scale.y) / PPM);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 8;
         fixtureDef.friction = 100.6f;
         fixtureDef.restitution = .5f;
 
-        addBodyComponent(transformComponent, textureComponent, world, fixtureDef);
+        addBodyComponent(transformComponent, spriteComponent, world, fixtureDef);
     }
 
 }

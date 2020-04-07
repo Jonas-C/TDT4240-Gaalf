@@ -63,11 +63,11 @@ abstract class Ball extends Entity {
         this.add(playerComponent);
     }
 
-    void addBodyComponent(TransformComponent transformComponent, SpriteComponent textureComponent, World world, FixtureDef fixtureDef){
+    void addBodyComponent(TransformComponent transformComponent, SpriteComponent spriteComponent, World world, FixtureDef fixtureDef){
         BodyComponent bodyComponent = new BodyComponent();
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set((transformComponent.pos.x -
-                (textureComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1);
+                (spriteComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         bodyDef.fixedRotation = false;

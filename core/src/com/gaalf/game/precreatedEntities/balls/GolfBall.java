@@ -19,16 +19,16 @@ class GolfBall extends Ball {
         TransformComponent transformComponent = addTransformComponent(tiledMap, 1.5f);
         TextureAtlas textureAtlas = assetManager.manager.get(assetManager.ballSpriteAtlas);
         Sprite sprite = textureAtlas.createSprite("Golf ball");
-        SpriteComponent textureComponent = addSpriteComponent(sprite);
+        SpriteComponent spriteComponent = addSpriteComponent(sprite);
 
         CircleShape cshape = new CircleShape();
-        cshape.setRadius(((textureComponent.sprite.getRegionWidth() * transformComponent.scale.x) / 2) / PPM);
+        cshape.setRadius(((spriteComponent.sprite.getRegionWidth() * transformComponent.scale.x) / 2) / PPM);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = cshape;
         fixtureDef.density = 8;
         fixtureDef.friction = 100.6f;
         fixtureDef.restitution = .5f;
 
-        addBodyComponent(transformComponent, textureComponent, world, fixtureDef);
+        addBodyComponent(transformComponent, spriteComponent, world, fixtureDef);
     }
 }
