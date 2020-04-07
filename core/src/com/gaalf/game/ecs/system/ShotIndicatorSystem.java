@@ -28,7 +28,7 @@ public class ShotIndicatorSystem extends IteratingSystem implements Observer {
         if(shotIndicatorTransform == null){
             shotIndicatorTransform = entity.getComponent(TransformComponent.class);
         }
-        shotIndicatorTransform.pos.set(playerTransform.pos.x, playerTransform.pos.y + 0.7f);
+        shotIndicatorTransform.pos.set(playerTransform.pos.x, playerTransform.pos.y + 0.4f);
 
     }
 
@@ -48,10 +48,10 @@ public class ShotIndicatorSystem extends IteratingSystem implements Observer {
                 distanceDragged.set( originalTouchPos.x - ((Vector2)o).x, originalTouchPos.y - ((Vector2)o).y);
 
                 float angle = (float)Math.toDegrees(Math.atan2(originalTouchPos.y - ((Vector2)o).y, originalTouchPos.x - ((Vector2)o).x));
-                shotIndicatorTransform.rotation = angle - 180f;
+                shotIndicatorTransform.rotation = angle;
                 float x = Math.abs(distanceDragged.x);
                 float y = Math.abs(distanceDragged.y);
-                shotIndicatorTransform.scale.set(x > y ? x / 1000 : y / 1000, 0.2f);
+                shotIndicatorTransform.scale.set(x > y ? x / 500 : y / 500, 0.4f);
             }
         }
         else if(o instanceof String){
