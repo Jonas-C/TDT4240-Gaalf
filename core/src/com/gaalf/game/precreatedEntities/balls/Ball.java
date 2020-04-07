@@ -46,11 +46,11 @@ abstract class Ball extends Entity {
         return soundComponent;
     }
 
-    TextureComponent addTextureComponent(Sprite sprite){
-        TextureComponent textureComponent = new TextureComponent();
-        textureComponent.sprite = sprite;
-        this.add(textureComponent);
-        return textureComponent;
+    SpriteComponent addSpriteComponent(Sprite sprite){
+        SpriteComponent spriteComponent = new SpriteComponent();
+        spriteComponent.sprite = sprite;
+        this.add(spriteComponent);
+        return spriteComponent;
     }
 
     /**
@@ -63,7 +63,7 @@ abstract class Ball extends Entity {
         this.add(playerComponent);
     }
 
-    void addBodyComponent(TransformComponent transformComponent, TextureComponent textureComponent, World world, FixtureDef fixtureDef){
+    void addBodyComponent(TransformComponent transformComponent, SpriteComponent textureComponent, World world, FixtureDef fixtureDef){
         BodyComponent bodyComponent = new BodyComponent();
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set((transformComponent.pos.x -

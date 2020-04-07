@@ -23,7 +23,7 @@ import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShotIndicatorComponent;
 import com.gaalf.game.ecs.component.SoundComponent;
-import com.gaalf.game.ecs.component.TextureComponent;
+import com.gaalf.game.ecs.component.SpriteComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.game.ecs.system.PhysicsDebugSystem;
 import com.gaalf.game.ecs.system.PhysicsSystem;
@@ -158,7 +158,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
 
     private void resetBall(Entity ball){
         TransformComponent transformComponent = ball.getComponent(TransformComponent.class);
-        TextureComponent textureComponent = ball.getComponent(TextureComponent.class);
+        SpriteComponent spriteComponent = ball.getComponent(SpriteComponent.class);
         BodyComponent bodyComponent = ball.getComponent(BodyComponent.class);
         PlayerComponent playerComponent = ball.getComponent(PlayerComponent.class);
 
@@ -166,7 +166,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         MapProperties mapProperties = tiledMap.getLayers().get("objects").getObjects().get("startPos").getProperties();
         transformComponent.pos.set((float)mapProperties.get("x") / PPM, (float)mapProperties.get("y") / PPM);
         bodyComponent.body.setTransform((transformComponent.pos.x -
-                (textureComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1, 0);
+                (spriteComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1, 0);
         bodyComponent.body.setLinearVelocity(0f, 0f);
     }
 
@@ -253,9 +253,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
     }
 
     private Entity createShotIndicator(){
-        TextureComponent textureComponent = new TextureComponent();
+        SpriteComponent spriteComponent = new SpriteComponent();
         Texture texture = new Texture("arrow.png");
-        textureComponent.sprite = new Sprite(texture);
+        spriteComponent.sprite = new Sprite(texture);
 
         TransformComponent transformComponent = new TransformComponent();
         transformComponent.pos.set(3, 3);
@@ -264,7 +264,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         transformComponent.visible = false;
 
         Entity e = new Entity();
-        e.add(textureComponent);
+        e.add(spriteComponent);
         e.add(transformComponent);
         e.add(new ShotIndicatorComponent());
         return e;

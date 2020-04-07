@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.*;
-import com.gaalf.game.ecs.component.TextureComponent;
+import com.gaalf.game.ecs.component.SpriteComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.manager.GameAssetManager;
 
@@ -17,7 +17,7 @@ class SquareBall extends Ball {
         TransformComponent transformComponent = addTransformComponent(tiledMap, 1.5f);
         TextureAtlas textureAtlas = assetManager.manager.get(assetManager.ballSpriteAtlas);
         Sprite sprite = textureAtlas.createSprite("Square ball");
-        TextureComponent textureComponent = addTextureComponent(sprite);
+        SpriteComponent textureComponent = addSpriteComponent(sprite);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox((textureComponent.sprite.getRegionWidth() / 2f * transformComponent.scale.x) / PPM,
