@@ -3,7 +3,6 @@ package com.gaalf.game.precreatedEntities.balls;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -47,11 +46,11 @@ abstract class Ball extends Entity {
         return soundComponent;
     }
 
-    TextureComponent addTextureComponent(Texture texture){
-        TextureComponent textureComponent = new TextureComponent();
-        textureComponent.sprite = new Sprite(texture);
-        this.add(textureComponent);
-        return textureComponent;
+    SpriteComponent addSpriteComponent(Sprite sprite){
+        SpriteComponent spriteComponent = new SpriteComponent();
+        spriteComponent.sprite = sprite;
+        this.add(spriteComponent);
+        return spriteComponent;
     }
 
     /**
@@ -64,11 +63,11 @@ abstract class Ball extends Entity {
         this.add(playerComponent);
     }
 
-    void addBodyComponent(TransformComponent transformComponent, TextureComponent textureComponent, World world, FixtureDef fixtureDef){
+    void addBodyComponent(TransformComponent transformComponent, SpriteComponent spriteComponent, World world, FixtureDef fixtureDef){
         BodyComponent bodyComponent = new BodyComponent();
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set((transformComponent.pos.x -
-                (textureComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1);
+                (spriteComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         bodyDef.fixedRotation = false;
