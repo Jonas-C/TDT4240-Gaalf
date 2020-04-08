@@ -143,7 +143,8 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
             Array<Body> bodies = new Array<>();
             world.getBodies(bodies);
             for(Body body : bodies){
-                if(body.getUserData() == "Terrain"){
+                System.out.println(body.getUserData());
+                if(body.getUserData() == "terrainFixture"){
                     world.destroyBody(body);
                 }
             }
