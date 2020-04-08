@@ -1,5 +1,6 @@
 package com.gaalf.view;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -36,7 +37,7 @@ public abstract class BaseGameView extends BaseView implements Screen {
         table = new Table();
         table.top();
         table.setFillParent(true);
-        table.add(pauseButton);
+        table.add(pauseButton).right().padTop(20);
         addActor(table);
     }
 
@@ -99,13 +100,15 @@ public abstract class BaseGameView extends BaseView implements Screen {
     @Override
     public void pause() {
         addActor(pauseWindow);
-        pauseButton.remove();
+        pauseButton.setVisible(false);
+        pauseButton.setDisabled(true);
     }
 
     @Override
     public void resume() {
         pauseWindow.remove();
-        getTable().add(pauseButton).right().padTop(20);
+        pauseButton.setVisible(true);
+        pauseButton.setDisabled(false);
     }
 
     @Override
