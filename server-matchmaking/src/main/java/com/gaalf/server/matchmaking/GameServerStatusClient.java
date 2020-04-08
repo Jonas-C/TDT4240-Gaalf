@@ -35,7 +35,7 @@ public class GameServerStatusClient implements Closeable {
         try {
             responseReady.await();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            return null;
         }
         return responseMessage;
     }

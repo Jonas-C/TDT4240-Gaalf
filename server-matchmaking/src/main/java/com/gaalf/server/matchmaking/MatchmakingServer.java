@@ -40,7 +40,7 @@ public class MatchmakingServer {
                     servers.add(gameServerEntry);
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                // Server is most likely down, skip it
             }
         }
 
