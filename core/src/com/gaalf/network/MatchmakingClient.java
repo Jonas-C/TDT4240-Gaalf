@@ -10,6 +10,7 @@ import com.gaalf.network.message.AvailableGameServersResponseMessage;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * Client to the matchmaking server, which can provide available game servers for multiplayer games.
@@ -17,34 +18,40 @@ import java.util.List;
 public class MatchmakingClient implements Closeable {
 
     private Client kryoClient;
+    private CountDownLatch responseReady;
     private AvailableGameServersResponseMessage responseMessage;
 
     public MatchmakingClient() throws IOException {
         kryoClient = new Client();
+        responseReady = new CountDownLatch(1);
         responseMessage = null;
 
-        KryoMessageRegister.registerMatchmakingMessages(kryoClient.getKryo());
+        KryoMessageRegister.registerMessages(kryoClient.getKryo());
         kryoClient.addListener(new InternalConnectionListener());
+        kryoClient.start();
         kryoClient.connect(5000, "gaalf.mchyll.no", 7000);
     }
 
     /**
      * Requests a list of available multiplayer game servers.
      * @return a list of multiplayer game servers and the number of players on each.
-     * @throws IOException
      * @see com.gaalf.network.data.GameServerSpecification
      */
-    public List<GameServerSpecification> getGameServers() throws IOException {
+    public List<GameServerSpecification> getGameServers() {
+        responseReady = new CountDownLatch(1);
         responseMessage = null;
         kryoClient.sendTCP(new AvailableGameServersRequestMessage());
-        while (responseMessage == null) {
-            kryoClient.update(250);
+        try {
+            responseReady.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         return responseMessage.servers;
     }
 
     @Override
     public void close() throws IOException {
+        System.out.println("Disposing MatchmakingClient");
         kryoClient.dispose();
     }
 
@@ -60,7 +67,8 @@ public class MatchmakingClient implements Closeable {
         @Override
         public void received(Connection connection, Object object) {
             if (object instanceof AvailableGameServersResponseMessage) {
-                MatchmakingClient.this.responseMessage = (AvailableGameServersResponseMessage) object;
+                responseMessage = (AvailableGameServersResponseMessage) object;
+                responseReady.countDown();
             }
         }
     }

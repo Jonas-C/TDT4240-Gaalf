@@ -9,26 +9,33 @@ import com.gaalf.network.message.GameServerStatusMessage;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.concurrent.CountDownLatch;
 
 public class GameServerStatusClient implements Closeable {
 
     private Client kryoClient;
+    private CountDownLatch responseReady;
     private GameServerStatusMessage responseMessage;
 
     public GameServerStatusClient(InetSocketAddress address) throws IOException {
         kryoClient = new Client();
+        responseReady = new CountDownLatch(1);
         responseMessage = null;
 
-        KryoMessageRegister.registerGameServerMessages(kryoClient.getKryo());
+        KryoMessageRegister.registerMessages(kryoClient.getKryo());
         kryoClient.addListener(new InternalConnectionListener());
+        kryoClient.start();
         kryoClient.connect(5000, address.getAddress(), address.getPort());
     }
 
-    public GameServerStatusMessage getStatus() throws IOException {
+    public GameServerStatusMessage getStatus() {
+        responseReady = new CountDownLatch(1);
         responseMessage = null;
         kryoClient.sendTCP(new GameServerStatusMessage());
-        while (responseMessage == null) {
-            kryoClient.update(250);
+        try {
+            responseReady.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
         return responseMessage;
     }
@@ -51,6 +58,7 @@ public class GameServerStatusClient implements Closeable {
         public void received(Connection connection, Object object) {
             if (object instanceof GameServerStatusMessage) {
                 responseMessage = (GameServerStatusMessage) object;
+                responseReady.countDown();
             }
         }
     }

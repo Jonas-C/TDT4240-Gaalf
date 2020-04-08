@@ -40,7 +40,7 @@ public class MatchmakingServer {
                     servers.add(gameServerEntry);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
 

@@ -37,4 +37,8 @@ public class MainMenuPresenter extends BaseMenuPresenter {
     public BaseView getView() {
         return view;
     }
+
+    public void openServerSelectMenu() {
+        game.setScreen(new ServersPresenter(game));
+    }
 }

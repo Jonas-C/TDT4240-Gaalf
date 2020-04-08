@@ -21,7 +21,7 @@ public class Main {
                 return new PlayerConnection();
             }
         };
-        KryoMessageRegister.registerGameServerMessages(kryoServer.getKryo());
+        KryoMessageRegister.registerMessages(kryoServer.getKryo());
 
         GameServer gameServer = new GameServer(kryoServer);
 

@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         Server kryoServer = new Server();
-        KryoMessageRegister.registerMatchmakingMessages(kryoServer.getKryo());
+        KryoMessageRegister.registerMessages(kryoServer.getKryo());
 
         MatchmakingServer matchmakingServer = new MatchmakingServer();
 

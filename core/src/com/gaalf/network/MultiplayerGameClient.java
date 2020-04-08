@@ -30,7 +30,7 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
         serverAddress = new InetSocketAddress(hostParts[0], Integer.parseInt(hostParts[1]));
 
         kryoClient = new Client();
-        KryoMessageRegister.registerGameServerMessages(kryoClient.getKryo());
+        KryoMessageRegister.registerMessages(kryoClient.getKryo());
         kryoClient.addListener(new InternalConnectionListener());
         kryoClient.start();
         kryoClient.connect(5000, serverAddress.getAddress(), serverAddress.getPort());
