@@ -1,8 +1,7 @@
 package com.gaalf.presenter;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.Array;
 import com.gaalf.GaalfGame;
 import com.gaalf.view.BaseMenuView;
 import com.gaalf.view.BaseView;
@@ -10,15 +9,25 @@ import com.gaalf.view.SettingsView;
 
 public class SettingsPresenter extends BaseMenuPresenter {
 
-    private BaseMenuView view;
+    private SettingsView view;
+    private Array<String> ballNames;
+    private int currentBallIndex;
 
-    public SettingsPresenter(final GaalfGame game){
+    SettingsPresenter(final GaalfGame game){
         super(game);
+        ballNames = new Array<>();
+        TextureAtlas textureAtlas = game.assetManager.manager.get(game.assetManager.ballSpriteAtlas);
+        Array<TextureAtlas.AtlasRegion> regions = textureAtlas.getRegions();
+        for(TextureAtlas.AtlasRegion region : regions){
+            ballNames.add(region.name);
+        }
         view = new SettingsView(game.getBatch(), this);
-
+        currentBallIndex = ballNames.indexOf(game.settingsManager.getBallChoice(), false);
+        view.setBallChoiceLabel(game.settingsManager.getBallChoice());
     }
 
     public void openMainMenuView() {
+        game.settingsManager.setBallChoice(ballNames.get(currentBallIndex));
         game.setScreen(new MainMenuPresenter(game));
     }
 
@@ -63,5 +72,22 @@ public class SettingsPresenter extends BaseMenuPresenter {
     }
     public void setSoundEffectsEnabled(boolean soundEffectsEnabled) {
         game.settingsManager.setSoundEffectsEnabled(soundEffectsEnabled);
+    }
+
+    public void handleBallChange(String button){
+        if(button.equals("left_arrow")){
+            if(currentBallIndex <= 0){
+                currentBallIndex = ballNames.size - 1;
+            } else {
+                currentBallIndex--;
+            }
+        } else{
+            if(currentBallIndex >= ballNames.size -1) {
+                currentBallIndex = 0;
+            } else {
+                currentBallIndex++;
+            }
+        }
+        view.setBallChoiceLabel(ballNames.get(currentBallIndex));
     }
 }

@@ -17,9 +17,7 @@ public class GameAssetManager {
     public final String jumpSound = "sounds/JumpSound.wav";
     public final String finishSound = "sounds/FinishSound.wav";
 
-    public final String basketBallSprite = "balls/basketball.png";
-    public final String golfBallSprite = "balls/golfball.png";
-    public final String soccerBallSprite = "balls/soccerball.png";
+    public final String ballSpriteAtlas = "balls/balls.atlas";
 
     public final String cloudsAtlas = "clouds.atlas";
 
@@ -36,9 +34,7 @@ public class GameAssetManager {
     }
 
     public void loadSprites(){
-        manager.load(basketBallSprite, Texture.class);
-        manager.load(golfBallSprite, Texture.class);
-        manager.load(soccerBallSprite, Texture.class);
+        manager.load(ballSpriteAtlas, TextureAtlas.class);
     }
 
     public void loadBackground(){
