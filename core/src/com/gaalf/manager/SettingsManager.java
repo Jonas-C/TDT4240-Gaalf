@@ -10,17 +10,20 @@ public class SettingsManager {
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOL = "sound";
     private static final String PREFS_NAME = "Settings.preferences";
+    private static final String PREF_USERNAME = "username";
 
     public float musicVolume;
     public boolean musicIsEnabled;
     public float soundVolume;
     public boolean soundIsEnabled;
+    public String displayName;
 
     public SettingsManager(){
         musicVolume = getMusicVolume();
         musicIsEnabled = isMusicEnabled();
         soundVolume = getSoundVolume();
         soundIsEnabled = isSoundEffectsEnabled();
+        displayName = getUsername();
     }
 
     private Preferences getPreferences(){
@@ -65,5 +68,15 @@ public class SettingsManager {
         getPreferences().putBoolean(PREF_SOUND_ENABLED, soundEffectsEnabled);
         getPreferences().flush();
         soundIsEnabled = soundEffectsEnabled;
+    }
+
+    public String getUsername(){
+        return getPreferences().getString(PREF_USERNAME);
+    }
+
+    public void setUsername(String name){
+        getPreferences().putString(PREF_USERNAME, name);
+        getPreferences().flush();
+        displayName = name;
     }
 }

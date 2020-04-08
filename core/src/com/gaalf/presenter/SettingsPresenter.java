@@ -3,6 +3,7 @@ package com.gaalf.presenter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.gaalf.GaalfGame;
 import com.gaalf.view.BaseView;
 import com.gaalf.view.SettingsView;
@@ -14,7 +15,6 @@ public class SettingsPresenter extends BaseMenuPresenter {
     public SettingsPresenter(final GaalfGame game){
         super(game);
         view = new SettingsView(game.getBatch(), this);
-
     }
 
     public void openMainMenuView() {
@@ -48,7 +48,6 @@ public class SettingsPresenter extends BaseMenuPresenter {
         game.settingsManager.setMusicVolume(volume);
     }
 
-
     public float getSoundVolume(){
         return game.settingsManager.soundVolume;
     }
@@ -58,9 +57,18 @@ public class SettingsPresenter extends BaseMenuPresenter {
     }
 
     public boolean isSoundEffectsEnabled(){
+
         return game.settingsManager.soundIsEnabled;
     }
     public void setSoundEffectsEnabled(boolean soundEffectsEnabled) {
         game.settingsManager.setSoundEffectsEnabled(soundEffectsEnabled);
     }
+
+    public String getUsername(){
+        return game.settingsManager.displayName;
+    }
+    public void setUsername(String usernameSet){
+        game.settingsManager.setUsername(usernameSet);
+    }
+
 }
