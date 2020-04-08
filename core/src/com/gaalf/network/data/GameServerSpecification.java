@@ -1,4 +1,4 @@
-package com.gaalf.network;
+package com.gaalf.network.data;
 
 public class GameServerSpecification {
     public String host;

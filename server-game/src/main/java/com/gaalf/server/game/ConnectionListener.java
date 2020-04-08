@@ -3,7 +3,8 @@ package com.gaalf.server.game;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gaalf.network.message.BallHitMessage;
-import com.gaalf.network.message.PlayerJoinServerMessage;
+import com.gaalf.network.message.GameServerStatusMessage;
+import com.gaalf.network.message.JoinGameRequestMessage;
 
 public class ConnectionListener extends Listener {
 
@@ -27,10 +28,13 @@ public class ConnectionListener extends Listener {
     public void received(Connection connection, Object object) {
         PlayerConnection playerConnection = (PlayerConnection) connection;
 
-        if (object instanceof PlayerJoinServerMessage) {
-            PlayerJoinServerMessage message = (PlayerJoinServerMessage) object;
-            playerConnection.playerName = message.playerName;
-            gameServer.playerJoined(playerConnection);
+        if (object instanceof GameServerStatusMessage) {
+            gameServer.statusRequest(playerConnection);
+        }
+
+        if (object instanceof JoinGameRequestMessage) {
+            JoinGameRequestMessage message = (JoinGameRequestMessage) object;
+            gameServer.playerJoinRequest(playerConnection, message);
         }
 
         if (object instanceof BallHitMessage) {

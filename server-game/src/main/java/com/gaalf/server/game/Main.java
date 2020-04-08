@@ -29,6 +29,6 @@ public class Main {
         kryoServer.bind(port);
         kryoServer.start();
 
-        System.out.println("Game server started");
+        System.out.println("Game server started on port " + port);
     }
 }

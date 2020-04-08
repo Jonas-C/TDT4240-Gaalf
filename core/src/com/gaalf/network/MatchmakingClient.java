@@ -3,6 +3,7 @@ package com.gaalf.network;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.gaalf.network.data.GameServerSpecification;
 import com.gaalf.network.message.AvailableGameServersRequestMessage;
 import com.gaalf.network.message.AvailableGameServersResponseMessage;
 
@@ -10,6 +11,9 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Client to the matchmaking server, which can provide available game servers for multiplayer games.
+ */
 public class MatchmakingClient implements Closeable {
 
     private Client kryoClient;
@@ -21,17 +25,17 @@ public class MatchmakingClient implements Closeable {
 
         KryoMessageRegister.registerMatchmakingMessages(kryoClient.getKryo());
         kryoClient.addListener(new InternalConnectionListener());
-        // TODO make configurable
-        kryoClient.connect(5000, "localhost", 7000);
+        kryoClient.connect(5000, "gaalf.mchyll.no", 7000);
     }
 
     /**
-     * Requests a list of available game servers.
-     * @return a list of game server and the number of players on each.
+     * Requests a list of available multiplayer game servers.
+     * @return a list of multiplayer game servers and the number of players on each.
      * @throws IOException
-     * @see GameServerSpecification
+     * @see com.gaalf.network.data.GameServerSpecification
      */
     public List<GameServerSpecification> getGameServers() throws IOException {
+        responseMessage = null;
         kryoClient.sendTCP(new AvailableGameServersRequestMessage());
         while (responseMessage == null) {
             kryoClient.update(250);
