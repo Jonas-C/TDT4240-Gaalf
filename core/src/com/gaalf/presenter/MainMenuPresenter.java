@@ -7,7 +7,6 @@ import com.gaalf.view.BaseView;
 public class MainMenuPresenter extends BaseMenuPresenter {
 
     private BaseView view;
-    private String username;
 
 
     public MainMenuPresenter(final GaalfGame game){
@@ -20,9 +19,10 @@ public class MainMenuPresenter extends BaseMenuPresenter {
         menuMusic.dispose();
 
 //      game.setScreen(new GamePresenter(game, game.levelManager.getLevels().get(0) ));
-        game.playersManager.addPlayer("Jonas", true);
+        game.playersManager.addPlayer(game.settingsManager.displayName, true);
         game.devicePlayer = game.playersManager.getPlayers().get(0);
         game.setScreen(new GamePresenter(game, game.levelManager.getRandomLevel()));
+        System.out.println("name:" + game.settingsManager.displayName);
     }
 
     public void openLevelSelectMenu() {

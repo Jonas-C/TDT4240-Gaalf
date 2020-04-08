@@ -80,7 +80,6 @@ public class SettingsView extends BaseMenuView {
         changeUsernameBtn.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                System.out.println(username.getText());
                 presenter.setUsername(username.getText());
                 return false;
             }

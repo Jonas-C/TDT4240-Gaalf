@@ -67,6 +67,7 @@ public class SettingsPresenter extends BaseMenuPresenter {
     public String getUsername(){
         return game.settingsManager.displayName;
     }
+
     public void setUsername(String usernameSet){
         game.settingsManager.setUsername(usernameSet);
     }
