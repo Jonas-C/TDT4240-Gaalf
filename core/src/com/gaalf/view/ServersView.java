@@ -6,10 +6,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.gaalf.network.GameServerSpecification;
+import com.gaalf.network.data.GameServerSpecification;
 import com.gaalf.presenter.ServersPresenter;
 
 import java.util.List;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.gaalf.network.MatchmakingClient;
+import com.gaalf.network.data.GameServerSpecification;
+import com.gaalf.presenter.ServersPresenter;
+
+import java.io.IOException;
 
 public class ServersView extends BaseMenuView {
 
@@ -31,6 +37,14 @@ public class ServersView extends BaseMenuView {
             }
         });
 
+//        try (MatchmakingClient matchmakingClient = new MatchmakingClient()) {
+//            for (GameServerSpecification server : matchmakingClient.getGameServers()) {
+//                table.row();
+//                table.add(new Label(server.host + " with " + server.players + " players", getSkin()));
+//            }
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
         addActor(table);
     }
 

@@ -1,27 +1,23 @@
-package com.gaalf.network;
+package com.gaalf.server.matchmaking;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.gaalf.network.data.GameServerSpecification;
-import com.gaalf.network.message.AvailableGameServersRequestMessage;
-import com.gaalf.network.message.AvailableGameServersResponseMessage;
+import com.gaalf.network.KryoMessageRegister;
+import com.gaalf.network.message.GameServerStatusMessage;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.List;
+import java.net.InetSocketAddress;
 import java.util.concurrent.CountDownLatch;
 
-/**
- * Client to the matchmaking server, which can provide available game servers for multiplayer games.
- */
-public class MatchmakingClient implements Closeable {
+public class GameServerStatusClient implements Closeable {
 
     private Client kryoClient;
     private CountDownLatch responseReady;
-    private AvailableGameServersResponseMessage responseMessage;
+    private GameServerStatusMessage responseMessage;
 
-    public MatchmakingClient() throws IOException {
+    public GameServerStatusClient(InetSocketAddress address) throws IOException {
         kryoClient = new Client();
         responseReady = new CountDownLatch(1);
         responseMessage = null;
@@ -29,29 +25,23 @@ public class MatchmakingClient implements Closeable {
         KryoMessageRegister.registerMessages(kryoClient.getKryo());
         kryoClient.addListener(new InternalConnectionListener());
         kryoClient.start();
-        kryoClient.connect(5000, "gaalf.mchyll.no", 7000);
+        kryoClient.connect(5000, address.getAddress(), address.getPort());
     }
 
-    /**
-     * Requests a list of available multiplayer game servers.
-     * @return a list of multiplayer game servers and the number of players on each.
-     * @see com.gaalf.network.data.GameServerSpecification
-     */
-    public List<GameServerSpecification> getGameServers() {
+    public GameServerStatusMessage getStatus() {
         responseReady = new CountDownLatch(1);
         responseMessage = null;
-        kryoClient.sendTCP(new AvailableGameServersRequestMessage());
+        kryoClient.sendTCP(new GameServerStatusMessage());
         try {
             responseReady.await();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return responseMessage.servers;
+        return responseMessage;
     }
 
     @Override
     public void close() throws IOException {
-        System.out.println("Disposing MatchmakingClient");
         kryoClient.dispose();
     }
 
@@ -66,8 +56,8 @@ public class MatchmakingClient implements Closeable {
 
         @Override
         public void received(Connection connection, Object object) {
-            if (object instanceof AvailableGameServersResponseMessage) {
-                responseMessage = (AvailableGameServersResponseMessage) object;
+            if (object instanceof GameServerStatusMessage) {
+                responseMessage = (GameServerStatusMessage) object;
                 responseReady.countDown();
             }
         }

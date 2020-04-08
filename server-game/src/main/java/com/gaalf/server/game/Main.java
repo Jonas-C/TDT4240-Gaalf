@@ -21,7 +21,7 @@ public class Main {
                 return new PlayerConnection();
             }
         };
-        KryoMessageRegister.registerGameServerMessages(kryoServer.getKryo());
+        KryoMessageRegister.registerMessages(kryoServer.getKryo());
 
         GameServer gameServer = new GameServer(kryoServer);
 
@@ -29,6 +29,6 @@ public class Main {
         kryoServer.bind(port);
         kryoServer.start();
 
-        System.out.println("Game server started");
+        System.out.println("Game server started on port " + port);
     }
 }

@@ -1,7 +1,7 @@
 package com.gaalf.presenter;
 
 import com.gaalf.GaalfGame;
-import com.gaalf.network.GameServerSpecification;
+import com.gaalf.network.data.GameServerSpecification;
 import com.gaalf.network.MatchmakingClient;
 import com.gaalf.view.BaseView;
 import com.gaalf.view.ServersView;
@@ -31,11 +31,7 @@ public class ServersPresenter extends BaseMenuPresenter {
 
     public List<GameServerSpecification> getGameServers() {
         if (matchmakingClient != null) {
-            try {
-                return matchmakingClient.getGameServers();
-            } catch (IOException e) {
-                return null;
-            }
+            return matchmakingClient.getGameServers();
         }
 
         return null;
