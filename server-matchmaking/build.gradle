@@ -1,0 +1,17 @@
+apply plugin: "java"
+apply plugin: "application"
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+mainClassName = "com.gaalf.server.matchmaking.Main"
+
+dependencies {
+    implementation project(":core")
+}
+
+jar {
+    manifest {
+        attributes "Main-Class": project.mainClassName
+    }
+}
