@@ -11,7 +11,7 @@ import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.SoundComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 
-public class WinConSystem  extends IteratingSystem {
+public class WinConSystem extends IteratingSystem {
     private Entity goalEntity;
     private ComponentMapper<PlayerComponent> playerMapper;
     private ComponentMapper<TransformComponent> transformMapper;
@@ -38,8 +38,8 @@ public class WinConSystem  extends IteratingSystem {
                     playerMapper.get(entity).isFinished = true;
                     goalEntity.getComponent(SoundComponent.class).shouldBePlayed = true;
                     System.out.println("Goal");
-                    Body playerBody = entity.getComponent(BodyComponent.class).body;
-                    playerBody.setAwake(false);
+//                    Body playerBody = entity.getComponent(BodyComponent.class).body;
+//                    playerBody.setAwake(false);
                 }
             }
         }

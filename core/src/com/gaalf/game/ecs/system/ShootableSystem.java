@@ -9,7 +9,6 @@ import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShootableComponent;
 import com.gaalf.game.ecs.component.SoundComponent;
-import com.gaalf.presenter.BaseGamePresenter;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -37,7 +36,6 @@ public class ShootableSystem extends IteratingSystem implements Observer{
         ShootableComponent shootableComponent = shootableMapper.get(entity);
         PlayerComponent playerComponent = playerMapper.get(entity);
 
-        System.out.println(distanceDragged);
         if(touchUp && !distanceDragged.isZero()){
             shootableComponent.force.set(distanceDragged);
             bodyComponent.body.applyForceToCenter(-(shootableComponent.force.x), -(shootableComponent.force.y), true);
@@ -48,7 +46,6 @@ public class ShootableSystem extends IteratingSystem implements Observer{
             distanceDragged.set(0, 0);
         }
             touchUp = false;
-
     }
 
 

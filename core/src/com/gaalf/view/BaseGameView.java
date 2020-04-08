@@ -16,7 +16,7 @@ public abstract class BaseGameView extends BaseView implements Screen {
     private final String TAG = GameView.class.getSimpleName();
     Table table;
     private Window pauseWindow = new Window("Pause", getSkin());
-    private TextButton pauseButton = new TextButton("Pause", getSkin());
+    TextButton pauseButton = new TextButton("Pause", getSkin());
     private BaseGamePresenter presenter;
 
 
@@ -50,7 +50,8 @@ public abstract class BaseGameView extends BaseView implements Screen {
         pauseWindow.setMovable(false);
         pauseWindow.setHeight(GaalfGame.V_HEIGHT / 1.2f);
         pauseWindow.setWidth(GaalfGame.V_HEIGHT / 1.2f);
-        pauseWindow.setPosition(GaalfGame.V_WIDTH / 2 - pauseWindow.getWidth() / 2, GaalfGame.V_HEIGHT / 2 - pauseWindow.getHeight() / 2);
+        pauseWindow.setPosition(GaalfGame.V_WIDTH / 2f - pauseWindow.getWidth() / 2,
+                GaalfGame.V_HEIGHT / 2f - pauseWindow.getHeight() / 2);
         Label titleLabel = pauseWindow.getTitleLabel();
         titleLabel.setFontScale(2, 2);
         Table titleTable = pauseWindow.getTitleTable();

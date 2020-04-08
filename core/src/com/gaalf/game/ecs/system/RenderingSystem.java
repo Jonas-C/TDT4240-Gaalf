@@ -8,15 +8,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.gaalf.game.ecs.component.TextureComponent;
+import com.gaalf.game.ecs.component.SpriteComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.game.util.TextureMapObjectRenderer;
 import static com.gaalf.game.constants.B2DConstants.*;
 
 public class RenderingSystem extends IteratingSystem {
 
-    private ComponentMapper<TextureComponent> textureMapper;
+    private ComponentMapper<SpriteComponent> spriteComponentMapper;
     private ComponentMapper<TransformComponent> transformMapper;
 
     private OrthographicCamera b2dCam;
@@ -26,30 +25,30 @@ public class RenderingSystem extends IteratingSystem {
 
     public SpriteBatch batch;
 
-    public RenderingSystem(SpriteBatch batch, OrthographicCamera b2dCam, TiledMap tiledMap){
-        super(Family.all(TextureComponent.class).get());
+    public RenderingSystem(SpriteBatch batch, OrthographicCamera b2dCam, TextureMapObjectRenderer tmr){
+        super(Family.all(SpriteComponent.class).get());
         this.batch = batch;
 
-        textureMapper = ComponentMapper.getFor(TextureComponent.class);
+        spriteComponentMapper = ComponentMapper.getFor(SpriteComponent.class);
         transformMapper = ComponentMapper.getFor(TransformComponent.class);
 
-        tmr = new TextureMapObjectRenderer(tiledMap, batch);
+        this.tmr = tmr;
         this.b2dCam = b2dCam;
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         TransformComponent transform = transformMapper.get(entity);
-        TextureComponent texture = textureMapper.get(entity);
+        SpriteComponent spriteComponent = spriteComponentMapper.get(entity);
         if(transform.visible) {
-            Sprite sprite = texture.sprite;
+            Sprite sprite = spriteComponent.sprite;
             float width = sprite.getRegionWidth();
             float height = sprite.getRegionHeight();
             float originX = width * 0.5f;
             float originY = height * 0.5f;
             float x = transform.pos.x - originX;
             float y = transform.pos.y - originY;
-            batch.draw(texture.sprite, x, y, originX, originY, width, height, transform.scale.x * P2M,
+            batch.draw(spriteComponent.sprite, x, y, originX, originY, width, height, transform.scale.x * P2M,
                     transform.scale.y * P2M, transform.rotation);
         }
     }
