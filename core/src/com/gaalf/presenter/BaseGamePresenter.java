@@ -90,8 +90,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
 
 
         Entity goal = createGoalEntity();
+        ImmutableArray<Entity> allPlayerEntities = engine.getEntitiesFor(Family.all(PlayerComponent.class).get());
         engine.addEntity(goal);
-        engine.addSystem(new WinConSystem(goal));
+        engine.addSystem(new WinConSystem(goal, allPlayerEntities));
 
         InputMultiplexer multiplexer = new InputMultiplexer();
         ShotInputHandler shotInputHandler = new ShotInputHandler();
@@ -189,7 +190,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         }
         engine.update(delta);
         getView().update(delta);
-        if(playerEntity.getComponent(PlayerComponent.class).isFinished && !levelFinished){
+        if(checkIfAllPlayersAreFinished() && !levelFinished){
             levelCleared();
             levelFinished = true;
         }
@@ -269,6 +270,10 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         e.add(new ShotIndicatorComponent());
         return e;
 
+    }
+
+    private boolean checkIfAllPlayersAreFinished(){
+        return engine.getSystem(WinConSystem.class).allPlayersFinished;
     }
 
     private void setScoreLabel(int playerNumber, String newText){

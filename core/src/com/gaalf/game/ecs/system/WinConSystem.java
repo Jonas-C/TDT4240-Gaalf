@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gaalf.game.ecs.component.BodyComponent;
@@ -15,14 +16,15 @@ public class WinConSystem extends IteratingSystem {
     private Entity goalEntity;
     private ComponentMapper<PlayerComponent> playerMapper;
     private ComponentMapper<TransformComponent> transformMapper;
-    private Boolean allPlayersFinished = false;
+    private ImmutableArray<Entity> allPlayers;
+    public Boolean allPlayersFinished = false;
 
 
-    public WinConSystem(Entity goalEntity){
+    public WinConSystem(Entity goalEntity, ImmutableArray<Entity> allPlayers){
         super(Family.all(PlayerComponent.class, TransformComponent.class).get());
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
         transformMapper = ComponentMapper.getFor(TransformComponent.class);
-
+        this.allPlayers = allPlayers;
         this.goalEntity = goalEntity;
     }
 
@@ -38,10 +40,24 @@ public class WinConSystem extends IteratingSystem {
                     playerMapper.get(entity).isFinished = true;
                     goalEntity.getComponent(SoundComponent.class).shouldBePlayed = true;
                     System.out.println("Goal");
+                    checkIfAllPlayersAreFinished();
 //                    Body playerBody = entity.getComponent(BodyComponent.class).body;
 //                    playerBody.setAwake(false);
                 }
             }
+        }
+    }
+
+    private void checkIfAllPlayersAreFinished(){
+        boolean allFinished = true;
+        for (Entity entity : allPlayers){
+            PlayerComponent playerComponent = entity.getComponent(PlayerComponent.class);
+            if (!playerComponent.isFinished){
+                allFinished = false;
+            }
+        }
+        if (allFinished){
+            allPlayersFinished = true;
         }
     }
 }

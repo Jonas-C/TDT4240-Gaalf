@@ -40,7 +40,9 @@ public class ShootableSystem extends IteratingSystem implements Observer{
             shootableComponent.force.set(distanceDragged);
             bodyComponent.body.applyForceToCenter(-(shootableComponent.force.x), -(shootableComponent.force.y), true);
             shootableComponent.force.set(0, 0);
-            playerComponent.playerScore++;
+            if (!playerComponent.isFinished){
+                playerComponent.playerScore++;
+            }
             playShootSound(entity);
             prevTouch.set(0, 0);
             distanceDragged.set(0, 0);
