@@ -127,8 +127,8 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
 
     private void initPlayers(){
         for(PlayerInfo player : game.playersManager.getPlayers()){
-            Entity ball = ballFactory.createEntity(player.getBallChoice(), player.getPlayerName(), player.getPlayerID(), tiledMap);
-            if(player.getThisDevice()){
+            Entity ball = ballFactory.createEntity(player, tiledMap);
+            if(player.isThisDevice()){
                 engine.addEntity(createShotIndicator());
                 playerEntity = ball;
             }

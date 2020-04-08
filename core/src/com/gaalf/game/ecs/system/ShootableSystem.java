@@ -36,16 +36,27 @@ public class ShootableSystem extends IteratingSystem implements Observer{
         ShootableComponent shootableComponent = shootableMapper.get(entity);
         PlayerComponent playerComponent = playerMapper.get(entity);
 
-        if(touchUp && !distanceDragged.isZero()){
-            shootableComponent.force.set(distanceDragged);
-            bodyComponent.body.applyForceToCenter(-(shootableComponent.force.x), -(shootableComponent.force.y), true);
-            shootableComponent.force.set(0, 0);
-            playerComponent.playerScore++;
-            playShootSound(entity);
-            prevTouch.set(0, 0);
-            distanceDragged.set(0, 0);
+        if(playerComponent.onThisDevice){
+            if(touchUp && !distanceDragged.isZero()){
+                shootableComponent.force.set(distanceDragged);
+                bodyComponent.body.applyForceToCenter(-(shootableComponent.force.x), -(shootableComponent.force.y), true);
+                shootableComponent.force.set(0, 0);
+                playerComponent.playerScore++;
+                playShootSound(entity);
+                prevTouch.set(0, 0);
+                distanceDragged.set(0, 0);
+                touchUp = false;
+            }
+        } else {
+            if(shootableComponent.shouldBeShot){
+                bodyComponent.body.applyForceToCenter(-(shootableComponent.force.x), -(shootableComponent.force.y), true);
+                shootableComponent.force.set(0, 0);
+                playerComponent.playerScore++;
+                playShootSound(entity);
+                shootableComponent.shouldBeShot = false;
+            }
         }
-            touchUp = false;
+
     }
 
 
