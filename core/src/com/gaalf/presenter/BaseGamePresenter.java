@@ -3,7 +3,6 @@ package com.gaalf.presenter;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.audio.Music;
@@ -19,6 +18,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.gaalf.GaalfGame;
+import com.gaalf.game.GameObservable;
+import com.gaalf.game.GameObserver;
 import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShotIndicatorComponent;
@@ -28,8 +29,10 @@ import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.game.ecs.system.PhysicsDebugSystem;
 import com.gaalf.game.ecs.system.PhysicsSystem;
 import com.gaalf.game.ecs.system.RenderingSystem;
+import com.gaalf.game.ecs.system.ScoreSystem;
 import com.gaalf.game.ecs.system.ShootableSystem;
 
+import com.gaalf.game.enums.GameEvent;
 import com.gaalf.game.precreatedEntities.balls.BallFactory;
 
 import com.gaalf.game.ecs.system.SoundSystem;
@@ -43,12 +46,11 @@ import com.gaalf.model.PlayerInfo;
 import com.gaalf.view.GameView;
 import com.gaalf.game.input.*;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.ArrayList;
 
 import static com.gaalf.game.constants.B2DConstants.*;
 
-public abstract class BaseGamePresenter extends BasePresenter implements Observer {
+public abstract class BaseGamePresenter extends BasePresenter implements GameObserver, GameObservable {
 
     private GameView view;
     private Engine engine;
@@ -62,6 +64,8 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
     private TextureMapObjectRenderer tmr;
     private boolean levelFinished = false;
     private BallFactory ballFactory;
+    private PlayerInfo playerInfo;
+    private ArrayList<GameObserver> gameObservers;
 
 
     BaseGamePresenter(final GaalfGame game, FileHandle level) {
@@ -71,6 +75,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         b2dCam = new OrthographicCamera();
         b2dViewport = new ExtendViewport(GaalfGame.V_WIDTH / PPM, GaalfGame.V_HEIGHT / PPM, b2dCam);
         b2dViewport.update(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT, true);
+        gameObservers = new ArrayList<>();
 
         setupGame(level);
         initPlayers();
@@ -80,13 +85,20 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         PhysicsSystem physicsSystem = new PhysicsSystem();
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, b2dCam);
         ShotIndicatorSystem shotIndicatorSystem = new ShotIndicatorSystem(playerEntity.getComponent(TransformComponent.class));
+        SoundSystem soundSystem = new SoundSystem(game.settingsManager);
+        ScoreSystem scoreSystem = new ScoreSystem();
+
+        shootableSystem.addListener(soundSystem);
+        shootableSystem.addListener(scoreSystem);
+        scoreSystem.addListener(this);
 
         engine.addSystem(shootableSystem);
         engine.addSystem(physicsSystem);
         engine.addSystem(renderingSystem);
-        engine.addSystem(new SoundSystem(game.settingsManager));
+        engine.addSystem(soundSystem);
         engine.addSystem(physicsDebugSystem);
         engine.addSystem(shotIndicatorSystem);
+        engine.addSystem(scoreSystem);
 
 
         Entity goal = createGoalEntity();
@@ -99,9 +111,11 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
         multiplexer.addProcessor(shotInputHandler);
         Gdx.input.setInputProcessor(multiplexer);
 
-        shotInputHandler.addObserver(shootableSystem);
-        shotInputHandler.addObserver(shotIndicatorSystem);
-        shotInputHandler.addObserver(this);
+
+        shotInputHandler.addListener(shootableSystem);
+        shotInputHandler.addListener(shotIndicatorSystem);
+        shotInputHandler.addListener(this);
+        this.addListener(scoreSystem);
 
         B2dDebugUtil.createWalls(world);
 
@@ -131,6 +145,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
             if(player.isThisDevice()){
                 engine.addEntity(createShotIndicator());
                 playerEntity = ball;
+                playerInfo = player;
             }
             engine.addEntity(ball);
             getView().addScoreLabel(player.getPlayerID(), player.getPlayerName());
@@ -154,6 +169,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
                 resetBall(ball);
             }
             levelFinished = false;
+            notifyObservers(GameEvent.LEVEL_RESET, tiledMap);
         }
     }
 
@@ -241,18 +257,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
 
     public abstract void levelCleared();
 
-    public void update(Observable observable, Object o) {
-        if (o instanceof String) {
-            if (o == "touchUp") {
-                ImmutableArray<Entity> playerEntities = engine.getEntitiesFor(Family.all(PlayerComponent.class).get());
-                for (Entity entity : playerEntities) {
-                    PlayerComponent playerComponent = entity.getComponent(PlayerComponent.class);
-                    setScoreLabel(playerComponent.playerNumber, playerComponent.playerName + ": " + playerComponent.playerScore);
-                }
-            }
-        }
-    }
-
     private Entity createShotIndicator(){
         SpriteComponent spriteComponent = new SpriteComponent();
         Texture texture = new Texture("arrow.png");
@@ -288,4 +292,32 @@ public abstract class BaseGamePresenter extends BasePresenter implements Observe
     }
 
     public abstract void nextLevel();
+
+    @Override
+    public void onReceiveEvent(GameEvent event, Object object) {
+        switch(event){
+            case SCORE_CHANGED:
+                setScoreLabel(playerInfo.getPlayerID(), playerInfo.getPlayerName() + ": " + object);
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void addListener(GameObserver observer) {
+        gameObservers.add(observer);
+    }
+
+    @Override
+    public void removeListener(GameObserver observer) {
+        gameObservers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(GameEvent gameEvent, Object obj) {
+        for(GameObserver observer : gameObservers){
+            observer.onReceiveEvent(gameEvent, obj);
+        }
+    }
 }

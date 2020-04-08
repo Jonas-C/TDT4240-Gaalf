@@ -4,10 +4,12 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.gaalf.game.ecs.ECSObserver;
+import com.gaalf.game.enums.ECSEvent;
 import com.gaalf.game.ecs.component.SoundComponent;
 import com.gaalf.manager.SettingsManager;
 
-public class SoundSystem extends IteratingSystem {
+public class SoundSystem extends IteratingSystem implements ECSObserver {
     private SettingsManager settingsManager;
     private ComponentMapper<SoundComponent> soundMapper;
 
@@ -26,6 +28,13 @@ public class SoundSystem extends IteratingSystem {
                 soundComponent.shouldBePlayed = false;
             }
         }
+    }
 
+    @Override
+    public void onEventReceived(ECSEvent event, Entity entity) {
+        if(event == ECSEvent.BALL_FIRED){
+            SoundComponent soundComponent = soundMapper.get(entity);
+            soundComponent.shouldBePlayed = true;
+        }
     }
 }
