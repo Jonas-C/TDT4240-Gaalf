@@ -8,7 +8,6 @@ public class MainMenuPresenter extends BaseMenuPresenter {
 
     private BaseView view;
 
-
     public MainMenuPresenter(final GaalfGame game){
         super(game);
 
@@ -20,14 +19,15 @@ public class MainMenuPresenter extends BaseMenuPresenter {
 
 //      game.setScreen(new GamePresenter(game, game.levelManager.getLevels().get(0) ));
         game.playersManager.addPlayer(game.settingsManager.displayName, true);
+        game.playersManager.addPlayer("Jonas", true, game.settingsManager.getBallChoice());
         game.devicePlayer = game.playersManager.getPlayers().get(0);
         game.setScreen(new GamePresenter(game, game.levelManager.getRandomLevel()));
         System.out.println("name:" + game.settingsManager.displayName);
     }
 
     public void openLevelSelectMenu() {
-        game.playersManager.addPlayer("Jonas", true);
-        game.playersManager.addPlayer("E", false);
+        game.playersManager.addPlayer("Jonas", true, game.settingsManager.getBallChoice());
+        game.playersManager.addPlayer("E", false, "Square");
         game.devicePlayer = game.playersManager.getPlayers().get(0);
         game.setScreen(new MapPackSelectPresenter(game));
     }

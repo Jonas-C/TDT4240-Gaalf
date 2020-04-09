@@ -24,6 +24,7 @@ public class SettingsView extends BaseMenuView {
     private Label musicOnOffLabel;
     private Label soundOnOffLabel;
     private Label usernameLabel;
+    private Label ballChoiceLabel;
 
     public SettingsView(SpriteBatch batch, final SettingsPresenter presenter){
         super(batch, presenter);
@@ -92,6 +93,26 @@ public class SettingsView extends BaseMenuView {
         volumeSoundLabel = new Label( "Sound effects volume", getSkin() );
         soundOnOffLabel = new Label( "Sound effects", getSkin() );
         usernameLabel = new Label ("Display name", getSkin());
+        Label volumeMusicLabel = new Label("Music volume", getSkin());
+        Label musicOnOffLabel = new Label("Music", getSkin());
+        Label volumeSoundLabel = new Label("Sound effects volume", getSkin());
+        Label soundOnOffLabel = new Label("Sound effects", getSkin());
+        Label ballLabel = new Label("Chosen ball", getSkin());
+        ballChoiceLabel = new Label("", getSkin());
+        TextButton leftArrowButton = new TextButton("<", getSkin());
+        leftArrowButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                presenter.handleBallChange("left_arrow");
+            }
+        });
+        TextButton rightArrowButton = new TextButton(">", getSkin());
+        rightArrowButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                presenter.handleBallChange("right_arrow");
+            }
+        });
 
         table.row();
         table.add(volumeMusicLabel);
@@ -109,6 +130,11 @@ public class SettingsView extends BaseMenuView {
         table.add(username);
         table.row();
         table.add(changeUsernameBtn);
+        table.add(ballLabel);
+        table.row();
+        table.add(leftArrowButton);
+        table.add(ballChoiceLabel);
+        table.add(rightArrowButton);
 
         String test = username.getText();
         System.out.println(test);
@@ -129,6 +155,9 @@ public class SettingsView extends BaseMenuView {
     @Override
     public void update(float delta) {
 
+    }
 
+    public void setBallChoiceLabel(String ballChoice){
+        ballChoiceLabel.setText(ballChoice);
     }
 }

@@ -9,6 +9,7 @@ public class SettingsManager {
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOL = "sound";
+    private static final String PREF_BALL = "ball";
     private static final String PREFS_NAME = "Settings.preferences";
     private static final String PREF_USERNAME = "username";
 
@@ -17,6 +18,7 @@ public class SettingsManager {
     public float soundVolume;
     public boolean soundIsEnabled;
     public String displayName;
+    public String ballChoice;
 
     public SettingsManager(){
         musicVolume = getMusicVolume();
@@ -24,10 +26,22 @@ public class SettingsManager {
         soundVolume = getSoundVolume();
         soundIsEnabled = isSoundEffectsEnabled();
         displayName = getUsername();
+        ballChoice = getBallChoice();
     }
 
     private Preferences getPreferences(){
         return Gdx.app.getPreferences(PREFS_NAME);
+    }
+
+    public String getBallChoice(){
+        return getPreferences().getString(PREF_BALL, "Golfball");
+    }
+
+    public void setBallChoice(String ballChoice){
+        if(!ballChoice.equals(getBallChoice())) {
+            getPreferences().putString(PREF_BALL, ballChoice);
+            getPreferences().flush();
+        }
     }
 
     public float getMusicVolume(){
