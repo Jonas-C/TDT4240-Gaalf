@@ -75,6 +75,7 @@ abstract class Ball extends Entity {
         bodyDef.fixedRotation = false;
         bodyDef.angularDamping = 1f;
         bodyComponent.body = world.createBody(bodyDef);
+        bodyComponent.body.setUserData(this);
         bodyComponent.body.createFixture(fixtureDef);
         this.add(bodyComponent);
     }

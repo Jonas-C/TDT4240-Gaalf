@@ -39,7 +39,6 @@ public class ScoreSystem extends IteratingSystem implements ECSObserver, ECSObse
             playerComponent.playerScore = 0;
         }
         if(playerComponent.playerScore >= MAX_STROKE_LIMIT){
-            System.out.println("Score limit reached");
             notifyObservers(ECSEvent.STROKE_LIMIT_REACHED, entity);
         }
     }
@@ -91,7 +90,7 @@ public class ScoreSystem extends IteratingSystem implements ECSObserver, ECSObse
     @Override
     public void onReceiveEvent(GameEvent event, Object object) {
         switch(event){
-            case LEVEL_RESET:
+            case LEVEL_NEW:
                 resetScore = true;
                 break;
             default:
