@@ -50,7 +50,7 @@ public class SettingsManager {
 
     public void setMusicVolume(float volume){
         getPreferences().putFloat(PREF_MUSIC_VOLUME, volume);
-        getPreferences().flush(); //written to disk and saved (forhåpentligvis)
+        getPreferences().flush(); //written to disk and saved
         musicVolume = volume;
     }
 

@@ -18,7 +18,7 @@ public class MainMenuPresenter extends BaseMenuPresenter {
         menuMusic.dispose();
 
 //      game.setScreen(new GamePresenter(game, game.levelManager.getLevels().get(0) ));
-        game.playersManager.addPlayer(game.settingsManager.displayName, true);
+        game.playersManager.addPlayer(game.settingsManager.displayName, true,game.settingsManager.getBallChoice());
         game.playersManager.addPlayer("Jonas", true, game.settingsManager.getBallChoice());
         game.devicePlayer = game.playersManager.getPlayers().get(0);
         game.setScreen(new GamePresenter(game, game.levelManager.getRandomLevel()));
