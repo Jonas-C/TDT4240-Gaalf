@@ -3,6 +3,7 @@ package com.gaalf.presenter;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.gaalf.GaalfGame;
+import com.gaalf.view.BaseMenuView;
 import com.gaalf.view.BaseView;
 import com.gaalf.view.SettingsView;
 
@@ -31,7 +32,7 @@ public class SettingsPresenter extends BaseMenuPresenter {
     }
 
     @Override
-    public BaseView getView() {
+    public BaseMenuView getView() {
         return view;
     }
 

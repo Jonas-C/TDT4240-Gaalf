@@ -19,6 +19,10 @@ public class GameAssetManager {
 
     public final String ballSpriteAtlas = "balls/balls.atlas";
 
+    public final String cloudsAtlas = "clouds.atlas";
+
+    public final String background = "background.png";
+
     public void loadMusic(){
         manager.load(menuMusic, Music.class);
         manager.load(levelOneMusic, Music.class);
@@ -31,5 +35,13 @@ public class GameAssetManager {
 
     public void loadSprites(){
         manager.load(ballSpriteAtlas, TextureAtlas.class);
+    }
+
+    public void loadBackground(){
+        manager.load(background, Texture.class);
+    }
+
+    public void loadClouds(){
+        manager.load(cloudsAtlas, TextureAtlas.class);
     }
 }

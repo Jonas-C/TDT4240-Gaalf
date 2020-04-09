@@ -202,18 +202,13 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         bodyComponent.body.setLinearVelocity(0f, 0f);
     }
 
-    private void update(float delta){
+    @Override
+    public void update(float delta){
         if(!paused) {
             world.step(delta, 6, 2);
         }
         engine.update(delta);
         getView().update(delta);
-    }
-
-    @Override
-    public void render(float delta){
-        update(delta);
-        super.render(delta);
     }
 
     @Override

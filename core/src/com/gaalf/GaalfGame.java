@@ -31,6 +31,8 @@ public class GaalfGame extends Game {
 		assetManager.loadMusic();
 		assetManager.loadSound();
 		assetManager.loadSprites();
+		assetManager.loadBackground();
+		assetManager.loadClouds();
 		assetManager.manager.finishLoading();
 		settingsManager = new SettingsManager();
 		setScreen(new MainMenuPresenter(this));
