@@ -12,8 +12,8 @@ public class PlayersManager {
         players = new ArrayList<>();
     }
 
-    public void addPlayer(String displayName, boolean thisDevice, String ballChoice){
-        players.add(new PlayerInfo(displayName, thisDevice, ballChoice));
+    public void addPlayer(String displayName, boolean thisDevice, String ballChoice, String shotIndicatorChoice){
+        players.add(new PlayerInfo(displayName, thisDevice, ballChoice, shotIndicatorChoice));
     }
 
     public void removePlayer(PlayerInfo removePlayer){

@@ -1,4 +1,4 @@
-package com.gaalf.game.precreatedEntities.balls;
+package com.gaalf.game.ecs.precreatedEntities.balls;
 
 
 import com.badlogic.ashley.core.Entity;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.*;
 import com.gaalf.game.ecs.component.*;
+import com.gaalf.game.ecs.precreatedEntities.PrecreatedEntity;
 import com.gaalf.manager.GameAssetManager;
 import com.gaalf.model.PlayerInfo;
 
@@ -16,7 +17,7 @@ import static com.gaalf.game.constants.B2DConstants.PPM;
 /**
  * Factory pattern for ball creation
  */
-abstract class Ball extends Entity {
+abstract class Ball extends PrecreatedEntity {
 
     Ball(PlayerInfo playerInfo, GameAssetManager assetManager) {
         super();
@@ -45,13 +46,6 @@ abstract class Ball extends Entity {
         SoundComponent soundComponent = new SoundComponent();
         soundComponent.sound =sound;
         return soundComponent;
-    }
-
-    SpriteComponent addSpriteComponent(Sprite sprite){
-        SpriteComponent spriteComponent = new SpriteComponent();
-        spriteComponent.sprite = sprite;
-        this.add(spriteComponent);
-        return spriteComponent;
     }
 
     /**

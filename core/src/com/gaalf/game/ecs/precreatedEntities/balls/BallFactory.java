@@ -1,9 +1,9 @@
-package com.gaalf.game.precreatedEntities.balls;
+package com.gaalf.game.ecs.precreatedEntities.balls;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.World;
-import com.gaalf.game.precreatedEntities.EntityFactory;
+import com.gaalf.game.ecs.precreatedEntities.EntityFactory;
 import com.gaalf.manager.GameAssetManager;
 import com.gaalf.model.PlayerInfo;
 
@@ -38,6 +38,7 @@ public class BallFactory extends EntityFactory {
 
     @Override
     public Entity createRandomEntity(PlayerInfo playerInfo, TiledMap tiledMap, World world) {
+        // todo: a way to not have to update this when new balls are added
         int randomNumber = new Random().nextInt(2); // integers under 2, so 0 and 1
         switch (randomNumber) {
             case 0:

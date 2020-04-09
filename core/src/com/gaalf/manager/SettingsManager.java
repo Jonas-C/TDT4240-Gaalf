@@ -11,12 +11,14 @@ public class SettingsManager {
     private static final String PREF_SOUND_VOL = "sound";
     private static final String PREF_BALL = "ball";
     private static final String PREFS_NAME = "Settings.preferences";
+    private static final String PREF_SHOT_INDICATOR = "shot indicator";
 
     public float musicVolume;
     public boolean musicIsEnabled;
     public float soundVolume;
     public boolean soundIsEnabled;
     public String ballChoice;
+    public String shotIndicatorChoice;
 
     public SettingsManager(){
         musicVolume = getMusicVolume();
@@ -24,6 +26,11 @@ public class SettingsManager {
         soundVolume = getSoundVolume();
         soundIsEnabled = isSoundEffectsEnabled();
         ballChoice = getBallChoice();
+        shotIndicatorChoice = getShotIndicatorChoice();
+    }
+
+    public String getShotIndicatorChoice() {
+        return getPreferences().getString(PREF_SHOT_INDICATOR, "Filled white shot indicator");
     }
 
     private Preferences getPreferences(){

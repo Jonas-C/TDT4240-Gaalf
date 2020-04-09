@@ -11,12 +11,14 @@ public class PlayerInfo {
     private int playerID;
     private boolean thisDevice;
     private String ballChoice;
+    private String shotIndicatorChoice;
 
-    public PlayerInfo(String playerName, boolean thisDevice, String ballChoice){
+    public PlayerInfo(String playerName, boolean thisDevice, String ballChoice, String shotIndicatorChoice){
         this.playerName = playerName;
         this.playerID = IDCounter.getAndIncrement();
         this.thisDevice = thisDevice;
         this.ballChoice = ballChoice;
+        this.shotIndicatorChoice = shotIndicatorChoice;
     }
 
     public void setPlayerName(String playerName){
@@ -38,4 +40,6 @@ public class PlayerInfo {
     public String getBallChoice(){
         return ballChoice;
     }
+
+    public String getShotIndicatorChoice() { return shotIndicatorChoice; }
 }

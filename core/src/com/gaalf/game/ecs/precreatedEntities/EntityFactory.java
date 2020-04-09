@@ -1,4 +1,4 @@
-package com.gaalf.game.precreatedEntities;
+package com.gaalf.game.ecs.precreatedEntities;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.maps.tiled.TiledMap;

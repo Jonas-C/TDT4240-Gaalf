@@ -26,6 +26,7 @@ import com.gaalf.game.ecs.component.ShotIndicatorComponent;
 import com.gaalf.game.ecs.component.SoundComponent;
 import com.gaalf.game.ecs.component.SpriteComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
+import com.gaalf.game.ecs.precreatedEntities.shotIndicators.ShotIndicatorFactory;
 import com.gaalf.game.ecs.system.PhysicsDebugSystem;
 import com.gaalf.game.ecs.system.PhysicsSystem;
 import com.gaalf.game.ecs.system.RenderingSystem;
@@ -33,7 +34,7 @@ import com.gaalf.game.ecs.system.ScoreSystem;
 import com.gaalf.game.ecs.system.ShootableSystem;
 
 import com.gaalf.game.enums.GameEvent;
-import com.gaalf.game.precreatedEntities.balls.BallFactory;
+import com.gaalf.game.ecs.precreatedEntities.balls.BallFactory;
 
 import com.gaalf.game.ecs.system.SoundSystem;
 import com.gaalf.game.ecs.system.WinConSystem;
@@ -258,22 +259,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     public abstract void levelCleared();
 
     private Entity createShotIndicator(){
-        SpriteComponent spriteComponent = new SpriteComponent();
-        Texture texture = new Texture("arrow.png");
-        spriteComponent.sprite = new Sprite(texture);
-
-        TransformComponent transformComponent = new TransformComponent();
-        transformComponent.pos.set(3, 3);
-        transformComponent.scale.set(0.2f, 0.2f);
-        transformComponent.rotation = 0;
-        transformComponent.visible = false;
-
-        Entity e = new Entity();
-        e.add(spriteComponent);
-        e.add(transformComponent);
-        e.add(new ShotIndicatorComponent());
-        return e;
-
+        return new ShotIndicatorFactory().createEntity(playerInfo, tiledMap);
     }
 
     private void setScoreLabel(int playerNumber, String newText){
