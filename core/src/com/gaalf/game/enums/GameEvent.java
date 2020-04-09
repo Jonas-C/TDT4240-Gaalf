@@ -5,5 +5,7 @@ public enum GameEvent {
     TOUCH_DOWN,
     TOUCH_UP,
     TOUCH_DRAG,
-    SCORE_CHANGED
+    SCORE_CHANGED,
+    MP_GAME_CREATED,
+    LOBBY_CREATED
 }

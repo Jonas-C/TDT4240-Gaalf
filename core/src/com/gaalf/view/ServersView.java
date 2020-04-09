@@ -1,7 +1,10 @@
 package com.gaalf.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.gaalf.network.MatchmakingClient;
 import com.gaalf.network.data.GameServerSpecification;
 import com.gaalf.presenter.ServersPresenter;
@@ -10,8 +13,21 @@ import java.io.IOException;
 
 public class ServersView extends BaseMenuView {
 
-    public ServersView(SpriteBatch batch, ServersPresenter presenter){
+    TextButton joinServer;
+
+    public ServersView(SpriteBatch batch, final ServersPresenter presenter){
         super(batch, presenter);
+        joinServer = new TextButton("Join", getSkin());
+        joinServer.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                try {
+                    presenter.joinGame("s");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         try (MatchmakingClient matchmakingClient = new MatchmakingClient()) {
             for (GameServerSpecification server : matchmakingClient.getGameServers()) {
@@ -21,6 +37,8 @@ public class ServersView extends BaseMenuView {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+        table.row();
+        table.add(joinServer);
         addActor(table);
     }
 
