@@ -31,7 +31,8 @@ public class TiledObjectUtil {
             body = world.createBody(bdef);
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = shape;
-            body.createFixture(fixtureDef).setUserData("terrain");
+            body.setUserData("terrainFixture");
+            body.createFixture(fixtureDef);
             shape.dispose();
         }
     }

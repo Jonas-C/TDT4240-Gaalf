@@ -7,4 +7,5 @@ public class PlayerComponent implements Component {
     public String playerName;
     public Boolean isFinished = false;
     public int playerScore = 0;
+    public boolean onThisDevice = false;
 }
