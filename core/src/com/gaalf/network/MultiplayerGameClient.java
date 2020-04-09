@@ -6,15 +6,12 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gaalf.game.GameObserver;
 import com.gaalf.game.enums.GameEvent;
-import com.gaalf.network.data.GameData;
-import com.gaalf.network.data.PlayerData;
 import com.gaalf.network.message.BallHitMessage;
 import com.gaalf.network.message.LeaveGameMessage;
 import com.gaalf.network.message.PlayerJoinedMessage;
 import com.gaalf.network.message.JoinGameAcceptedMessage;
 import com.gaalf.network.message.JoinGameRequestMessage;
 import com.gaalf.network.message.JoinGameRejectedMessage;
-import com.gaalf.presenter.LobbyPresenter;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -47,16 +44,16 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable,
 
 //    @Override
 //    public void joinGame(String playerName) {
-//        if (localPlayerId >= 0) {
-//            throw new IllegalStateException("Game is already joined");
-//        }
 //        // TODO ball type
 //        kryoClient.sendTCP(new JoinGameRequestMessage(playerName, "default"));
 //    }
 
     @Override
     public void joinGame(String playerName) {
-        kryoClient.sendTCP(new JoinGameRequestMessage(playerName, "default"));
+        if (localPlayerId >= 0) {
+            throw new IllegalStateException("Game is already joined");
+        }
+        kryoClient.sendTCP(new JoinGameRequestMessage(playerName, "default")); // TODO ball type
     }
 
     @Override
@@ -73,6 +70,7 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable,
 
     @Override
     public void close() throws IOException {
+        kryoClient.stop();
         kryoClient.dispose();
     }
 
@@ -132,7 +130,7 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable,
 
             if (object instanceof LeaveGameMessage) {
                 LeaveGameMessage message = (LeaveGameMessage) object;
-                mpGameListener.gamePlayerQuit(message.playerId);
+                mpGameListener.playerQuit(message.playerId);
             }
         }
     }

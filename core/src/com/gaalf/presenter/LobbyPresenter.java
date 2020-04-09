@@ -18,6 +18,7 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
         this.players = players;
 
     }
+
     @Override
     public BaseView getView() {
         return view;
@@ -29,7 +30,7 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     }
 
     @Override
-    public void playerLeft(PlayerData playerData) {
+    public void playerLeft(int playerId) {
 
     }
 

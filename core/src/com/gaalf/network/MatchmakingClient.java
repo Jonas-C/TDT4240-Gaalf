@@ -27,9 +27,10 @@ public class MatchmakingClient implements Closeable {
         responseMessage = null;
 
         KryoMessageRegister.registerMessages(kryoClient.getKryo());
+
         kryoClient.addListener(new InternalConnectionListener());
         kryoClient.start();
-        kryoClient.connect(5000, "gaalf.mchyll.no", 7000);
+        kryoClient.connect(5000, "mchyll.no", 7000);
     }
 
     /**
@@ -51,7 +52,8 @@ public class MatchmakingClient implements Closeable {
 
     @Override
     public void close() throws IOException {
-        System.out.println("Disposing MatchmakingClient");
+        System.out.println("Disposing MatchmakingClient on thread " + Thread.currentThread().getName());
+        kryoClient.stop();
         kryoClient.dispose();
     }
 

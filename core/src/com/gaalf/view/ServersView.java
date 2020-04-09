@@ -17,7 +17,7 @@ public class ServersView extends BaseMenuView {
 
     public ServersView(SpriteBatch batch, final ServersPresenter presenter){
         super(batch, presenter);
-        joinServer = new TextButton("Join", getSkin());
+        joinServer = new TextButton("Join mchyll.no:7001", getSkin());
         joinServer.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -28,17 +28,19 @@ public class ServersView extends BaseMenuView {
                 }
             }
         });
+        table.row();
+        table.add(joinServer);
 
         try (MatchmakingClient matchmakingClient = new MatchmakingClient()) {
             for (GameServerSpecification server : matchmakingClient.getGameServers()) {
                 table.row();
-                table.add(new Label(server.host + " with " + server.players + " players", getSkin()));
+                table.add(new Label(server.address + " with " + server.players + " players", getSkin()));
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            table.row();
+            table.add(new Label("IOException: " + e, getSkin()));
         }
-        table.row();
-        table.add(joinServer);
+
         addActor(table);
     }
 

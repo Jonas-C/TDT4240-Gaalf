@@ -5,6 +5,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.gaalf.network.data.GameData;
 import com.gaalf.network.data.GameServerSpecification;
 import com.gaalf.network.data.PlayerData;
+import com.gaalf.network.data.ServerAddress;
 import com.gaalf.network.message.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class KryoMessageRegister {
         kryo.register(GameData.class);
         kryo.register(GameServerSpecification.class);
         kryo.register(PlayerData.class);
+        kryo.register(ServerAddress.class);
 
         kryo.register(AvailableGameServersRequestMessage.class);
         kryo.register(AvailableGameServersResponseMessage.class);

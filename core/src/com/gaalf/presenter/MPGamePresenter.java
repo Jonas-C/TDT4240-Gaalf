@@ -10,13 +10,14 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
     public MPGamePresenter(final GaalfGame game, FileHandle level){
         super(game, level);
     }
+
     @Override
     public void ballHit(int playerId, Vector2 velocity) {
 
     }
 
     @Override
-    public void gamePlayerQuit(int playerId) {
+    public void playerQuit(int playerId) {
 
     }
 

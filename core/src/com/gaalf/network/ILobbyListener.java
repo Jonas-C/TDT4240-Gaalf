@@ -9,7 +9,7 @@ public interface ILobbyListener {
      */
     void playerJoined(PlayerData playerData);
 
-    void playerLeft(PlayerData playerData);
+    void playerLeft(int playerId);
 
     void onGameStarted();
 }

@@ -4,11 +4,11 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gaalf.network.KryoMessageRegister;
+import com.gaalf.network.data.ServerAddress;
 import com.gaalf.network.message.GameServerStatusMessage;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.util.concurrent.CountDownLatch;
 
 public class GameServerStatusClient implements Closeable {
@@ -17,7 +17,7 @@ public class GameServerStatusClient implements Closeable {
     private CountDownLatch responseReady;
     private GameServerStatusMessage responseMessage;
 
-    public GameServerStatusClient(InetSocketAddress address) throws IOException {
+    public GameServerStatusClient(ServerAddress address) throws IOException {
         kryoClient = new Client();
         responseReady = new CountDownLatch(1);
         responseMessage = null;
@@ -25,7 +25,7 @@ public class GameServerStatusClient implements Closeable {
         KryoMessageRegister.registerMessages(kryoClient.getKryo());
         kryoClient.addListener(new InternalConnectionListener());
         kryoClient.start();
-        kryoClient.connect(5000, address.getAddress(), address.getPort());
+        kryoClient.connect(5000, address.getHostname(), address.getPort());
     }
 
     public GameServerStatusMessage getStatus() {
@@ -42,6 +42,7 @@ public class GameServerStatusClient implements Closeable {
 
     @Override
     public void close() throws IOException {
+        kryoClient.stop();
         kryoClient.dispose();
     }
 

@@ -10,6 +10,7 @@ import com.gaalf.view.ServersView;
 import java.io.IOException;
 
 public class ServersPresenter extends BaseMenuPresenter implements IServersListener {
+
     private ServersView view;
     MultiplayerGameClient mpgc;
     GameData gameData;
@@ -20,6 +21,7 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
         view = new ServersView(game.getBatch(), this);
         canJoin = false;
     }
+
     @Override
     public BaseView getView() {
         return view;

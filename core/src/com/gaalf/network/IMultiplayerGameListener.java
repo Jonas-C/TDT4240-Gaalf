@@ -8,10 +8,6 @@ import com.gaalf.network.data.PlayerData;
  * Defines a listener for multiplayer game server events.
  */
 public interface IMultiplayerGameListener {
-
-
-
-
     /**
      * Called when an opponent has hit its ball.
      * @param playerId the id of the player/ball which was hit
@@ -23,7 +19,7 @@ public interface IMultiplayerGameListener {
      * Called when an opponent leaves the game.
      * @param playerId the id of the player which left the game
      */
-    void gamePlayerQuit(int playerId);
+    void playerQuit(int playerId);
 
     /**
      * Called when the server disconnected or ended the game.

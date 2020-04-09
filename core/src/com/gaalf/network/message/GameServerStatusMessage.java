@@ -1,6 +1,7 @@
 package com.gaalf.network.message;
 
 public class GameServerStatusMessage extends Message {
+
     public int connectedPlayers;
     public int maxPlayers;
 
