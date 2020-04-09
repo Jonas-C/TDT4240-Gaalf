@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="64" height="36" tilewidth="20" tileheight="20" infinite="0" nextlayerid="7" nextobjectid="1629">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="64" height="36" tilewidth="20" tileheight="20" infinite="0" nextlayerid="7" nextobjectid="1632">
  <tileset firstgid="1" source="../../tiles_spritesheet.tsx"/>
  <layer id="1" name="Tile Layer 1" width="64" height="36" visible="0">
   <data encoding="base64" compression="zlib">
@@ -10,8 +10,8 @@
   <object id="823" type="terrain" x="20" y="680">
    <polyline points="0,0 20,20 1220,20 1240,0 1240,-340 240,-340 240,-360 260,-380 320,-380 380,-440 720,-440 1240,-440 1240,-600 1220,-620 20,-620 0,-600 0,-200 20,-180 600,-180 600,-200 620,-200 620,-220 640,-220 640,-200 660,-200 660,-180 980,-180 1040,-240 1040,-180 1000,-140 0,-140 0,0"/>
   </object>
-  <object id="1628" type="goal" x="1187.82" y="239.636">
-   <polyline points="0,0 -0.181818,-23.8182 -22.9091,-23.8182 -27.6364,-27.6364 -28,-59.4545 -22.3636,-63.8182 -0.545455,-64 1.09091,-67.0909 2.90909,-68.5455 6,-68.7273 9.09091,-68.5455 10.9091,-68 12.3636,-65.8182 12.5455,-64.1818 33.8182,-63.6364 37.6364,-63.2727 39.8182,-60.7273 40.7273,-59.4545 41.0909,-29.8182 40,-27.6364 37.8182,-25.8182 35.8182,-24.5455 34,-23.8182 12.5455,-24.1818 12.5455,-0.545455 -0.443182,-0.0113636"/>
+  <object id="1631" type="goal" x="1188.25" y="240.5">
+   <polyline points="0,0 0,-67.5 4,-69.75 8.5,-70.25 11.5,-68.25 12.5,-66.5 12.5,0"/>
   </object>
  </objectgroup>
  <objectgroup id="4" name="sprites">

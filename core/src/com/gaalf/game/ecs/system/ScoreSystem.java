@@ -37,6 +37,7 @@ public class ScoreSystem extends IteratingSystem implements ECSObserver, ECSObse
         if(resetScore){
             //functionality for storing score from previous map.
             playerComponent.playerScore = 0;
+            resetScore = false;
         }
         if(playerComponent.playerScore >= MAX_STROKE_LIMIT){
             notifyObservers(ECSEvent.STROKE_LIMIT_REACHED, entity);

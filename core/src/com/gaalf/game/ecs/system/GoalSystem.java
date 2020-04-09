@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.gaalf.game.GameObservable;
@@ -16,6 +17,7 @@ import com.gaalf.game.ecs.component.SoundComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.game.enums.ECSEvent;
 import com.gaalf.game.enums.GameEvent;
+import com.gaalf.model.PlayerInfo;
 
 import java.util.ArrayList;
 
@@ -23,11 +25,14 @@ public class GoalSystem extends IteratingSystem implements ECSObserver, GameObse
     private int playerCount;
     private int playersFinished = 0;
     private ArrayList<GameObserver> gameObservers;
+    private ArrayList<PlayerInfo> players;
+    private TiledMap tiledMap;
 
 
-    public GoalSystem(int playerCount){
+    public GoalSystem(ArrayList<PlayerInfo> players){
         super(Family.all(PlayerComponent.class, TransformComponent.class).get());
-        this.playerCount = playerCount;
+        this.players = players;
+        this.playerCount = players.size();
         gameObservers = new ArrayList<>();
 
     }
@@ -102,7 +107,7 @@ public class GoalSystem extends IteratingSystem implements ECSObserver, GameObse
     public void onReceiveEvent(GameEvent event, Object object) {
         switch(event){
             case LEVEL_NEW:
-                playerCount = (int)object;
+                playerCount = players.size();
                 break;
             default:
                 break;

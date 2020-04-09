@@ -92,7 +92,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         ShotIndicatorSystem shotIndicatorSystem = new ShotIndicatorSystem(playerEntity.getComponent(TransformComponent.class));
         SoundSystem soundSystem = new SoundSystem(game.settingsManager);
         ScoreSystem scoreSystem = new ScoreSystem();
-        GoalSystem goalSystem = new GoalSystem(game.playersManager.getPlayers().size());
+        GoalSystem goalSystem = new GoalSystem(game.playersManager.getPlayers());
 
         shootableSystem.addListener(soundSystem);
         shootableSystem.addListener(scoreSystem);
