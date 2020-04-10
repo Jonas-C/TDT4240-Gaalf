@@ -5,17 +5,17 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.gaalf.network.MatchmakingClient;
 import com.gaalf.network.data.GameServerSpecification;
 import com.gaalf.presenter.ServersPresenter;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ServersView extends BaseMenuView {
 
     TextButton joinServer;
 
-    public ServersView(SpriteBatch batch, final ServersPresenter presenter){
+    public ServersView(SpriteBatch batch, final ServersPresenter presenter, List<GameServerSpecification> servers){
         super(batch, presenter);
         joinServer = new TextButton("Join mchyll.no:7001", getSkin());
         joinServer.addListener(new ChangeListener() {
@@ -31,14 +31,10 @@ public class ServersView extends BaseMenuView {
         table.row();
         table.add(joinServer);
 
-        try (MatchmakingClient matchmakingClient = new MatchmakingClient()) {
-            for (GameServerSpecification server : matchmakingClient.getGameServers()) {
-                table.row();
-                table.add(new Label(server.address + " with " + server.players + " players", getSkin()));
-            }
-        } catch (IOException e) {
+        for(GameServerSpecification server : servers){
             table.row();
-            table.add(new Label("IOException: " + e, getSkin()));
+
+            table.add(new Label(server.address + " with " + server.players + " players", getSkin()));
         }
 
         addActor(table);

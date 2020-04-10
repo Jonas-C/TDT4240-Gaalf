@@ -17,7 +17,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
-public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable, GameObserver {
+public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable {
 
     private InetSocketAddress serverAddress;
     private Client kryoClient;
@@ -80,19 +80,12 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable,
         }
     }
 
-    @Override
-    public void onReceiveEvent(GameEvent event, Object object) {
-        switch (event){
-            case LOBBY_CREATED:
-                lobbyListener = (ILobbyListener)object;
-                break;
-            case MP_GAME_CREATED:
-                mpGameListener = (IMultiplayerGameListener)object;
-                break;
-            default:
-                break;
-        }
+    public void setLobbyListener(ILobbyListener lobbyListener){
+        this.lobbyListener = lobbyListener;
+    }
 
+    public void setMpGameListener(IMultiplayerGameListener mpGameListener){
+        this.mpGameListener = mpGameListener;
     }
 
     private class InternalConnectionListener extends Listener {
@@ -103,7 +96,8 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable,
 
         @Override
         public void disconnected(Connection connection) {
-            mpGameListener.gameQuit();
+            connection.close();
+//            mpGameListener.gameQuit();
         }
 
         @Override
@@ -130,7 +124,8 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable,
 
             if (object instanceof LeaveGameMessage) {
                 LeaveGameMessage message = (LeaveGameMessage) object;
-                mpGameListener.playerQuit(message.playerId);
+                lobbyListener.playerLeft(message.playerId);
+//                mpGameListener.playerQuit(message.playerId);
             }
         }
     }

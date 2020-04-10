@@ -1,41 +1,58 @@
 package com.gaalf.presenter;
 
 import com.gaalf.network.ILobbyListener;
+import com.gaalf.network.MultiplayerGameClient;
 import com.gaalf.network.data.GameData;
 import com.gaalf.network.data.PlayerData;
-import com.gaalf.view.BaseMenuView;
 import com.gaalf.GaalfGame;
 import com.gaalf.view.LobbyView;
 
+import java.io.IOException;
+
 public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener {
 
-    private BaseMenuView view;
-    GameData players;
+    private LobbyView view;
+    private GameData players;
+    private MultiplayerGameClient mpgc;
 
-    public LobbyPresenter(final GaalfGame game, GameData players){
+    public LobbyPresenter(final GaalfGame game, GameData players, MultiplayerGameClient mpgc){
         super(game);
-        view = new LobbyView(game.getBatch(), this);
+        mpgc.setLobbyListener(this);
+        view = new LobbyView(game.getBatch(), this, players);
         this.players = players;
+        this.mpgc = mpgc;
+
 
     }
 
     @Override
-    public BaseMenuView getView() {
+    public LobbyView getView() {
         return view;
     }
 
     @Override
     public void playerJoined(PlayerData playerData) {
-
+        getView().addPlayer(playerData);
     }
 
     @Override
     public void playerLeft(int playerId) {
-
+        getView().removePlayer(playerId);
     }
 
     @Override
     public void onGameStarted() {
+        game.setScreen(new MPGamePresenter(game, game.levelManager.getRandomLevel()));
+    }
+
+    public void goBack() throws IOException {
+        mpgc.leaveGame();
+        mpgc.close();
+        game.setScreen(new MainMenuPresenter(game));
+    }
+
+    public void startGame(){
+
     }
 
 }
