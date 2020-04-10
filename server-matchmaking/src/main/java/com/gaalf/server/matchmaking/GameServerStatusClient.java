@@ -9,7 +9,6 @@ import com.gaalf.network.message.GameServerStatusMessage;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.concurrent.CountDownLatch;
 
 public class GameServerStatusClient implements Closeable {
@@ -26,7 +25,7 @@ public class GameServerStatusClient implements Closeable {
         KryoMessageRegister.registerMessages(kryoClient.getKryo());
         kryoClient.addListener(new InternalConnectionListener());
         kryoClient.start();
-        kryoClient.connect(5000, InetAddress.getByName(address.getHostname()), address.getPort());
+        kryoClient.connect(5000, address.getHostname(), address.getPort());
     }
 
     public GameServerStatusMessage getStatus() {

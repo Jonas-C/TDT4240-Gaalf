@@ -41,8 +41,9 @@ public class MatchmakingServer {
         for (ServerAddress serverAddress : gameServers) {
             log.debug("Checking server " + serverAddress);
             try (GameServerStatusClient statusClient = new GameServerStatusClient(serverAddress)) {
-                log.debug("Getting status");
                 GameServerStatusMessage status = statusClient.getStatus();
+                log.debug("Server is online, {} / {} players online, game started: {}",
+                        status.connectedPlayers, status.maxPlayers, status.maxPlayers);
                 if (!status.gameStarted && status.connectedPlayers < status.maxPlayers) {
                     GameServerSpecification gameServerEntry = new GameServerSpecification();
                     gameServerEntry.address = serverAddress;
@@ -50,7 +51,7 @@ public class MatchmakingServer {
                     servers.add(gameServerEntry);
                 }
             } catch (IOException e) {
-                log.debug("IOException", e);
+                log.trace("IOException", e);
                 log.debug("I assume server is down, skipping");
                 // Server is most likely down, skip it
             }

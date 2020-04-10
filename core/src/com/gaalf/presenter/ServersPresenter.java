@@ -27,8 +27,7 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
     public ServersPresenter(final GaalfGame game){
         super(game);
         try (MatchmakingClient matchmakingClient = new MatchmakingClient()) {
-            for (GameServerSpecification spec :
-                    matchmakingClient.getGameServers()) {
+            for (GameServerSpecification spec : matchmakingClient.getGameServers()) {
                 System.out.println(spec.address + " with " + spec.connectedPlayers + " players");
             }
             view = new ServersView(game.getBatch(), this, new ArrayList<GameServerSpecification>());
