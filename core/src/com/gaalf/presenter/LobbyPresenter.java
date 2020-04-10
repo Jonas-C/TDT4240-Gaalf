@@ -16,15 +16,18 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     private GameData players;
     private MultiplayerGameClient mpgc;
 
-    public LobbyPresenter(final GaalfGame game, GameData players, MultiplayerGameClient mpgc){
+    public LobbyPresenter(final GaalfGame game, GameData players, MultiplayerGameClient mpgc) {
         super(game);
         mpgc.setLobbyListener(this);
         view = new LobbyView(game.getBatch(), this, players);
         this.players = players;
         this.mpgc = mpgc;
-        for(PlayerData playerData : players.players){
-            PlayerInfo playerInfo = new PlayerInfo(playerData.playerName, false, playerData.playerId, playerData.ballType);
-            game.playersManager.addPlayer(playerInfo);
+        for (PlayerData playerData : players.players) {
+            // Local player is already added
+            if (playerData.playerId != game.devicePlayer.getPlayerID()) {
+                PlayerInfo playerInfo = new PlayerInfo(playerData.playerName, false, playerData.playerId, playerData.ballType);
+                game.playersManager.addPlayer(playerInfo);
+            }
         }
     }
 
@@ -58,8 +61,9 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
         game.setScreen(new MainMenuPresenter(game));
     }
 
-    public void startGame(){
-
+    public void startGame() {
+        // TODO map pack
+        mpgc.startGame("MapPack");
     }
 
 }

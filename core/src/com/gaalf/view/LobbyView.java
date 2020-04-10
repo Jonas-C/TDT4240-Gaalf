@@ -46,6 +46,8 @@ public class LobbyView extends BaseMenuView {
                 presenter.startGame();
             }
         });
+        table.add(startButton);
+        table.row();
 
         for(PlayerData playerData : players.players){
             addPlayer(playerData);

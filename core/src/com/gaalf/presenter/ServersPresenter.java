@@ -23,9 +23,10 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
     private ServersView view;
     private MultiplayerGameClient mpgc;
     private GameData gameData;
+    private String playerName;
     private boolean canJoin;
 
-    public ServersPresenter(final GaalfGame game){
+    public ServersPresenter(final GaalfGame game) {
         super(game);
 
         view = new ServersView(game.getBatch(), this, getGameServers());
@@ -53,12 +54,13 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
 
     public void joinGame(ServerAddress serverAddress) throws IOException {
         mpgc = new MultiplayerGameClient(serverAddress, this);
-        mpgc.joinGame("Player" + new Random().nextInt(100));
+        playerName = "Player" + new Random().nextInt(100);
+        mpgc.joinGame(playerName, game.settingsManager.getBallChoice());
     }
 
     @Override
-    public void update(float delta){
-        if(canJoin){
+    public void update(float delta) {
+        if (canJoin) {
             game.setScreen(new LobbyPresenter(game, gameData, mpgc));
             canJoin = false;
         }
@@ -66,6 +68,9 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
 
     @Override
     public void gameJoinAccepted(int yourPlayerId, GameData gameData) {
+        game.devicePlayer = new PlayerInfo(playerName, true,
+                yourPlayerId, game.settingsManager.getBallChoice());
+        game.playersManager.addPlayer(game.devicePlayer);
         this.gameData = gameData;
         canJoin = true;
     }
