@@ -11,13 +11,10 @@ import java.util.List;
 
 public class ServersPresenter extends BaseMenuPresenter {
     private BaseView view;
-    private MatchmakingClient matchmakingClient;
 
     public ServersPresenter(final GaalfGame game){
         super(game);
         view = new ServersView(game.getBatch(), this);
-        matchmakingClient = createMatchmakingClient();
-        System.out.println(matchmakingClient);
     }
 
     public void openMainMenuView() {
@@ -30,18 +27,14 @@ public class ServersPresenter extends BaseMenuPresenter {
     }
 
     public List<GameServerSpecification> getGameServers() {
-        if (matchmakingClient != null) {
-            return matchmakingClient.getGameServers();
+        try (MatchmakingClient matchmakingClient = new MatchmakingClient()){
+            if (matchmakingClient != null) {
+                return matchmakingClient.getGameServers();
+            }
+        } catch (IOException e) {
+            System.out.println("IOException when creating matchmaking client: " + e.toString());
         }
 
         return null;
-    }
-
-    private MatchmakingClient createMatchmakingClient() {
-        try {
-           return new MatchmakingClient();
-        } catch (IOException e) {
-            return null;
-        }
     }
 }

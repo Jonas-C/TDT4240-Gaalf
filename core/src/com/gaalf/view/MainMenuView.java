@@ -39,8 +39,6 @@ public class MainMenuView extends BaseMenuView {
             }
         });
 
-
-
         TextButton settingsButton = addMenuButton("Settings");
         settingsButton.addListener(new ChangeListener() {
             @Override
