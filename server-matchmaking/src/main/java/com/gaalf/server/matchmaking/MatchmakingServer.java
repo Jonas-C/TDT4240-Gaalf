@@ -1,10 +1,14 @@
 package com.gaalf.server.matchmaking;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Server;
 import com.gaalf.network.data.GameServerSpecification;
 import com.gaalf.network.data.ServerAddress;
 import com.gaalf.network.message.AvailableGameServersResponseMessage;
 import com.gaalf.network.message.GameServerStatusMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,9 +16,13 @@ import java.util.List;
 
 public class MatchmakingServer {
 
+    private static final Logger log = LoggerFactory.getLogger(MatchmakingServer.class);
+
+    private Server kryoServer;
     private List<ServerAddress> gameServers;
 
-    public MatchmakingServer() {
+    public MatchmakingServer(Server kryoServer) {
+        this.kryoServer = kryoServer;
         gameServers = new ArrayList<>();
         gameServers.add(new ServerAddress("mchyll.no", 7001));
         gameServers.add(new ServerAddress("mchyll.no", 7002));
@@ -31,7 +39,9 @@ public class MatchmakingServer {
         List<GameServerSpecification> servers = new ArrayList<>();
 
         for (ServerAddress serverAddress : gameServers) {
+            log.debug("Checking server " + serverAddress);
             try (GameServerStatusClient statusClient = new GameServerStatusClient(serverAddress)) {
+                log.debug("Getting status");
                 GameServerStatusMessage status = statusClient.getStatus();
                 if (status.connectedPlayers < status.maxPlayers) {
                     GameServerSpecification gameServerEntry = new GameServerSpecification();
@@ -40,6 +50,8 @@ public class MatchmakingServer {
                     servers.add(gameServerEntry);
                 }
             } catch (IOException e) {
+                log.debug("IOException: " + e);
+                log.debug("I assume server is down, skipping");
                 // Server is most likely down, skip it
             }
         }
