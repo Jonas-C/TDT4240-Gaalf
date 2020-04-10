@@ -50,7 +50,7 @@ public class MatchmakingServer {
                     servers.add(gameServerEntry);
                 }
             } catch (IOException e) {
-                log.debug("IOException: " + e);
+                log.debug("IOException", e);
                 log.debug("I assume server is down, skipping");
                 // Server is most likely down, skip it
             }
