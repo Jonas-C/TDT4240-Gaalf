@@ -22,10 +22,6 @@ public abstract class BasePresenter extends ScreenAdapter {
         getView().draw();
     }
 
-    public void update(float delta){
-
-    }
-
     @Override
     public void resize(int width, int height) {
         getView().resize(width, height);
