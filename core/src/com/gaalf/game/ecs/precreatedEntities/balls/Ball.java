@@ -1,12 +1,12 @@
 package com.gaalf.game.ecs.precreatedEntities.balls;
 
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 import com.gaalf.game.ecs.component.*;
 import com.gaalf.game.ecs.precreatedEntities.PrecreatedEntity;
 import com.gaalf.manager.GameAssetManager;

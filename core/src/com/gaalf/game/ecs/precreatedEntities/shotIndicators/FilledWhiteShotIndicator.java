@@ -1,15 +1,12 @@
 package com.gaalf.game.ecs.precreatedEntities.shotIndicators;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.gaalf.game.ecs.component.TransformComponent;
+import com.gaalf.manager.GameAssetManager;
 
 public class FilledWhiteShotIndicator extends ShotIndicator {
 
-    FilledWhiteShotIndicator() {
-        super();
-        // todo: refactor to atlas?
-        addSpriteComponent(new Sprite(new Texture("arrow.png")));
+    FilledWhiteShotIndicator(GameAssetManager gameAssetManager) {
+        super("Excalibur", gameAssetManager);
     }
 
     @Override

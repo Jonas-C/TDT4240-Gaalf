@@ -8,8 +8,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
@@ -20,36 +18,21 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.gaalf.GaalfGame;
 import com.gaalf.game.GameObservable;
 import com.gaalf.game.GameObserver;
-import com.gaalf.game.ecs.component.BodyComponent;
-import com.gaalf.game.ecs.component.PlayerComponent;
-import com.gaalf.game.ecs.component.ShotIndicatorComponent;
-import com.gaalf.game.ecs.component.SoundComponent;
-import com.gaalf.game.ecs.component.SpriteComponent;
-import com.gaalf.game.ecs.component.TransformComponent;
-import com.gaalf.game.ecs.precreatedEntities.shotIndicators.ShotIndicatorFactory;
-import com.gaalf.game.ecs.system.PhysicsDebugSystem;
-import com.gaalf.game.ecs.system.PhysicsSystem;
-import com.gaalf.game.ecs.system.RenderingSystem;
-import com.gaalf.game.ecs.system.ScoreSystem;
-import com.gaalf.game.ecs.system.ShootableSystem;
-
-import com.gaalf.game.enums.GameEvent;
+import com.gaalf.game.ecs.component.*;
 import com.gaalf.game.ecs.precreatedEntities.balls.BallFactory;
-
-import com.gaalf.game.ecs.system.SoundSystem;
-import com.gaalf.game.ecs.system.WinConSystem;
-import com.gaalf.game.ecs.system.ShotIndicatorSystem;
-
+import com.gaalf.game.ecs.precreatedEntities.shotIndicators.ShotIndicatorFactory;
+import com.gaalf.game.ecs.system.*;
+import com.gaalf.game.enums.GameEvent;
+import com.gaalf.game.input.ShotInputHandler;
 import com.gaalf.game.util.B2dDebugUtil;
 import com.gaalf.game.util.TextureMapObjectRenderer;
 import com.gaalf.game.util.TiledObjectUtil;
 import com.gaalf.model.PlayerInfo;
 import com.gaalf.view.GameView;
-import com.gaalf.game.input.*;
 
 import java.util.ArrayList;
 
-import static com.gaalf.game.constants.B2DConstants.*;
+import static com.gaalf.game.constants.B2DConstants.PPM;
 
 public abstract class BaseGamePresenter extends BasePresenter implements GameObserver, GameObservable {
 
@@ -133,7 +116,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
     private void setupGame(FileHandle level){
         world = new World(new Vector2(0, -9.81f), true);
-        ballFactory = new BallFactory(world, game.assetManager);
+        ballFactory = new BallFactory(playerInfo, tiledMap, world);
         this.tiledMap = game.levelManager.loadLevel(level);
         tmr = new TextureMapObjectRenderer(tiledMap, game.getBatch());
         tmr.setMap(tiledMap);
@@ -142,7 +125,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
     private void initPlayers(){
         for(PlayerInfo player : game.playersManager.getPlayers()){
-            Entity ball = ballFactory.createEntity(player, tiledMap);
+            Entity ball = ballFactory.createEntity(game.assetManager);
             if(player.isThisDevice()){
                 engine.addEntity(createShotIndicator());
                 playerEntity = ball;
@@ -259,7 +242,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     public abstract void levelCleared();
 
     private Entity createShotIndicator(){
-        return new ShotIndicatorFactory().createEntity(playerInfo, tiledMap);
+        return new ShotIndicatorFactory(playerInfo).createEntity(game.assetManager);
     }
 
     private void setScoreLabel(int playerNumber, String newText){

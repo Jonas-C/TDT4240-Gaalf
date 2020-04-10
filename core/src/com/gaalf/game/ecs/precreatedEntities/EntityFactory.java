@@ -1,14 +1,10 @@
 package com.gaalf.game.ecs.precreatedEntities;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.physics.box2d.World;
-import com.gaalf.model.PlayerInfo;
+import com.gaalf.manager.GameAssetManager;
 
 /**
- * Factory method pattern. Must use more than for BallFactory for it to make sense.
- * If not probably better to just do this simpler.
- * Either with simple factory (no abstract factory) or maybe without a factory at all.
+ * Factory method pattern.
  *
  * PS: even though we are using an abstract factory, this is not considered to be abstract factory pattern.
  * To have an abstract factory pattern the factory has create multiple objects that is coupled together.
@@ -16,6 +12,6 @@ import com.gaalf.model.PlayerInfo;
  * https://www.youtube.com/watch?v=v-GiuMmsXj4&list=PLrhzvIcii6GNjpARdnO4ueTUAVR9eMBpc&index=5
  */
 public abstract class EntityFactory {
-    public abstract Entity createEntity(PlayerInfo playerInfo, TiledMap tiledMap);
-    public abstract Entity createRandomEntity(PlayerInfo playerInfo, TiledMap tiledMap, World world);
+    public abstract Entity createEntity(GameAssetManager gameAssetManager);
+    public abstract Entity createRandomEntity(GameAssetManager gameAssetManager);
 }

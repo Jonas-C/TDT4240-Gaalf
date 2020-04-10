@@ -17,7 +17,9 @@ public class GameAssetManager {
     public final String jumpSound = "sounds/JumpSound.wav";
     public final String finishSound = "sounds/FinishSound.wav";
 
+    // Sprites
     public final String ballSpriteAtlas = "balls/balls.atlas";
+    public final String shotIndicatorSpriteAtlas = "shotIndicators/shotIndicators.atlas";
 
     public void loadMusic(){
         manager.load(menuMusic, Music.class);
@@ -31,5 +33,6 @@ public class GameAssetManager {
 
     public void loadSprites(){
         manager.load(ballSpriteAtlas, TextureAtlas.class);
+        manager.load(shotIndicatorSpriteAtlas, TextureAtlas.class);
     }
 }
