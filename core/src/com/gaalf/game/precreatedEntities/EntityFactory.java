@@ -3,6 +3,7 @@ package com.gaalf.game.precreatedEntities;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.World;
+import com.gaalf.model.PlayerInfo;
 
 /**
  * Factory method pattern. Must use more than for BallFactory for it to make sense.
@@ -15,6 +16,6 @@ import com.badlogic.gdx.physics.box2d.World;
  * https://www.youtube.com/watch?v=v-GiuMmsXj4&list=PLrhzvIcii6GNjpARdnO4ueTUAVR9eMBpc&index=5
  */
 public abstract class EntityFactory {
-    public abstract Entity createEntity(String type, String playerName, int playerNumber, TiledMap tiledMap);
-    public abstract Entity createRandomEntity(String playerName, int playerNumber, TiledMap tiledMap, World world);
+    public abstract Entity createEntity(PlayerInfo playerInfo, TiledMap tiledMap);
+    public abstract Entity createRandomEntity(PlayerInfo playerInfo, TiledMap tiledMap, World world);
 }

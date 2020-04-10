@@ -4,36 +4,38 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.gaalf.game.GameObserver;
+import com.gaalf.game.enums.GameEvent;
+import com.gaalf.network.data.ServerAddress;
 import com.gaalf.network.message.BallHitMessage;
+import com.gaalf.network.message.JoinGameAcceptedMessage;
+import com.gaalf.network.message.JoinGameRejectedMessage;
+import com.gaalf.network.message.JoinGameRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
 import com.gaalf.network.message.PlayerJoinedMessage;
-import com.gaalf.network.message.JoinGameAcceptedMessage;
-import com.gaalf.network.message.JoinGameRequestMessage;
-import com.gaalf.network.message.JoinGameRejectedMessage;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 
 public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable {
 
-    private InetSocketAddress serverAddress;
+    private ServerAddress serverAddress;
     private Client kryoClient;
-    private IMultiplayerGameListener listener;
+    private IMultiplayerGameListener mpGameListener;
+    private ILobbyListener lobbyListener;
+    private IServersListener serversListener;
 
     private int localPlayerId;
 
-    public MultiplayerGameClient(String host, IMultiplayerGameListener listener) throws IOException {
-        this.listener = listener;
-
-        String[] hostParts = host.split(":");
-        serverAddress = new InetSocketAddress(hostParts[0], Integer.parseInt(hostParts[1]));
+    public MultiplayerGameClient(ServerAddress serverAddress, IServersListener serversListener) throws IOException {
+        this.serverAddress = serverAddress;
+        this.serversListener = serversListener;
 
         kryoClient = new Client();
         KryoMessageRegister.registerMessages(kryoClient.getKryo());
         kryoClient.addListener(new InternalConnectionListener());
         kryoClient.start();
-        kryoClient.connect(5000, serverAddress.getAddress(), serverAddress.getPort());
+        kryoClient.connect(5000, serverAddress.getHostname(), serverAddress.getPort());
 
         localPlayerId = -1;
     }
@@ -60,8 +62,8 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
     }
 
     @Override
-    public void close() throws IOException {
-        kryoClient.dispose();
+    public void close() {
+        kryoClient.stop();
     }
 
     private void ensureGameJoined() {
@@ -70,14 +72,24 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
         }
     }
 
+    public void setLobbyListener(ILobbyListener lobbyListener){
+        this.lobbyListener = lobbyListener;
+    }
+
+    public void setMpGameListener(IMultiplayerGameListener mpGameListener){
+        this.mpGameListener = mpGameListener;
+    }
+
     private class InternalConnectionListener extends Listener {
         @Override
         public void connected(Connection connection) {
+
         }
 
         @Override
         public void disconnected(Connection connection) {
-            listener.gameQuit();
+            connection.close();
+//            mpGameListener.gameQuit();
         }
 
         @Override
@@ -85,26 +97,27 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
             if (object instanceof JoinGameAcceptedMessage && localPlayerId < 0) {
                 JoinGameAcceptedMessage message = (JoinGameAcceptedMessage) object;
                 localPlayerId = message.yourPlayerId;
-                listener.gameJoinAccepted(message.yourPlayerId, message.gameData);
+                serversListener.gameJoinAccepted(message.yourPlayerId, message.gameData);
             }
 
             if (object instanceof JoinGameRejectedMessage && localPlayerId < 0) {
-                listener.gameJoinRejected();
+                serversListener.gameJoinRejected();
             }
 
             if (object instanceof PlayerJoinedMessage) {
                 PlayerJoinedMessage message = (PlayerJoinedMessage) object;
-                listener.playerJoined(message.player);
+                lobbyListener.playerJoined(message.player);
             }
 
             if (object instanceof BallHitMessage) {
                 BallHitMessage message = (BallHitMessage) object;
-                listener.ballHit(message.playerId, message.velocity);
+                mpGameListener.ballHit(message.playerId, message.velocity);
             }
 
             if (object instanceof LeaveGameMessage) {
                 LeaveGameMessage message = (LeaveGameMessage) object;
-                listener.playerLeft(message.playerId);
+                lobbyListener.playerLeft(message.playerId);
+//                mpGameListener.playerQuit(message.playerId);
             }
         }
     }

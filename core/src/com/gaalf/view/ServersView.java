@@ -8,26 +8,22 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.gaalf.network.data.GameServerSpecification;
 import com.gaalf.presenter.ServersPresenter;
-
 import java.util.List;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.gaalf.network.MatchmakingClient;
-import com.gaalf.network.data.GameServerSpecification;
-import com.gaalf.presenter.ServersPresenter;
-
 import java.io.IOException;
 
+
 public class ServersView extends BaseMenuView {
+    private final String TAG = ServersView.class.getSimpleName();
+    private final int MAX_NUMBER_OF_PLAYERS = 2;
 
-    private final String TAG = MainMenuView.class.getSimpleName();
-
-    public ServersView(SpriteBatch batch, final ServersPresenter presenter){
+    public ServersView(SpriteBatch batch, final ServersPresenter presenter, List<GameServerSpecification> servers){
         super(batch, presenter);
 
-        addTitle("Select server??");
+        addTitle("Select server");
         table.row();
 
-        CreateServerSelectMenu();
+        Table serversTable = createServerSelectMenu(servers);
+        table.add(serversTable);
 
         TextButton backButton = addBackButton();
         backButton.addListener(new ChangeListener() {
@@ -37,14 +33,6 @@ public class ServersView extends BaseMenuView {
             }
         });
 
-//        try (MatchmakingClient matchmakingClient = new MatchmakingClient()) {
-//            for (GameServerSpecification server : matchmakingClient.getGameServers()) {
-//                table.row();
-//                table.add(new Label(server.host + " with " + server.players + " players", getSkin()));
-//            }
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
         addActor(table);
     }
 
@@ -53,16 +41,35 @@ public class ServersView extends BaseMenuView {
 
     }
 
-    public void CreateServerSelectMenu() {
-        List<GameServerSpecification> gameServers = ((ServersPresenter)getPresenter()).getGameServers();
+    public Table createServerSelectMenu(List<GameServerSpecification> gameServers) {
+
+        Table serversTable = new Table();
 
         if (gameServers != null) {
-            for (GameServerSpecification gameServer : gameServers) {
-                log(TAG, "Host: " + gameServer.host + ", players: " + gameServer.players);
+            for (final GameServerSpecification gameServer : gameServers) {
+                serversTable.add(new Label("Host: " + gameServer.address, getSkin()));
+                serversTable.add(new Label("players: " + gameServer.players + "/" + MAX_NUMBER_OF_PLAYERS, getSkin())).pad(20);
+                TextButton joinServerButton = new TextButton("join", getSkin());
+                joinServerButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        try {
+                            ((ServersPresenter)getPresenter()).joinGame(gameServer.address);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                serversTable.add(joinServerButton);
+
+                serversTable.row();
             }
+
         } else {
             Label label = new Label("No available servers ...", getSkin());
-            table.add(label);
+            serversTable.add(label);
         }
+
+        return serversTable;
     }
 }

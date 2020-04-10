@@ -1,23 +1,24 @@
 package com.gaalf.view;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.utils.Array;
+import com.gaalf.GaalfGame;
 import com.gaalf.presenter.BaseMenuPresenter;
 
 
-abstract class BaseMenuView extends BaseView {
+public abstract class BaseMenuView extends BaseView {
 
     Table table;
 
-    private final float BUTTON_WIDTH = getViewport().getScreenWidth() / 5;
-    private final float TABLE_PADDING = 20;
-    private final float TITLE_BTM_PADDING = 50; // BTM is BOTTOM if you didn't catch that
-    private final float BUTTON_BTM_PADDING = 15;
-    private final float BACK_BUTTON_TOP_PADDING = 30;
+    final float BUTTON_WIDTH = getViewport().getScreenWidth() / 5;
+    final float TABLE_PADDING = 20;
+    final float TITLE_BTM_PADDING = 50; // BTM is BOTTOM if you didn't catch that
+    final float BUTTON_BTM_PADDING = 15;
+    final float BACK_BUTTON_TOP_PADDING = 30;
 
     BaseMenuView(SpriteBatch batch, BaseMenuPresenter presenter){
         super(batch, presenter);
@@ -44,6 +45,15 @@ abstract class BaseMenuView extends BaseView {
                 .padBottom(BUTTON_BTM_PADDING);
 
         return menuButton;
+    }
+
+    public void drawBackground(Sprite background, Array<Sprite> clouds){
+        getBatch().begin();
+        getBatch().draw(background, 0, 0, GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT);
+        for(Sprite cloud : clouds){
+            getBatch().draw(cloud, cloud.getX(), cloud.getY());
+        }
+        getBatch().end();
     }
 
     TextButton addBackButton() {

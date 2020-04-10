@@ -27,9 +27,10 @@ public class MatchmakingClient implements Closeable {
         responseMessage = null;
 
         KryoMessageRegister.registerMessages(kryoClient.getKryo());
+
         kryoClient.addListener(new InternalConnectionListener());
         kryoClient.start();
-        kryoClient.connect(5000, "gaalf.mchyll.no", 7000);
+        kryoClient.connect(5000, "mchyll.no", 7000);
     }
 
     /**
@@ -44,15 +45,14 @@ public class MatchmakingClient implements Closeable {
         try {
             responseReady.await();
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            return null;
         }
         return responseMessage.servers;
     }
 
     @Override
-    public void close() throws IOException {
-        System.out.println("Disposing MatchmakingClient");
-        kryoClient.dispose();
+    public void close() {
+        kryoClient.stop();
     }
 
     private class InternalConnectionListener extends Listener {

@@ -18,7 +18,6 @@ public class GameView extends BaseGameView {
     private final String TAG = GameView.class.getSimpleName();
     private Window levelClearedWindow;
     private TextButton nextLevelButton;
-    private TextButton exitLevelSelectButton;
 
     public GameView(SpriteBatch batch, final BaseGamePresenter presenter) {
         super(batch, presenter);
@@ -43,18 +42,11 @@ public class GameView extends BaseGameView {
         Table titleTable = levelClearedWindow.getTitleTable();
         titleTable.pad(20);
 
-        nextLevelButton = new TextButton("Next level", getSkin());
-        nextLevelButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                presenter.nextLevel();
-            }
-        });
 
 
 
         levelClearedWindow.row();
-        exitLevelSelectButton = new TextButton("Exit to Level Select", getSkin());
+        TextButton exitLevelSelectButton = new TextButton("Exit to Level Select", getSkin());
         exitLevelSelectButton.setWidth(levelClearedWindow.getWidth() / 2);
         exitLevelSelectButton.addListener(new ChangeListener() {
             @Override
@@ -74,7 +66,17 @@ public class GameView extends BaseGameView {
             }
         });
         levelClearedWindow.add(exitMainMenuButton).width(levelClearedWindow.getWidth() / 2).padBottom(15);
+        levelClearedWindow.row();
 
+        nextLevelButton = new TextButton("Next level", getSkin());
+        nextLevelButton.setWidth(levelClearedWindow.getWidth() / 2);
+        nextLevelButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                presenter.nextLevel();
+            }
+        });
+        levelClearedWindow.add(nextLevelButton).width(levelClearedWindow.getWidth() / 2).padBottom(15);
     }
 
     @Override
@@ -88,15 +90,17 @@ public class GameView extends BaseGameView {
     }
 
     public void levelCleared(boolean hasNext){
-        if(hasNext){
-            levelClearedWindow.addActorBefore(exitLevelSelectButton, nextLevelButton);
+        if(!hasNext){
+            nextLevelButton.setVisible(false);
+            nextLevelButton.setDisabled(true);
         }
         addActor(levelClearedWindow);
         pauseButton.remove();
     }
 
     public void clearWindow(){
-        levelClearedWindow.removeActor(nextLevelButton);
+        nextLevelButton.setVisible(true);
+        nextLevelButton.setDisabled(false);
         levelClearedWindow.remove();
         getTable().add(pauseButton).right().padTop(20);
     }
