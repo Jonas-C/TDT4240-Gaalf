@@ -36,5 +36,6 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
 
     @Override
     public void onGameStarted() {
+    }
 
 }
