@@ -42,8 +42,8 @@ public class MatchmakingServer {
             log.debug("Checking server " + serverAddress);
             try (GameServerStatusClient statusClient = new GameServerStatusClient(serverAddress)) {
                 GameServerStatusMessage status = statusClient.getStatus();
-                log.debug("Server is online, {} / {} players online, game started: {}",
-                        status.connectedPlayers, status.maxPlayers, status.maxPlayers);
+                log.debug("Server is online, {}/{} players online, game started: {}",
+                        status.connectedPlayers, status.maxPlayers, status.gameStarted);
                 if (!status.gameStarted && status.connectedPlayers < status.maxPlayers) {
                     GameServerSpecification gameServerEntry = new GameServerSpecification();
                     gameServerEntry.address = serverAddress;
