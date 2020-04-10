@@ -1,5 +1,6 @@
 package com.gaalf.presenter;
 
+import com.gaalf.model.PlayerInfo;
 import com.gaalf.network.ILobbyListener;
 import com.gaalf.network.MultiplayerGameClient;
 import com.gaalf.network.data.GameData;
@@ -21,8 +22,10 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
         view = new LobbyView(game.getBatch(), this, players);
         this.players = players;
         this.mpgc = mpgc;
-
-
+        for(PlayerData playerData : players.players){
+            PlayerInfo playerInfo = new PlayerInfo(playerData.playerName, false, playerData.playerId, playerData.ballType);
+            game.playersManager.addPlayer(playerInfo);
+        }
     }
 
     @Override
@@ -33,11 +36,14 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     @Override
     public void playerJoined(PlayerData playerData) {
         getView().addPlayer(playerData);
+        PlayerInfo playerInfo = new PlayerInfo(playerData.playerName, false, playerData.playerId, playerData.ballType);
+        game.playersManager.addPlayer(playerInfo);
     }
 
     @Override
     public void playerLeft(int playerId) {
         getView().removePlayer(playerId);
+        game.playersManager.removePlayer(playerId);
     }
 
     @Override
@@ -48,6 +54,7 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     public void goBack() throws IOException {
         mpgc.leaveGame();
         mpgc.close();
+        game.playersManager.getPlayers().clear();
         game.setScreen(new MainMenuPresenter(game));
     }
 
