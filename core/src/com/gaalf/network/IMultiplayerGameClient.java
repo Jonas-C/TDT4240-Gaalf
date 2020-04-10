@@ -13,11 +13,16 @@ public interface IMultiplayerGameClient {
      * The server either accepts or rejects the request to join. If the server rejects,
      * this method is meant to be retried with a different nick name.
      * @param playerName the nick name to use in-game
-     * @see IServersListener.gameJoinAccepted(int, GameData)
+     * @see IServersListener#gameJoinAccepted(int, GameData)
      * @see IServersListener#gameJoinRejected()
      */
     void joinGame(String playerName);
 
+    /**
+     * Starts the multiplayer game from a lobby.
+     * @param mapPack the map pack to play
+     */
+    void startGame(String mapPack);
 
     /**
      * Signals that the local player's ball has been hit.

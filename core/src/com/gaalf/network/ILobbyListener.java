@@ -11,5 +11,5 @@ public interface ILobbyListener {
 
     void playerLeft(int playerId);
 
-    void onGameStarted();
+    void onGameStarted(String mapPack);
 }

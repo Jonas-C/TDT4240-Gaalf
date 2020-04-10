@@ -34,5 +34,6 @@ public class KryoMessageRegister {
         kryo.register(JoinGameRequestMessage.class);
         kryo.register(LeaveGameMessage.class);
         kryo.register(PlayerJoinedMessage.class);
+        kryo.register(StartGameMessage.class);
     }
 }

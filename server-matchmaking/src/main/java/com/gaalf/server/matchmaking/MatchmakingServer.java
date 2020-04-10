@@ -43,10 +43,10 @@ public class MatchmakingServer {
             try (GameServerStatusClient statusClient = new GameServerStatusClient(serverAddress)) {
                 log.debug("Getting status");
                 GameServerStatusMessage status = statusClient.getStatus();
-                if (status.connectedPlayers < status.maxPlayers) {
+                if (!status.gameStarted && status.connectedPlayers < status.maxPlayers) {
                     GameServerSpecification gameServerEntry = new GameServerSpecification();
                     gameServerEntry.address = serverAddress;
-                    gameServerEntry.players = status.connectedPlayers;
+                    gameServerEntry.connectedPlayers = status.connectedPlayers;
                     servers.add(gameServerEntry);
                 }
             } catch (IOException e) {

@@ -16,7 +16,7 @@ public class ServersView extends BaseMenuView {
 
     TextButton joinServer;
 
-    public ServersView(SpriteBatch batch, final ServersPresenter presenter, List<GameServerSpecification> servers){
+    public ServersView(SpriteBatch batch, final ServersPresenter presenter, List<GameServerSpecification> servers) {
         super(batch, presenter);
         joinServer = new TextButton("Join mchyll.no:7001", getSkin());
         joinServer.addListener(new ChangeListener() {
@@ -32,10 +32,9 @@ public class ServersView extends BaseMenuView {
         table.row();
         table.add(joinServer);
 
-        for(GameServerSpecification server : servers){
+        for (GameServerSpecification server : servers) {
             table.row();
-
-            table.add(new Label(server.address + " with " + server.players + " players", getSkin()));
+            table.add(new Label(server.address + " with " + server.connectedPlayers + " players", getSkin()));
         }
 
         addActor(table);

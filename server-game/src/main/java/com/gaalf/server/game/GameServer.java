@@ -5,11 +5,12 @@ import com.gaalf.network.data.GameData;
 import com.gaalf.network.data.PlayerData;
 import com.gaalf.network.message.BallHitMessage;
 import com.gaalf.network.message.GameServerStatusMessage;
-import com.gaalf.network.message.LeaveGameMessage;
-import com.gaalf.network.message.PlayerJoinedMessage;
 import com.gaalf.network.message.JoinGameAcceptedMessage;
 import com.gaalf.network.message.JoinGameRejectedMessage;
 import com.gaalf.network.message.JoinGameRequestMessage;
+import com.gaalf.network.message.LeaveGameMessage;
+import com.gaalf.network.message.PlayerJoinedMessage;
+import com.gaalf.network.message.StartGameMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,12 @@ public class GameServer {
 
     private Server kryoServer;
     private List<PlayerConnection> players;
+    private boolean gameStarted;
 
     public GameServer(Server kryoServer) {
         this.kryoServer = kryoServer;
         players = new ArrayList<>();
+        gameStarted = false;
     }
 
     public boolean isNameAvailable(final String playerName) {
@@ -46,12 +49,14 @@ public class GameServer {
     }
 
     public void playerJoinRequest(PlayerConnection playerConnection, JoinGameRequestMessage message) {
-        if (isNameAvailable(message.playerName)) {
-            players.add(playerConnection);
-            playerConnection.playerData = new PlayerData(playerConnection.getID(),
+        if (!gameStarted && isNameAvailable(message.playerName)) {
+            playerConnection.playerData = new PlayerData(
+                    playerConnection.getID(),
                     message.playerName, message.ballType);
             playerConnection.hasJoined = true;
+            players.add(playerConnection);
 
+            // Send accepted to player with game data and players
             playerConnection.sendTCP(new JoinGameAcceptedMessage(
                     playerConnection.playerData.playerId, getGameData()));
 
@@ -63,9 +68,16 @@ public class GameServer {
         }
     }
 
+    public void starGame(PlayerConnection playerConnection, StartGameMessage message) {
+        if (!gameStarted) {
+            gameStarted = true;
+            kryoServer.sendToAllExceptTCP(playerConnection.getID(), message);
+        }
+    }
+
     public void ballHit(PlayerConnection playerConnection, BallHitMessage message) {
-        // Check if player has joined
-        if (playerConnection.hasJoined) {
+        // Check if game is started and player has joined
+        if (gameStarted && playerConnection.hasJoined) {
             // Forward ball hit message to other players
             kryoServer.sendToAllExceptTCP(playerConnection.getID(),
                     new BallHitMessage(playerConnection.getID(), message.velocity));
@@ -73,16 +85,16 @@ public class GameServer {
     }
 
     public void playerDisconnected(PlayerConnection playerConnection) {
-        players.remove(playerConnection);
         // Check if this player had fully joined the game and was forwarded to the other players
         if (playerConnection.hasJoined) {
             playerConnection.hasJoined = false;
+            players.remove(playerConnection);
             kryoServer.sendToAllExceptTCP(playerConnection.getID(),
                     new LeaveGameMessage(playerConnection.getID()));
         }
     }
 
     public void statusRequest(PlayerConnection playerConnection) {
-        playerConnection.sendTCP(new GameServerStatusMessage(players.size(), MAX_PLAYERS));
+        playerConnection.sendTCP(new GameServerStatusMessage(players.size(), MAX_PLAYERS, gameStarted));
     }
 }

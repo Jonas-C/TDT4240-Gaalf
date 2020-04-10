@@ -47,7 +47,7 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     }
 
     @Override
-    public void onGameStarted() {
+    public void onGameStarted(String mapPack) {
         game.setScreen(new MPGamePresenter(game, game.levelManager.getRandomLevel()));
     }
 

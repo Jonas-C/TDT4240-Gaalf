@@ -4,8 +4,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.gaalf.game.GameObserver;
-import com.gaalf.game.enums.GameEvent;
 import com.gaalf.network.data.ServerAddress;
 import com.gaalf.network.message.BallHitMessage;
 import com.gaalf.network.message.JoinGameAcceptedMessage;
@@ -13,6 +11,7 @@ import com.gaalf.network.message.JoinGameRejectedMessage;
 import com.gaalf.network.message.JoinGameRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
 import com.gaalf.network.message.PlayerJoinedMessage;
+import com.gaalf.network.message.StartGameMessage;
 
 import java.io.Closeable;
 import java.io.IOException;
@@ -25,6 +24,8 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
     private ILobbyListener lobbyListener;
     private IServersListener serversListener;
 
+    private enum State { NOT_JOINED, LOBBY, GAME }
+    private State state;
     private int localPlayerId;
 
     public MultiplayerGameClient(ServerAddress serverAddress, IServersListener serversListener) throws IOException {
@@ -37,12 +38,13 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
         kryoClient.start();
         kryoClient.connect(5000, serverAddress.getHostname(), serverAddress.getPort());
 
+        state = State.NOT_JOINED;
         localPlayerId = -1;
     }
 
     @Override
     public void joinGame(String playerName) {
-        if (localPlayerId >= 0) {
+        if (state != State.NOT_JOINED) {
             throw new IllegalStateException("Game is already joined");
         }
         // TODO ball type
@@ -50,14 +52,26 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
     }
 
     @Override
+    public void startGame(String mapPack) {
+        if (state != State.LOBBY) {
+            throw new IllegalStateException("Must be in lobby to start game");
+        }
+        kryoClient.sendTCP(new StartGameMessage(mapPack));
+    }
+
+    @Override
     public void sendBallHit(Vector2 velocity) {
-        ensureGameJoined();
+        if (state != State.GAME) {
+            throw new IllegalStateException("Must be in game to send ball hit");
+        }
         kryoClient.sendTCP(new BallHitMessage(localPlayerId, velocity));
     }
 
     @Override
     public void leaveGame() {
-        ensureGameJoined();
+        if (state != State.LOBBY && state != State.GAME) {
+            throw new IllegalStateException("Must be in game or lobby to leave game");
+        }
         kryoClient.sendTCP(new LeaveGameMessage());
     }
 
@@ -66,17 +80,11 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
         kryoClient.stop();
     }
 
-    private void ensureGameJoined() {
-        if (localPlayerId < 0) {
-            throw new IllegalStateException("Game not joined; call joinGame(playerName) first");
-        }
-    }
-
-    public void setLobbyListener(ILobbyListener lobbyListener){
+    public void setLobbyListener(ILobbyListener lobbyListener) {
         this.lobbyListener = lobbyListener;
     }
 
-    public void setMpGameListener(IMultiplayerGameListener mpGameListener){
+    public void setMpGameListener(IMultiplayerGameListener mpGameListener) {
         this.mpGameListener = mpGameListener;
     }
 
@@ -88,36 +96,60 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
 
         @Override
         public void disconnected(Connection connection) {
-            connection.close();
-//            mpGameListener.gameQuit();
+            if (state == State.GAME) {
+                mpGameListener.gameQuit();
+            }
         }
 
         @Override
         public void received(Connection connection, Object object) {
-            if (object instanceof JoinGameAcceptedMessage && localPlayerId < 0) {
+            // Was accepted into the lobby
+            if (object instanceof JoinGameAcceptedMessage &&
+                    state == State.NOT_JOINED && serversListener != null) {
                 JoinGameAcceptedMessage message = (JoinGameAcceptedMessage) object;
+                state = State.LOBBY;
                 localPlayerId = message.yourPlayerId;
                 serversListener.gameJoinAccepted(message.yourPlayerId, message.gameData);
             }
 
-            if (object instanceof JoinGameRejectedMessage && localPlayerId < 0) {
+            // Was rejected to join the lobby
+            if (object instanceof JoinGameRejectedMessage &&
+                    state == State.NOT_JOINED && serversListener != null) {
                 serversListener.gameJoinRejected();
             }
 
-            if (object instanceof PlayerJoinedMessage) {
+            // Someone joined the lobby
+            if (object instanceof PlayerJoinedMessage &&
+                    state == State.LOBBY && lobbyListener != null) {
                 PlayerJoinedMessage message = (PlayerJoinedMessage) object;
                 lobbyListener.playerJoined(message.player);
             }
 
-            if (object instanceof BallHitMessage) {
+            // Someone started the game
+            if (object instanceof StartGameMessage &&
+                    state == State.LOBBY && lobbyListener != null) {
+                StartGameMessage message = (StartGameMessage) object;
+                state = State.GAME;
+                lobbyListener.onGameStarted(message.mapPack);
+            }
+
+            // Someone hit their ball
+            if (object instanceof BallHitMessage &&
+                    state == State.GAME && mpGameListener != null) {
                 BallHitMessage message = (BallHitMessage) object;
                 mpGameListener.ballHit(message.playerId, message.velocity);
             }
 
+            // Someone left the game or lobby
             if (object instanceof LeaveGameMessage) {
                 LeaveGameMessage message = (LeaveGameMessage) object;
-                lobbyListener.playerLeft(message.playerId);
-//                mpGameListener.playerQuit(message.playerId);
+
+                if (state == State.LOBBY && lobbyListener != null) {
+                    lobbyListener.playerLeft(message.playerId);
+                }
+                else if (state == State.GAME && mpGameListener != null) {
+                    mpGameListener.playerQuit(message.playerId);
+                }
             }
         }
     }

@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.gaalf.network.message.BallHitMessage;
 import com.gaalf.network.message.GameServerStatusMessage;
 import com.gaalf.network.message.JoinGameRequestMessage;
+import com.gaalf.network.message.StartGameMessage;
 
 public class ConnectionListener extends Listener {
 
@@ -35,6 +36,11 @@ public class ConnectionListener extends Listener {
         if (object instanceof JoinGameRequestMessage) {
             JoinGameRequestMessage message = (JoinGameRequestMessage) object;
             gameServer.playerJoinRequest(playerConnection, message);
+        }
+
+        if (object instanceof StartGameMessage) {
+            StartGameMessage message = (StartGameMessage) object;
+            gameServer.starGame(playerConnection, message);
         }
 
         if (object instanceof BallHitMessage) {

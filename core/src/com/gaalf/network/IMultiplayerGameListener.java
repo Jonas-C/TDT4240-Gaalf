@@ -1,8 +1,6 @@
 package com.gaalf.network;
 
 import com.badlogic.gdx.math.Vector2;
-import com.gaalf.network.data.GameData;
-import com.gaalf.network.data.PlayerData;
 
 /**
  * Defines a listener for multiplayer game server events.

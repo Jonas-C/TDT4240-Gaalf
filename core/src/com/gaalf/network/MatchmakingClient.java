@@ -30,7 +30,7 @@ public class MatchmakingClient implements Closeable {
 
         kryoClient.addListener(new InternalConnectionListener());
         kryoClient.start();
-        kryoClient.connect(5000, "mchyll.no", 7000);
+        kryoClient.connect(5000, "localhost", 7000);
     }
 
     /**
