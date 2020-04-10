@@ -44,11 +44,10 @@ public class MatchmakingServer {
                 GameServerStatusMessage status = statusClient.getStatus();
                 log.debug("Server is online, {}/{} players online, game started: {}",
                         status.connectedPlayers, status.maxPlayers, status.gameStarted);
+
                 if (!status.gameStarted && status.connectedPlayers < status.maxPlayers) {
-                    GameServerSpecification gameServerEntry = new GameServerSpecification();
-                    gameServerEntry.address = serverAddress;
-                    gameServerEntry.connectedPlayers = status.connectedPlayers;
-                    servers.add(gameServerEntry);
+                    servers.add(new GameServerSpecification(
+                            serverAddress, status.connectedPlayers, status.maxPlayers));
                 }
             } catch (IOException e) {
                 log.trace("IOException", e);

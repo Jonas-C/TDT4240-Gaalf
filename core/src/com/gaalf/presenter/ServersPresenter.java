@@ -16,6 +16,7 @@ import com.gaalf.view.ServersView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class ServersPresenter extends BaseMenuPresenter implements IServersListener {
 
@@ -26,16 +27,13 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
 
     public ServersPresenter(final GaalfGame game){
         super(game);
-        try (MatchmakingClient matchmakingClient = new MatchmakingClient()) {
-            for (GameServerSpecification spec : matchmakingClient.getGameServers()) {
-                System.out.println(spec.address + " with " + spec.connectedPlayers + " players");
-            }
-            view = new ServersView(game.getBatch(), this, new ArrayList<GameServerSpecification>());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
+        view = new ServersView(game.getBatch(), this, getGameServers());
         canJoin = false;
+    }
+
+    public void openMainMenuView() {
+        game.setScreen(new MainMenuPresenter(game));
     }
 
     @Override
@@ -43,9 +41,19 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
         return view;
     }
 
+    private List<GameServerSpecification> getGameServers() {
+        try (MatchmakingClient matchmakingClient = new MatchmakingClient()) {
+            return matchmakingClient.getGameServers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public void joinGame(ServerAddress serverAddress) throws IOException {
         mpgc = new MultiplayerGameClient(serverAddress, this);
-        mpgc.joinGame("Jonas2");
+        mpgc.joinGame("Player" + new Random().nextInt(100));
     }
 
     @Override

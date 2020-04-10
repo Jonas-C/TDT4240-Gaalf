@@ -35,7 +35,7 @@ public class MainMenuView extends BaseMenuView {
         startMpGameButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                presenter.openServerSelectMenu();
+                presenter.openServersView();
             }
         });
 
