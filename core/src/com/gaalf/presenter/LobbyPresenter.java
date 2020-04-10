@@ -3,13 +3,13 @@ package com.gaalf.presenter;
 import com.gaalf.network.ILobbyListener;
 import com.gaalf.network.data.GameData;
 import com.gaalf.network.data.PlayerData;
-import com.gaalf.view.BaseView;
+import com.gaalf.view.BaseMenuView;
 import com.gaalf.GaalfGame;
 import com.gaalf.view.LobbyView;
 
 public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener {
 
-    private BaseView view;
+    private BaseMenuView view;
     GameData players;
 
     public LobbyPresenter(final GaalfGame game, GameData players){
@@ -20,7 +20,7 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     }
 
     @Override
-    public BaseView getView() {
+    public BaseMenuView getView() {
         return view;
     }
 
@@ -37,5 +37,4 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     @Override
     public void onGameStarted() {
 
-    }
 }

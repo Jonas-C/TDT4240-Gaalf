@@ -4,7 +4,7 @@ import com.gaalf.GaalfGame;
 import com.gaalf.network.IServersListener;
 import com.gaalf.network.MultiplayerGameClient;
 import com.gaalf.network.data.GameData;
-import com.gaalf.view.BaseView;
+import com.gaalf.view.BaseMenuView;
 import com.gaalf.view.ServersView;
 
 import java.io.IOException;
@@ -12,9 +12,9 @@ import java.io.IOException;
 public class ServersPresenter extends BaseMenuPresenter implements IServersListener {
 
     private ServersView view;
-    MultiplayerGameClient mpgc;
-    GameData gameData;
-    boolean canJoin;
+    private MultiplayerGameClient mpgc;
+    private GameData gameData;
+    private boolean canJoin;
 
     public ServersPresenter(final GaalfGame game){
         super(game);
@@ -23,7 +23,7 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
     }
 
     @Override
-    public BaseView getView() {
+    public BaseMenuView getView() {
         return view;
     }
 
