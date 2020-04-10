@@ -51,10 +51,8 @@ public class MatchmakingClient implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
-        System.out.println("Disposing MatchmakingClient on thread " + Thread.currentThread().getName());
+    public void close() {
         kryoClient.stop();
-        kryoClient.dispose();
     }
 
     private class InternalConnectionListener extends Listener {

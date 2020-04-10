@@ -5,6 +5,9 @@ public class ServerAddress {
     private String hostname;
     private int port;
 
+    public ServerAddress() {
+    }
+
     public ServerAddress(String hostname, int port) {
         this.hostname = hostname;
         this.port = port;

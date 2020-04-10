@@ -41,9 +41,8 @@ public class GameServerStatusClient implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         kryoClient.stop();
-        kryoClient.dispose();
     }
 
     private class InternalConnectionListener extends Listener {

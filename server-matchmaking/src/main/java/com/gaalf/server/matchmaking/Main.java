@@ -18,17 +18,5 @@ public class Main {
         kryoServer.start();
 
         System.out.println("Matchmaking server started");
-
-//        Client client = new Client();
-//        client.getKryo().register(TestMessage.class);
-//        client.start();
-//        client.connect(5000, "localhost", 7000);
-//        client.sendTCP(new TestMessage("helå"));
-//        System.out.println("Client connected and sent message");
-//
-//        Thread.sleep(100);
-//        client.stop();
-//
-//        kryoServer.stop();
     }
 }
