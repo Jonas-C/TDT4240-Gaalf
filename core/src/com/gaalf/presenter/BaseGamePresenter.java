@@ -184,7 +184,8 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         return goal;
     }
 
-    private void update(float delta){
+    @Override
+    public void update(float delta){
         if(!paused) {
             world.step(delta, 6, 2);
         }
@@ -194,12 +195,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
             levelCleared();
             levelFinished = true;
         }
-    }
-
-    @Override
-    public void render(float delta){
-        update(delta);
-        super.render(delta);
     }
 
     @Override
