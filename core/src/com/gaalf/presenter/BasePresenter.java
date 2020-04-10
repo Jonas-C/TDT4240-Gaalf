@@ -14,15 +14,12 @@ public abstract class BasePresenter extends ScreenAdapter {
 
     public abstract BaseView getView();
 
+    public abstract void update(float delta);
     @Override
     public void render(float delta) {
         update(delta);
         getView().update(delta);
         getView().draw();
-    }
-
-    public void update(float delta){
-
     }
 
     @Override

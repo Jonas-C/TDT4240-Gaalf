@@ -214,12 +214,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     }
 
     @Override
-    public void render(float delta){
-        update(delta);
-        super.render(delta);
-    }
-
-    @Override
     public void resize(int width, int height){
         b2dViewport.update(GaalfGame.V_WIDTH, GaalfGame.V_HEIGHT, true);
         b2dCam.update();
