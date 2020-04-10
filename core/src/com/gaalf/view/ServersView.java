@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.gaalf.network.MatchmakingClient;
 import com.gaalf.network.data.GameServerSpecification;
+import com.gaalf.network.data.ServerAddress;
 import com.gaalf.presenter.ServersPresenter;
 
 import java.io.IOException;
@@ -22,7 +23,7 @@ public class ServersView extends BaseMenuView {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 try {
-                    presenter.joinGame("s");
+                    presenter.joinGame(new ServerAddress("mchyll.no", 7001));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

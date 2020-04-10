@@ -4,6 +4,7 @@ import com.gaalf.GaalfGame;
 import com.gaalf.network.IServersListener;
 import com.gaalf.network.MultiplayerGameClient;
 import com.gaalf.network.data.GameData;
+import com.gaalf.network.data.ServerAddress;
 import com.gaalf.view.BaseView;
 import com.gaalf.view.ServersView;
 
@@ -27,8 +28,8 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
         return view;
     }
 
-    public void joinGame(String port) throws IOException {
-        mpgc = new MultiplayerGameClient("mchyll.no:7001", this);
+    public void joinGame(ServerAddress serverAddress) throws IOException {
+        mpgc = new MultiplayerGameClient(serverAddress, this);
         mpgc.joinGame("Magnus");
     }
 
