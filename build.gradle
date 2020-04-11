@@ -81,6 +81,10 @@ project(":core") {
         api "com.badlogicgames.ashley:ashley:$ashleyVersion"
 
         api "com.esotericsoftware:kryonet:2.22.0-RC1"
+
+        compile ("com.esotericsoftware:kryonet:2.22.0-RC1") {
+            exclude module : 'kryo'
+        }
     }
 }
 
