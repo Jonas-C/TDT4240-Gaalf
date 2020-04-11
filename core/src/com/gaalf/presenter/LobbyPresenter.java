@@ -78,6 +78,7 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     public void update(float delta){
         super.update(delta);
         if(shouldStartGame){
+            menuMusic.dispose();
             game.setScreen(new MPGamePresenter(game, game.levelManager.getFirstMapPackLevel(), mpgc));
             shouldStartGame = false;
         }

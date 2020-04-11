@@ -63,7 +63,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     private OrthographicCamera b2dCam;
     private ExtendViewport b2dViewport;
     private TiledMap tiledMap;
-    protected Music gameMusic;
+    Music gameMusic;
     boolean paused = false;
     private Entity playerEntity;
     private TextureMapObjectRenderer tmr;
@@ -72,7 +72,8 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     private ArrayList<GameObserver> gameObservers;
     private WorldContactListener worldContactListener;
     private GameObjectFactory gameObjectFactory;
-    protected ShootableSystem shootableSystem;
+    ShootableSystem shootableSystem;
+    private float accumulator = 0;
 
     BaseGamePresenter(final GaalfGame game, FileHandle level) {
         super(game);
@@ -97,7 +98,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
         shootableSystem.addListener(soundSystem);
         shootableSystem.addListener((ECSObserver) scoreSystem);
-        shootableSystem.addListener((GameObserver) this);
+        shootableSystem.addListener(this);
         scoreSystem.addListener(this);
         worldContactListener.addListener(goalSystem);
         goalSystem.addListener(this);
@@ -138,7 +139,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     }
 
     private void setupGame(FileHandle level){
-        world = new World(new Vector2(0, -9.81f), true);
+        world = new World(new Vector2(0, -9.81f), false);
         worldContactListener = new WorldContactListener();
         world.setContactListener(worldContactListener);
         ballFactory = new BallFactory(world, game.assetManager);
@@ -206,10 +207,15 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
     @Override
     public void update(float delta){
-        if(!paused) {
-            world.step(delta, 6, 2);
-        }
         engine.update(delta);
+        if(!paused) {
+            float frameTime = Math.min(delta, 0.25f);
+            accumulator += frameTime;
+            while(accumulator >= 1/60f) {
+                world.step(1/60f, 6, 2);
+                accumulator -= 1/60f;
+            }
+        }
         getView().update(delta);
     }
 
@@ -271,7 +277,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
     }
 
-    protected void setScoreLabel(int playerNumber, String newText){
+    void setScoreLabel(int playerNumber, String newText){
         getView().setPlayerLabelText(playerNumber, newText);
     }
 
