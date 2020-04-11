@@ -60,10 +60,10 @@ public class LobbyView extends BaseMenuView {
     }
 
 
-    @Override
-    public void update(float delta) {
-
-    }
+//    @Override
+//    public void update(float delta) {
+//
+//    }
 
 
     public void addPlayer(PlayerData playerData){

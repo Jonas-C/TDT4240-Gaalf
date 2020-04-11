@@ -58,20 +58,21 @@ import static com.gaalf.game.constants.B2DConstants.*;
 public abstract class BaseGamePresenter extends BasePresenter implements GameObserver, GameObservable {
 
     private GameView view;
-    private Engine engine;
-    private World world;
+    Engine engine;
+    World world;
     private OrthographicCamera b2dCam;
     private ExtendViewport b2dViewport;
     private TiledMap tiledMap;
-    private Music gameMusic;
+    protected Music gameMusic;
     boolean paused = false;
     private Entity playerEntity;
     private TextureMapObjectRenderer tmr;
     private BallFactory ballFactory;
-    private PlayerInfo playerInfo;
+    protected PlayerInfo playerInfo;
     private ArrayList<GameObserver> gameObservers;
     private WorldContactListener worldContactListener;
     private GameObjectFactory gameObjectFactory;
+    protected ShootableSystem shootableSystem;
 
     BaseGamePresenter(final GaalfGame game, FileHandle level) {
         super(game);
@@ -86,7 +87,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         initPlayers();
 
         RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), b2dCam, tmr);
-        ShootableSystem shootableSystem = new ShootableSystem();
+        shootableSystem = new ShootableSystem();
         PhysicsSystem physicsSystem = new PhysicsSystem();
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, b2dCam);
         ShotIndicatorSystem shotIndicatorSystem = new ShotIndicatorSystem(playerEntity.getComponent(TransformComponent.class));
@@ -95,7 +96,8 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         GoalSystem goalSystem = new GoalSystem(game.playersManager.getPlayers());
 
         shootableSystem.addListener(soundSystem);
-        shootableSystem.addListener(scoreSystem);
+        shootableSystem.addListener((ECSObserver) scoreSystem);
+        shootableSystem.addListener((GameObserver) this);
         scoreSystem.addListener(this);
         worldContactListener.addListener(goalSystem);
         goalSystem.addListener(this);
@@ -269,7 +271,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
     }
 
-    private void setScoreLabel(int playerNumber, String newText){
+    protected void setScoreLabel(int playerNumber, String newText){
         getView().setPlayerLabelText(playerNumber, newText);
     }
 
@@ -278,26 +280,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         game.setScreen(new LevelSelectMenuPresenter(game));
     }
 
-    public void exitMainMenu(){
-        gameMusic.dispose();
-        game.playersManager.removePlayer(game.devicePlayer);
-        game.setScreen(new MainMenuPresenter(game));
-    }
+    public abstract void exitMainMenu();
 
     public abstract void nextLevel();
-
-    @Override
-    public void onReceiveEvent(GameEvent event, Object object) {
-        switch(event){
-            case SCORE_CHANGED:
-                setScoreLabel(playerInfo.getPlayerID(), playerInfo.getPlayerName() + ": " + object);
-                break;
-            case LEVEL_COMPLETE:
-                levelCleared();
-            default:
-                break;
-        }
-    }
 
     @Override
     public void addListener(GameObserver observer) {

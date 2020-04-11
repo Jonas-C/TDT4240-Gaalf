@@ -15,6 +15,7 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     private LobbyView view;
     private GameData players;
     private MultiplayerGameClient mpgc;
+    private boolean shouldStartGame;
 
     public LobbyPresenter(final GaalfGame game, GameData players, MultiplayerGameClient mpgc) {
         super(game);
@@ -22,6 +23,7 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
         view = new LobbyView(game.getBatch(), this, players);
         this.players = players;
         this.mpgc = mpgc;
+        shouldStartGame = false;
         for (PlayerData playerData : players.players) {
             // Local player is already added
             if (playerData.playerId != game.devicePlayer.getPlayerID()) {
@@ -29,6 +31,19 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
                 game.playersManager.addPlayer(playerInfo);
             }
         }
+
+        for(int i = 0; i < game.playersManager.getPlayers().size(); i++){
+            System.out.println("Player " + i + ":");
+            System.out.println("{");
+            System.out.println("Name: " + game.playersManager.getPlayers().get(i).getPlayerName());
+            System.out.println("ID: " + game.playersManager.getPlayers().get(i).getPlayerID());
+            System.out.println("This device: " + game.playersManager.getPlayers().get(i).isThisDevice());
+            System.out.println("Ball: " + game.playersManager.getPlayers().get(i).getBallChoice());
+            System.out.println("}");
+
+        }
+
+
     }
 
     @Override
@@ -41,6 +56,16 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
         getView().addPlayer(playerData);
         PlayerInfo playerInfo = new PlayerInfo(playerData.playerName, false, playerData.playerId, playerData.ballType);
         game.playersManager.addPlayer(playerInfo);
+        for(int i = 0; i < game.playersManager.getPlayers().size(); i++){
+            System.out.println("Player " + i + ":");
+            System.out.println("{");
+            System.out.println("Name: " + game.playersManager.getPlayers().get(i).getPlayerName());
+            System.out.println("ID: " + game.playersManager.getPlayers().get(i).getPlayerID());
+            System.out.println("This device: " + game.playersManager.getPlayers().get(i).isThisDevice());
+            System.out.println("Ball: " + game.playersManager.getPlayers().get(i).getBallChoice());
+            System.out.println("}");
+
+        }
     }
 
     @Override
@@ -50,8 +75,19 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     }
 
     @Override
+    public void update(float delta){
+        super.update(delta);
+        if(shouldStartGame){
+            game.setScreen(new MPGamePresenter(game, game.levelManager.getFirstMapPackLevel(), mpgc));
+            shouldStartGame = false;
+        }
+    }
+
+    @Override
     public void onGameStarted(String mapPack) {
-        game.setScreen(new MPGamePresenter(game, game.levelManager.getRandomLevel()));
+        System.out.println("started");
+        game.levelManager.setLevels("forest");
+        shouldStartGame = true;
     }
 
     public void goBack() throws IOException {
@@ -63,7 +99,9 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
 
     public void startGame() {
         // TODO map pack
-        mpgc.startGame("MapPack");
+        mpgc.startGame("forest");
+        game.levelManager.setLevels("forest");
+        shouldStartGame = true;
     }
 
 }

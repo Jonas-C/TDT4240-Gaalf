@@ -55,6 +55,7 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
         if (state != State.LOBBY) {
             throw new IllegalStateException("Must be in lobby to start game");
         }
+        state = State.GAME;
         kryoClient.sendTCP(new StartGameMessage(mapPack));
     }
 
