@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="64" height="36" tilewidth="20" tileheight="20" infinite="0" backgroundcolor="#87ceeb" nextlayerid="5" nextobjectid="1327">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="64" height="36" tilewidth="20" tileheight="20" infinite="0" backgroundcolor="#87ceeb" nextlayerid="5" nextobjectid="1329">
  <tileset firstgid="1" source="../../tiles_spritesheet.tsx"/>
  <tileset firstgid="157" name="flagRed2" tilewidth="70" tileheight="70" tilecount="1" columns="0">
   <grid orientation="orthogonal" width="1" height="1"/>
@@ -605,11 +605,14 @@
   <object id="1326" gid="160" x="680" y="300" width="70" height="70"/>
  </objectgroup>
  <objectgroup id="3" name="collision">
-  <object id="1241" x="20" y="60">
+  <object id="1241" type="terrain" x="20" y="60">
    <polyline points="0,0 0,560 20,580 1220,580 1240,560 1240,0 0,0"/>
   </object>
-  <object id="1312" x="460.313" y="220">
+  <object id="1312" type="terrain" x="460.313" y="220">
    <polyline points="0,0 80,80 280,80 360,0 360,60 300,120 60,120 0,60 0,0"/>
+  </object>
+  <object id="1328" type="goal" x="633.818" y="299.636">
+   <polyline points="0,0 0,-65.8182 2.36364,-68.7273 4.36364,-69.6364 8.36364,-69.6364 10.7273,-67.4545 12.1818,-65.0909 12.1818,0.363636"/>
   </object>
  </objectgroup>
  <objectgroup id="4" name="objects">
