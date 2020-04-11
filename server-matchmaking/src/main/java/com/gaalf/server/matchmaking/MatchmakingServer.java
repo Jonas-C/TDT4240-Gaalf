@@ -32,6 +32,7 @@ public class MatchmakingServer {
     }
 
     public void availableGameServersRequest(Connection connection) {
+        log.info("Available game servers requested by {}", connection.getRemoteAddressTCP().toString());
         connection.sendTCP(new AvailableGameServersResponseMessage(getAvailableGameServers()));
     }
 

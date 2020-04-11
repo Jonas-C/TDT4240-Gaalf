@@ -15,6 +15,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         MinLogAdapter.registerSLF4J();
+
         Server kryoServer = new Server();
         KryoMessageRegister.registerMessages(kryoServer.getKryo());
 
