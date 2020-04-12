@@ -6,10 +6,13 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gaalf.network.data.ServerAddress;
 import com.gaalf.network.message.BallHitMessage;
+import com.gaalf.network.message.BallResetMessage;
 import com.gaalf.network.message.JoinGameAcceptedMessage;
 import com.gaalf.network.message.JoinGameRejectedMessage;
 import com.gaalf.network.message.JoinGameRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
+import com.gaalf.network.message.LevelWonMessage;
+import com.gaalf.network.message.NextLevelMessage;
 import com.gaalf.network.message.PlayerJoinedMessage;
 import com.gaalf.network.message.StartGameMessage;
 
@@ -55,6 +58,7 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
         if (state != State.LOBBY) {
             throw new IllegalStateException("Must be in lobby to start game");
         }
+        state = State.GAME;
         kryoClient.sendTCP(new StartGameMessage(mapPack));
     }
 
@@ -67,15 +71,41 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
     }
 
     @Override
+    public void nextLevel() {
+        if (state != State.GAME) {
+            throw new IllegalStateException("Must be in game");
+        }
+        kryoClient.sendTCP(new NextLevelMessage());
+    }
+
+    @Override
+    public void levelWon() {
+        if (state != State.GAME) {
+            throw new IllegalStateException("Must be in game");
+        }
+        kryoClient.sendTCP(new LevelWonMessage());
+    }
+
+    @Override
+    public void ballReset() {
+        if (state != State.GAME) {
+            throw new IllegalStateException("Must be in game");
+        }
+        kryoClient.sendTCP(new BallResetMessage(localPlayerId));
+    }
+
+    @Override
     public void leaveGame() {
         if (state != State.LOBBY && state != State.GAME) {
             throw new IllegalStateException("Must be in game or lobby to leave game");
         }
+        state = State.NOT_JOINED;
         kryoClient.sendTCP(new LeaveGameMessage());
     }
 
     @Override
     public void close() {
+        state = State.NOT_JOINED;
         kryoClient.stop();
     }
 
@@ -96,6 +126,7 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
         @Override
         public void disconnected(Connection connection) {
             if (state == State.GAME) {
+                state = State.NOT_JOINED;
                 mpGameListener.gameQuit();
             }
         }
@@ -137,6 +168,22 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
                     state == State.GAME && mpGameListener != null) {
                 BallHitMessage message = (BallHitMessage) object;
                 mpGameListener.ballHit(message.playerId, message.velocity);
+            }
+
+            if (object instanceof NextLevelMessage
+                    && state == State.GAME && mpGameListener != null) {
+                mpGameListener.nextLevel();
+            }
+
+            if (object instanceof LevelWonMessage
+                    && state == State.GAME && mpGameListener != null) {
+                mpGameListener.levelWon();
+            }
+
+            if (object instanceof BallResetMessage
+                    && state == State.GAME && mpGameListener != null) {
+                BallResetMessage message = (BallResetMessage) object;
+                mpGameListener.ballReset(message.playerId);
             }
 
             // Someone left the game or lobby

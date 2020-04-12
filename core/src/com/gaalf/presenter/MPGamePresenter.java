@@ -35,4 +35,14 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
     public void nextLevel() {
 
     }
+
+    @Override
+    public void levelWon() {
+
+    }
+
+    @Override
+    public void ballReset(int playerId) {
+
+    }
 }

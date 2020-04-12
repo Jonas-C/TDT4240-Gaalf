@@ -1,14 +1,18 @@
 package com.gaalf.server.game;
 
+import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.gaalf.network.data.GameData;
 import com.gaalf.network.data.PlayerData;
 import com.gaalf.network.message.BallHitMessage;
+import com.gaalf.network.message.BallResetMessage;
 import com.gaalf.network.message.GameServerStatusMessage;
 import com.gaalf.network.message.JoinGameAcceptedMessage;
 import com.gaalf.network.message.JoinGameRejectedMessage;
 import com.gaalf.network.message.JoinGameRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
+import com.gaalf.network.message.LevelWonMessage;
+import com.gaalf.network.message.NextLevelMessage;
 import com.gaalf.network.message.PlayerJoinedMessage;
 import com.gaalf.network.message.StartGameMessage;
 
@@ -34,7 +38,7 @@ public class GameServer {
         gameStarted = false;
     }
 
-    public boolean isNameAvailable(final String playerName) {
+    public boolean isPlayerNameAvailable(final String playerName) {
         for (PlayerConnection player : players) {
             if (playerName.equals(player.playerData.playerName)) {
                 return false;
@@ -54,7 +58,7 @@ public class GameServer {
     }
 
     public void playerJoinRequest(PlayerConnection playerConnection, JoinGameRequestMessage message) {
-        if (!gameStarted && isNameAvailable(message.playerName)) {
+        if (!gameStarted && isPlayerNameAvailable(message.playerName)) {
             log.info("Player {} joined", message.playerName);
 
             playerConnection.playerData = new PlayerData(
@@ -111,8 +115,30 @@ public class GameServer {
         }
     }
 
-    public void statusRequest(PlayerConnection playerConnection) {
+    public void statusRequest(Connection connection) {
         log.debug("Game server status requested");
-        playerConnection.sendTCP(new GameServerStatusMessage(players.size(), MAX_PLAYERS, gameStarted));
+        connection.sendTCP(new GameServerStatusMessage(players.size(), MAX_PLAYERS, gameStarted));
+    }
+
+    public void nextLevel(PlayerConnection playerConnection) {
+        if (gameStarted && playerConnection.hasJoined) {
+            log.debug("Proceeding to next level");
+            kryoServer.sendToAllExceptTCP(playerConnection.getID(), new NextLevelMessage());
+        }
+    }
+
+    public void levelWon(PlayerConnection playerConnection) {
+        if (gameStarted && playerConnection.hasJoined) {
+            log.debug("Current level won");
+            kryoServer.sendToAllExceptTCP(playerConnection.getID(), new LevelWonMessage());
+        }
+    }
+
+    public void ballReset(PlayerConnection playerConnection, BallResetMessage message) {
+        if (gameStarted && playerConnection.hasJoined) {
+            log.debug("The ball of player {} was reset", playerConnection.playerData.playerName);
+            kryoServer.sendToAllExceptTCP(playerConnection.getID(),
+                    new BallResetMessage(playerConnection.playerData.playerId));
+        }
     }
 }

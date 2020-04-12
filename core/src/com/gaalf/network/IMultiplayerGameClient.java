@@ -31,6 +31,21 @@ public interface IMultiplayerGameClient {
     void sendBallHit(Vector2 velocity);
 
     /**
+     * Proceeds to the next level.
+     */
+    void nextLevel();
+
+    /**
+     * Signals that the current level is won.
+     */
+    void levelWon();
+
+    /**
+     * Signals that the local player's ball's position is reset.
+     */
+    void ballReset();
+
+    /**
      * Leaves the multiplayer game.
      */
     void leaveGame();
