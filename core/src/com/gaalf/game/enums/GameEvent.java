@@ -7,4 +7,5 @@ public enum GameEvent {
     TOUCH_UP,
     TOUCH_DRAG,
     SCORE_CHANGED,
+    RESET_BALL
 }

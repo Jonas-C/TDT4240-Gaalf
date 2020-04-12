@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.gaalf.game.ecs.component.GoalComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.TerrainComponent;
+import com.gaalf.game.ecs.component.WaterComponent;
 import com.gaalf.game.enums.ECSEvent;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class WorldContactListener implements ContactListener, ECSObservable {
     private ComponentMapper<PlayerComponent> playerMapper;
     private ComponentMapper<GoalComponent> goalMapper;
     private ComponentMapper<TerrainComponent> terrainMapper;
+    private ComponentMapper<WaterComponent> waterMapper;
     private ArrayList<ECSObserver> ecsObservers;
 
     public WorldContactListener(){
@@ -26,6 +28,7 @@ public class WorldContactListener implements ContactListener, ECSObservable {
         playerMapper = ComponentMapper.getFor(PlayerComponent.class);
         goalMapper = ComponentMapper.getFor(GoalComponent.class);
         terrainMapper = ComponentMapper.getFor(TerrainComponent.class);
+        waterMapper = ComponentMapper.getFor(WaterComponent.class);
         ecsObservers = new ArrayList<>();
     }
 
@@ -54,8 +57,11 @@ public class WorldContactListener implements ContactListener, ECSObservable {
 
         Entity other = playerEntity == e1 ? e2 : e1;
 
-        if(goalMapper.has(other)){
+        if(goalMapper.has(other)){ // Collision with goal
             notifyObservers(ECSEvent.BALL_GOAL, playerEntity);
+        }
+        if (waterMapper.has(other)){ // Collision with water
+            notifyObservers(ECSEvent.BALL_OOB, playerEntity);
         }
 
     }

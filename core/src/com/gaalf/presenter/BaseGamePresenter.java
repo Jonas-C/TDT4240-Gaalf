@@ -31,6 +31,8 @@ import com.gaalf.game.ecs.component.ShotIndicatorComponent;
 import com.gaalf.game.ecs.component.SpriteComponent;
 import com.gaalf.game.ecs.component.TerrainComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
+import com.gaalf.game.ecs.component.WaterComponent;
+import com.gaalf.game.ecs.system.OutOfBoundsSystem;
 import com.gaalf.game.ecs.system.PhysicsDebugSystem;
 import com.gaalf.game.ecs.system.PhysicsSystem;
 import com.gaalf.game.ecs.system.RenderingSystem;
@@ -93,11 +95,14 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         SoundSystem soundSystem = new SoundSystem(game.settingsManager);
         ScoreSystem scoreSystem = new ScoreSystem();
         GoalSystem goalSystem = new GoalSystem(game.playersManager.getPlayers());
+        OutOfBoundsSystem outOfBoundsSystem = new OutOfBoundsSystem();
 
         shootableSystem.addListener(soundSystem);
         shootableSystem.addListener(scoreSystem);
         scoreSystem.addListener(this);
         worldContactListener.addListener(goalSystem);
+        worldContactListener.addListener(outOfBoundsSystem);
+        outOfBoundsSystem.addListener(this);
         goalSystem.addListener(this);
         scoreSystem.addListener((ECSObserver) goalSystem);
 
@@ -108,6 +113,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         engine.addSystem(physicsDebugSystem);
         engine.addSystem(shotIndicatorSystem);
         engine.addSystem(scoreSystem);
+        engine.addSystem(outOfBoundsSystem);
 
         engine.addSystem(goalSystem);
 
@@ -172,7 +178,8 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         for(Body body : bodies){
             if(body.getUserData() != null && body.getUserData() instanceof GameObjectEntity){
                 if(((Entity)body.getUserData()).getComponent(TerrainComponent.class) != null ||
-                        ((Entity)body.getUserData()).getComponent(GoalComponent.class) != null){
+                        ((Entity)body.getUserData()).getComponent(GoalComponent.class) != null||
+                        ((Entity)body.getUserData()).getComponent(WaterComponent.class) != null){
                     engine.removeEntity((Entity)body.getUserData());
                     world.destroyBody(body);
                     MapObjects mapObjects = tiledMap.getLayers().get("collision").getObjects();
@@ -294,6 +301,10 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
                 break;
             case LEVEL_COMPLETE:
                 levelCleared();
+                break;
+            case RESET_BALL:
+                resetBall((Entity) object);
+                break;
             default:
                 break;
         }
