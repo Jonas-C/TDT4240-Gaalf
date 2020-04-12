@@ -4,13 +4,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import com.gaalf.game.GameObserver;
 import com.gaalf.game.ecs.component.ShotIndicatorComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
+import com.gaalf.game.enums.GameEvent;
 
-import java.util.Observable;
-import java.util.Observer;
-
-public class ShotIndicatorSystem extends IteratingSystem implements Observer {
+public class ShotIndicatorSystem extends IteratingSystem implements GameObserver {
     private TransformComponent shotIndicatorTransform;
     private TransformComponent playerTransform;
 
@@ -32,37 +31,44 @@ public class ShotIndicatorSystem extends IteratingSystem implements Observer {
 
     }
 
-    @Override
-    public void update(Observable observable, Object o) {
-        if(shotIndicatorTransform == null){
-            throw new IllegalStateException("Shot indicator is null!");
-        }
-        if(o instanceof Vector2){
-            if(originalTouchPos.isZero()){
-                originalTouchPos.set(((Vector2)o).x, ((Vector2)o).y);
-            } else {
-                if(!shotIndicatorTransform.visible){
-                    shotIndicatorTransform.visible = true;
-                }
-                ((Vector2) o).set(((Vector2) o).x, ((Vector2) o).y);
-                distanceDragged.set( originalTouchPos.x - ((Vector2)o).x, originalTouchPos.y - ((Vector2)o).y);
-
-                float angle = (float)Math.toDegrees(Math.atan2(originalTouchPos.y - ((Vector2)o).y, originalTouchPos.x - ((Vector2)o).x));
-                shotIndicatorTransform.rotation = angle;
-                float x = Math.abs(distanceDragged.x);
-                float y = Math.abs(distanceDragged.y);
-                shotIndicatorTransform.scale.set(x > y ? x / 500 : y / 500, 0.4f);
-            }
-        }
-        else if(o instanceof String){
-            if(o == "touchDown" && !originalTouchPos.isZero()){
+    private void updateShotIndicator(Vector2 touchPos){
+        if(originalTouchPos.isZero()){
+            originalTouchPos.set((touchPos).x, (touchPos).y);
+        } else {
+            if(!shotIndicatorTransform.visible){
                 shotIndicatorTransform.visible = true;
-            } else if(o == "touchUp"){
-                shotIndicatorTransform.visible = false;
-                shotIndicatorTransform.scale.set(0.2f, 0.2f);
-                originalTouchPos.setZero();
-                distanceDragged.setZero();
             }
+            touchPos.set(touchPos.x, touchPos.y);
+            distanceDragged.set( originalTouchPos.x - touchPos.x, originalTouchPos.y - touchPos.y);
+
+            shotIndicatorTransform.rotation = (float)Math.toDegrees(Math.atan2(originalTouchPos.y - touchPos.y, originalTouchPos.x - touchPos.x));
+            float x = Math.abs(distanceDragged.x);
+            float y = Math.abs(distanceDragged.y);
+            shotIndicatorTransform.scale.set(x > y ? x / 500 : y / 500, 0.4f);
+        }
+    }
+
+    private void reset(){
+        shotIndicatorTransform.visible = false;
+        shotIndicatorTransform.scale.set(0.2f, 0.2f);
+        originalTouchPos.setZero();
+        distanceDragged.setZero();
+    }
+
+    @Override
+    public void onReceiveEvent(GameEvent event, Object object) {
+        switch(event){
+            case TOUCH_DOWN:
+                shotIndicatorTransform.visible = true;
+                break;
+            case TOUCH_UP:
+                reset();
+                break;
+            case TOUCH_DRAG:
+                updateShotIndicator((Vector2)object);
+                break;
+            default:
+                break;
         }
     }
 }

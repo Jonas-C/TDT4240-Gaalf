@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.*;
 import com.gaalf.game.ecs.component.*;
 import com.gaalf.manager.GameAssetManager;
+import com.gaalf.model.PlayerInfo;
 
 import static com.gaalf.game.constants.B2DConstants.PPM;
 
@@ -17,10 +18,10 @@ import static com.gaalf.game.constants.B2DConstants.PPM;
  */
 abstract class Ball extends Entity {
 
-    Ball(String playerName, int playerNumber, GameAssetManager assetManager) {
+    Ball(PlayerInfo playerInfo, GameAssetManager assetManager) {
         super();
         this.add(new ShootableComponent());
-        this.addPlayerComponent(playerName, playerNumber);
+        this.addPlayerComponent(playerInfo);
         this.add(addSoundComponent((Sound)assetManager.manager.get(assetManager.jumpSound)));
     }
 
@@ -56,10 +57,11 @@ abstract class Ball extends Entity {
     /**
      * Adding info about the player that is controlling the ball
      */
-    private void addPlayerComponent(String playerName, int playerNumber) {
+    private void addPlayerComponent(PlayerInfo playerInfo) {
         PlayerComponent playerComponent = new PlayerComponent();
-        playerComponent.playerName = playerName;
-        playerComponent.playerNumber = playerNumber;
+        playerComponent.playerName = playerInfo.getPlayerName();
+        playerComponent.playerNumber = playerInfo.getPlayerID();
+        playerComponent.onThisDevice = playerInfo.isThisDevice();
         this.add(playerComponent);
     }
 
@@ -73,6 +75,7 @@ abstract class Ball extends Entity {
         bodyDef.fixedRotation = false;
         bodyDef.angularDamping = 1f;
         bodyComponent.body = world.createBody(bodyDef);
+        bodyComponent.body.setUserData(this);
         bodyComponent.body.createFixture(fixtureDef);
         this.add(bodyComponent);
     }

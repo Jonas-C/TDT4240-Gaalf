@@ -31,7 +31,7 @@ public class PlayerInfo {
         return playerID;
     }
 
-    public boolean getThisDevice(){
+    public boolean isThisDevice(){
         return thisDevice;
     }
 

@@ -13,26 +13,27 @@ import com.badlogic.gdx.physics.box2d.World;
 import static com.gaalf.game.constants.B2DConstants.PPM;
 
 public class TiledObjectUtil {
-    public static void parseTiledObjectLayer(World world, MapObjects objects){
-        Shape shape;
-        Body body;
-        BodyDef bdef = new BodyDef();
-        bdef.type = BodyDef.BodyType.StaticBody;
-        for(MapObject object : objects){
-            if(object instanceof PolylineMapObject){
-                shape = createPolyLine((PolylineMapObject) object);
-                bdef.position.set(((PolylineMapObject) object).getPolyline().getOriginX() / PPM,
-                        ((PolylineMapObject) object).getPolyline().getOriginY() / PPM);
 
-            } else {
-                continue;
-            }
+    public static Body parseTiledObjectLayer(World world, MapObject object){
+        if((object instanceof PolylineMapObject)){
+            Shape shape;
+            Body body;
+            BodyDef bdef = new BodyDef();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            shape = createPolyLine((PolylineMapObject) object);
+            bdef.position.set(((PolylineMapObject) object).getPolyline().getOriginX() / PPM,
+                    ((PolylineMapObject) object).getPolyline().getOriginY() / PPM);
 
             body = world.createBody(bdef);
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = shape;
-            body.createFixture(fixtureDef).setUserData("terrain");
+            body.setUserData(object.getProperties().get("type"));
+            System.out.println(body.getUserData());
+            body.createFixture(fixtureDef);
             shape.dispose();
+            return body;
+        } else {
+            throw new IllegalArgumentException("Object must be a Polyline!");
         }
     }
 
