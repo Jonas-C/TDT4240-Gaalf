@@ -134,8 +134,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         if (!game.settingsManager.musicIsEnabled){
             gameMusic.pause();
         }
-
-
     }
 
     private void setupGame(FileHandle level){
@@ -200,9 +198,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         playerComponent.isFinished = false;
         MapProperties mapProperties = tiledMap.getLayers().get("objects").getObjects().get("startPos").getProperties();
         transformComponent.pos.set((float)mapProperties.get("x") / PPM, (float)mapProperties.get("y") / PPM);
+        bodyComponent.body.setLinearVelocity(0f, 0f);
         bodyComponent.body.setTransform((transformComponent.pos.x -
                 (spriteComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1, 0);
-        bodyComponent.body.setLinearVelocity(0f, 0f);
     }
 
     @Override
@@ -211,9 +209,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         if(!paused) {
             float frameTime = Math.min(delta, 0.25f);
             accumulator += frameTime;
-            while(accumulator >= 1/60f) {
-                world.step(1/60f, 6, 2);
-                accumulator -= 1/60f;
+            while(accumulator >= 1/45f) {
+                world.step(1/45f, 6, 2);
+                accumulator -= 1/45f;
             }
         }
         getView().update(delta);

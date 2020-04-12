@@ -6,7 +6,7 @@ import com.gaalf.game.enums.GameEvent;
 
 public class GamePresenter extends BaseGamePresenter {
 
-    public GamePresenter(final GaalfGame game, FileHandle level){
+    GamePresenter(final GaalfGame game, FileHandle level){
         super(game, level);
     }
 
@@ -50,6 +50,5 @@ public class GamePresenter extends BaseGamePresenter {
     public void nextLevel(){
             getView().clearWindow();
             newLevel(game.levelManager.nextLevel());
-//            initMap(game.levelManager.nextLevel());
     }
 }

@@ -73,7 +73,7 @@ abstract class Ball extends Entity {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
         bodyDef.fixedRotation = false;
-        bodyDef.angularDamping = 1f;
+        bodyDef.angularDamping = 2f;
         bodyComponent.body = world.createBody(bodyDef);
         bodyComponent.body.setUserData(this);
         fixtureDef.filter.groupIndex = -1;

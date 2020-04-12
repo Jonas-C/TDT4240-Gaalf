@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.gaalf.GaalfGame;
 import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
@@ -14,25 +13,15 @@ import com.gaalf.network.IMultiplayerGameListener;
 import com.gaalf.network.MultiplayerGameClient;
 
 import java.util.AbstractMap;
-import java.util.Map;
 
 public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGameListener {
 
     private MultiplayerGameClient mpgc;
-    public MPGamePresenter(final GaalfGame game, FileHandle level, MultiplayerGameClient mpgc){
+    MPGamePresenter(final GaalfGame game, FileHandle level, MultiplayerGameClient mpgc){
         super(game, level);
         this.mpgc = mpgc;
         mpgc.setMpGameListener(this);
         addListener(shootableSystem);
-        for(int i = 0; i < game.playersManager.getPlayers().size(); i++){
-            System.out.println("Player " + i);
-            System.out.println(game.playersManager.getPlayers().get(i).getPlayerName());
-            System.out.println(game.playersManager.getPlayers().get(i).getPlayerID());
-            System.out.println(game.playersManager.getPlayers().get(i).isThisDevice());
-            System.out.println(game.playersManager.getPlayers().get(i).getBallChoice());
-
-        }
-
     }
 
     @Override
@@ -72,13 +61,18 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
     }
 
     @Override
+    public void update(float delta){
+
+    }
+
+    @Override
     public void gameQuit() {
 
     }
 
     @Override
     public void levelCleared() {
-
+        getView().levelCleared(game.levelManager.hasNext());
     }
 
     @Override

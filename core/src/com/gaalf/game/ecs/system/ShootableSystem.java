@@ -51,11 +51,8 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
             shoot(bodyComponent, shootableComponent, entity);
             mpShot = null;
 
-        }
-
-        if(playerComponent.onThisDevice){
-            if(touchUp && !distanceDragged.isZero()){
-            System.out.println(playerComponent.playerNumber);
+        } else if(playerComponent.onThisDevice){
+            if(touchUp && !playerComponent.isFinished && !distanceDragged.isZero()){
                 shootableComponent.force.set(distanceDragged);
                 notifyObservers(GameEvent.BALL_STROKE, shootableComponent.force);
                 shoot(bodyComponent, shootableComponent, entity);

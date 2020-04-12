@@ -23,7 +23,7 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
     private String playerName;
     private boolean canJoin;
 
-    public ServersPresenter(final GaalfGame game) {
+    ServersPresenter(final GaalfGame game) {
         super(game);
 
         view = new ServersView(game.getBatch(), this, getGameServers());
