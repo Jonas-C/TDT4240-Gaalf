@@ -11,7 +11,7 @@ public class SettingsManager {
     private static final String PREF_SOUND_VOL = "sound";
     private static final String PREF_BALL = "ball";
     private static final String PREFS_NAME = "Settings.preferences";
-    private static final String PREF_USERNAME = "username";
+    private static final String PREF_DISPLAY_NAME = "displayName";
 
     public float musicVolume;
     public boolean musicIsEnabled;
@@ -25,7 +25,7 @@ public class SettingsManager {
         musicIsEnabled = isMusicEnabled();
         soundVolume = getSoundVolume();
         soundIsEnabled = isSoundEffectsEnabled();
-        displayName = getUsername();
+        displayName = getDisplayName();
         ballChoice = getBallChoice();
     }
 
@@ -84,13 +84,13 @@ public class SettingsManager {
         soundIsEnabled = soundEffectsEnabled;
     }
 
-    public String getUsername(){
-        return getPreferences().getString(PREF_USERNAME);
+    public String getDisplayName(){
+        return getPreferences().getString(PREF_DISPLAY_NAME);
     }
 
-    public void setUsername(String name){
-        getPreferences().putString(PREF_USERNAME, name);
+    public void setDisplayName(String displayName){
+        getPreferences().putString(PREF_DISPLAY_NAME, displayName);
         getPreferences().flush();
-        displayName = name;
+        this.displayName = displayName;
     }
 }

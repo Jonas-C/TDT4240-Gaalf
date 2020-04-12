@@ -79,12 +79,13 @@ public class SettingsPresenter extends BaseMenuPresenter {
         game.settingsManager.setSoundEffectsEnabled(soundEffectsEnabled);
     }
 
-    public String getUsername(){
+    public String getDisplayName(){
         return game.settingsManager.displayName;
     }
 
-    public void setUsername(String usernameSet){
-        game.settingsManager.setUsername(usernameSet);
+    public void setDisplayName(String displayName){
+        System.out.println(displayName);
+        game.settingsManager.setDisplayName(displayName);
     }
 
 
