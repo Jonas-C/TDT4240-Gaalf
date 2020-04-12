@@ -9,13 +9,9 @@ import com.gaalf.network.data.GameData;
 import com.gaalf.network.data.PlayerData;
 import com.gaalf.presenter.LobbyPresenter;
 
-import java.io.IOException;
-
 public class LobbyView extends BaseMenuView {
 
-    TextButton backButton;
-    TextButton startButton;
-    Table playerTable;
+    private Table playerTable;
 
     public LobbyView(SpriteBatch batch, final LobbyPresenter presenter, GameData players){
         super(batch, presenter);
@@ -25,21 +21,17 @@ public class LobbyView extends BaseMenuView {
         playerTable.pad(TABLE_PADDING);
         playerTable.setFillParent(true);
 
-        backButton = new TextButton("Exit lobby", getSkin());
+        TextButton backButton = new TextButton("Exit lobby", getSkin());
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                try {
                     presenter.goBack();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             }
         });
         table.add(backButton);
         table.row();
 
-        startButton = new TextButton("Start Game", getSkin());
+        TextButton startButton = new TextButton("Start Game", getSkin());
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -60,10 +52,10 @@ public class LobbyView extends BaseMenuView {
     }
 
 
-    @Override
-    public void update(float delta) {
-
-    }
+//    @Override
+//    public void update(float delta) {
+//
+//    }
 
 
     public void addPlayer(PlayerData playerData){

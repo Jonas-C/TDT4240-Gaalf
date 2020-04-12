@@ -2,10 +2,11 @@ package com.gaalf.presenter;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.gaalf.GaalfGame;
+import com.gaalf.game.enums.GameEvent;
 
 public class GamePresenter extends BaseGamePresenter {
 
-    public GamePresenter(final GaalfGame game, FileHandle level){
+    GamePresenter(final GaalfGame game, FileHandle level){
         super(game, level);
     }
 
@@ -22,13 +23,32 @@ public class GamePresenter extends BaseGamePresenter {
     }
 
     @Override
+    public void onReceiveEvent(GameEvent event, Object object) {
+        switch(event){
+            case SCORE_CHANGED:
+                setScoreLabel(playerInfo.getPlayerID(), playerInfo.getPlayerName() + ": " + object);
+                break;
+            case LEVEL_COMPLETE:
+                levelCleared();
+            default:
+                break;
+        }
+    }
+
+    @Override
     public void levelCleared() {
         getView().levelCleared(game.levelManager.hasNext());
+    }
+
+    @Override
+    public void exitMainMenu(){
+        gameMusic.dispose();
+        game.playersManager.getPlayers().clear();
+        game.setScreen(new MainMenuPresenter(game));
     }
 
     public void nextLevel(){
             getView().clearWindow();
             newLevel(game.levelManager.nextLevel());
-//            initMap(game.levelManager.nextLevel());
     }
 }

@@ -1,19 +1,13 @@
 package com.gaalf.game.ecs.system;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.gaalf.game.GameObservable;
 import com.gaalf.game.GameObserver;
 import com.gaalf.game.ecs.ECSObserver;
-import com.gaalf.game.ecs.component.BodyComponent;
-import com.gaalf.game.ecs.component.GoalComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
-import com.gaalf.game.ecs.component.SoundComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.game.enums.ECSEvent;
 import com.gaalf.game.enums.GameEvent;
@@ -81,6 +75,7 @@ public class GoalSystem extends IteratingSystem implements ECSObserver, GameObse
     private void playerFinished(Entity entity){
         PlayerComponent playerComponent = entity.getComponent(PlayerComponent.class);
         if(!playerComponent.isFinished) {
+            System.out.println(playerComponent.playerName + " finished!");
             playerComponent.isFinished = true;
             playersFinished++;
         }

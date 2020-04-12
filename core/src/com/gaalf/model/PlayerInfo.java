@@ -1,10 +1,6 @@
 package com.gaalf.model;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class PlayerInfo {
-
-    //Reset this when a mp game ends.
 
     private String playerName;
     private int playerID;

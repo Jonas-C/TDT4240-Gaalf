@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import com.gaalf.game.GameObservable;
 import com.gaalf.game.GameObserver;
 import com.gaalf.game.ecs.ECSObservable;
 import com.gaalf.game.ecs.ECSObserver;
@@ -14,9 +15,10 @@ import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShootableComponent;
 import com.gaalf.game.enums.GameEvent;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 
-public class ShootableSystem extends IteratingSystem implements ECSObservable, GameObserver {
+public class ShootableSystem extends IteratingSystem implements ECSObservable, GameObserver, GameObservable {
 
     private ComponentMapper<BodyComponent> bodyMapper;
     private ComponentMapper<ShootableComponent> shootableMapper;
@@ -25,6 +27,8 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
     private Vector2 prevTouch;
     private Vector2 distanceDragged;
     private ArrayList<ECSObserver> ecsObservers;
+    private ArrayList<GameObserver> gameObservers;
+    private AbstractMap.SimpleEntry mpShot;
 
 
     public ShootableSystem(){
@@ -35,25 +39,28 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
         prevTouch = new Vector2();
         distanceDragged = new Vector2(0, 0);
         ecsObservers = new ArrayList<>();
+        gameObservers = new ArrayList<>();
     }
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         BodyComponent bodyComponent = bodyMapper.get(entity);
         ShootableComponent shootableComponent = shootableMapper.get(entity);
         PlayerComponent playerComponent = playerMapper.get(entity);
+        if(mpShot != null && playerComponent.playerNumber == (int)mpShot.getKey()){
+            shootableComponent.force.set((Vector2)mpShot.getValue());
+            shoot(bodyComponent, shootableComponent, entity);
+            mpShot = null;
 
-        if(playerComponent.onThisDevice){
-            if(touchUp && !distanceDragged.isZero()){
+        } else if(playerComponent.onThisDevice){
+            if(touchUp && !playerComponent.isFinished && !distanceDragged.isZero()){
                 shootableComponent.force.set(distanceDragged);
+                notifyObservers(GameEvent.BALL_STROKE, shootableComponent.force);
                 shoot(bodyComponent, shootableComponent, entity);
                 prevTouch.set(0, 0);
                 distanceDragged.set(0, 0);
                 touchUp = false;
             }
-        } else if(shootableComponent.shouldBeShot){
-                shoot(bodyComponent, shootableComponent, entity);
-            }
-
+        }
     }
 
     private void shoot(BodyComponent bodyComponent, ShootableComponent shootableComponent, Entity entity){
@@ -86,6 +93,7 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
         switch(event){
             case TOUCH_UP:
                 touchUp = true;
+                System.out.println(distanceDragged);
                 break;
             case TOUCH_DRAG:
                 if(prevTouch.isZero()){
@@ -94,8 +102,29 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
                 distanceDragged.add(((Vector2) object).x - prevTouch.x, ((Vector2) object).y - prevTouch.y);
                 prevTouch.set((Vector2)object);
                 break;
+            case BALL_STROKE:
+                System.out.println("HEY");
+                mpShot = (AbstractMap.SimpleEntry)object;
+                System.out.println(((AbstractMap.SimpleEntry) object).getValue());
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void addListener(GameObserver observer) {
+        gameObservers.add(observer);
+    }
+
+    @Override
+    public void removeListener(GameObserver observer) {
+        gameObservers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(GameEvent gameEvent, Object obj) {
+        for(GameObserver observer : gameObservers){
+            observer.onReceiveEvent(gameEvent, obj);
         }
     }
 }

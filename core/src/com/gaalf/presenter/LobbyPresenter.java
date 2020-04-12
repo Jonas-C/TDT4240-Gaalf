@@ -13,15 +13,15 @@ import java.io.IOException;
 public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener {
 
     private LobbyView view;
-    private GameData players;
     private MultiplayerGameClient mpgc;
+    private boolean shouldStartGame;
 
-    public LobbyPresenter(final GaalfGame game, GameData players, MultiplayerGameClient mpgc) {
+    LobbyPresenter(final GaalfGame game, GameData players, MultiplayerGameClient mpgc) {
         super(game);
         mpgc.setLobbyListener(this);
         view = new LobbyView(game.getBatch(), this, players);
-        this.players = players;
         this.mpgc = mpgc;
+        shouldStartGame = false;
         for (PlayerData playerData : players.players) {
             // Local player is already added
             if (playerData.playerId != game.devicePlayer.getPlayerID()) {
@@ -50,11 +50,22 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     }
 
     @Override
-    public void onGameStarted(String mapPack) {
-        game.setScreen(new MPGamePresenter(game, game.levelManager.getRandomLevel()));
+    public void update(float delta){
+        super.update(delta);
+        if(shouldStartGame){
+            menuMusic.dispose();
+            game.setScreen(new MPGamePresenter(game, game.levelManager.getFirstMapPackLevel(), mpgc));
+            shouldStartGame = false;
+        }
     }
 
-    public void goBack() throws IOException {
+    @Override
+    public void onGameStarted(String mapPack) {
+        game.levelManager.setLevels("forest");
+        shouldStartGame = true;
+    }
+
+    public void goBack() {
         mpgc.leaveGame();
         mpgc.close();
         game.playersManager.getPlayers().clear();
@@ -63,7 +74,9 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
 
     public void startGame() {
         // TODO map pack
-        mpgc.startGame("MapPack");
+        mpgc.startGame("forest");
+        game.levelManager.setLevels("forest");
+        shouldStartGame = true;
     }
 
 }

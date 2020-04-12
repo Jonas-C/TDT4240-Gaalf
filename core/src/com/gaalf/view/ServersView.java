@@ -2,12 +2,16 @@ package com.gaalf.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.esotericsoftware.kryonet.Server;
 import com.gaalf.network.data.GameServerSpecification;
 import com.gaalf.presenter.ServersPresenter;
+import com.gaalf.view.widgets.ServerButton;
+
 import java.util.List;
 import java.io.IOException;
 
@@ -46,11 +50,12 @@ public class ServersView extends BaseMenuView {
 
         if (gameServers != null) {
             for (final GameServerSpecification gameServer : gameServers) {
-                serversTable.add(new Label("Host: " + gameServer.address, getSkin()));
-                serversTable.add(new Label("players: " + gameServer.connectedPlayers +
-                        "/" + gameServer.maxPlayers, getSkin())).pad(20);
-                TextButton joinServerButton = new TextButton("join", getSkin());
-                joinServerButton.addListener(new ChangeListener() {
+//                Table serverInfo = new Table();
+//                serverInfo.add(new Label("Host: " + gameServer.address, getSkin()));
+//                serverInfo.add(new Label("Players: " + gameServer.connectedPlayers + "/" + gameServer.maxPlayers, getSkin()));
+//                Button button = new Button(serverInfo, getSkin());
+                ServerButton button = new ServerButton(gameServer.address.toString(), gameServer.connectedPlayers, gameServer.maxPlayers, getSkin());
+                button.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         try {
@@ -60,7 +65,23 @@ public class ServersView extends BaseMenuView {
                         }
                     }
                 });
-                serversTable.add(joinServerButton);
+                serversTable.add(button).padBottom(15);
+
+//                serversTable.add(new Label("Host: " + gameServer.address, getSkin()));
+//                serversTable.add(new Label("players: " + gameServer.connectedPlayers +
+//                        "/" + gameServer.maxPlayers, getSkin())).pad(20);
+//                TextButton joinServerButton = new TextButton("join", getSkin());
+//                joinServerButton.addListener(new ChangeListener() {
+//                    @Override
+//                    public void changed(ChangeEvent event, Actor actor) {
+//                        try {
+//                            ((ServersPresenter)getPresenter()).joinGame(gameServer.address);
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//                serversTable.add(joinServerButton);
 
                 serversTable.row();
             }
