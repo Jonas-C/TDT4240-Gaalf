@@ -21,6 +21,10 @@ public class PlayerInfo {
         this.shotIndicatorChoice = shotIndicatorChoice;
     }
 
+    public void setBallChoice(String ballChoice) {
+        this.ballChoice = ballChoice;
+    }
+
     public void setPlayerName(String playerName){
         this.playerName = playerName;
     }

@@ -116,7 +116,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
     private void setupGame(FileHandle level){
         world = new World(new Vector2(0, -9.81f), true);
-        ballFactory = new BallFactory(playerInfo, tiledMap, world);
+        ballFactory = new BallFactory(tiledMap, world, game.assetManager);
         this.tiledMap = game.levelManager.loadLevel(level);
         tmr = new TextureMapObjectRenderer(tiledMap, game.getBatch());
         tmr.setMap(tiledMap);
@@ -125,11 +125,13 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
     private void initPlayers(){
         for(PlayerInfo player : game.playersManager.getPlayers()){
-            Entity ball = ballFactory.createEntity(game.assetManager);
             if(player.isThisDevice()){
-                engine.addEntity(createShotIndicator());
+                this.playerInfo = player;
+                engine.addEntity(createShotIndicator(this.playerInfo));
+            }
+            Entity ball = ballFactory.createEntity(this.playerInfo);
+            if (player.isThisDevice()) {
                 playerEntity = ball;
-                playerInfo = player;
             }
             engine.addEntity(ball);
             getView().addScoreLabel(player.getPlayerID(), player.getPlayerName());
@@ -236,8 +238,8 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
     public abstract void levelCleared();
 
-    private Entity createShotIndicator(){
-        return new ShotIndicatorFactory(playerInfo).createEntity(game.assetManager);
+    private Entity createShotIndicator(PlayerInfo playerInfo){
+        return new ShotIndicatorFactory(game.assetManager).createEntity(playerInfo);
     }
 
     private void setScoreLabel(int playerNumber, String newText){
