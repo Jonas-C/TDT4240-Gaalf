@@ -1,5 +1,6 @@
 package com.gaalf.view;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -102,11 +103,13 @@ public class GameView extends BaseGameView {
         nextLevelButton.setVisible(true);
         nextLevelButton.setDisabled(false);
         levelClearedWindow.remove();
-        getTable().add(pauseButton).right().padTop(20);
+        getTable().addActorAt(0, pauseButton);
+        getTable().getCell(pauseButton).padTop(20);
     }
 
     public void addScoreLabel(int playerNumber, String playerName){
-        Label scoreLabel = new Label(playerName + ": 0", getSkin());
+        Label.LabelStyle labelStyle = new Label.LabelStyle(getSkin().get(TextButton.TextButtonStyle.class).font, Color.WHITE);
+        Label scoreLabel = new Label(playerName + ": 0", labelStyle);
         getTable().add(scoreLabel);
         getTable().row();
         playerScoreLabels.put(playerNumber, scoreLabel);
