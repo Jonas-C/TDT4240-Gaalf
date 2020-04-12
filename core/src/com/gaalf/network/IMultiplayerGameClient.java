@@ -9,14 +9,14 @@ import com.gaalf.network.data.GameData;
 public interface IMultiplayerGameClient {
 
     /**
-     * Attempts to join the multiplayer game with the given nick name.
+     * Attempts to join the multiplayer game lobby with the given nick name.
      * The server either accepts or rejects the request to join. If the server rejects,
      * this method is meant to be retried with a different nick name.
      * @param playerName the nick name to use in-game
-     * @see IServersListener#gameJoinAccepted(int, GameData)
-     * @see IServersListener#gameJoinRejected()
+     * @see IServersListener#lobbyJoinAccepted(int, GameData)
+     * @see IServersListener#lobbyJoinRejected()
      */
-    void joinGame(String playerName, String ballType);
+    void joinLobby(String playerName, String ballType);
 
     /**
      * Starts the multiplayer game from a lobby.

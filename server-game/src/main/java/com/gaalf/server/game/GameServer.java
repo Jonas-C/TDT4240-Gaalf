@@ -7,9 +7,9 @@ import com.gaalf.network.data.PlayerData;
 import com.gaalf.network.message.BallHitMessage;
 import com.gaalf.network.message.BallResetMessage;
 import com.gaalf.network.message.GameServerStatusMessage;
-import com.gaalf.network.message.JoinGameAcceptedMessage;
-import com.gaalf.network.message.JoinGameRejectedMessage;
-import com.gaalf.network.message.JoinGameRequestMessage;
+import com.gaalf.network.message.JoinLobbyAcceptedMessage;
+import com.gaalf.network.message.JoinLobbyRejectedMessage;
+import com.gaalf.network.message.JoinLobbyRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
 import com.gaalf.network.message.LevelWonMessage;
 import com.gaalf.network.message.NextLevelMessage;
@@ -57,9 +57,9 @@ public class GameServer {
         return data;
     }
 
-    public void playerJoinRequest(PlayerConnection playerConnection, JoinGameRequestMessage message) {
+    public void playerJoinRequest(PlayerConnection playerConnection, JoinLobbyRequestMessage message) {
         if (!gameStarted && isPlayerNameAvailable(message.playerName)) {
-            log.info("Player {} joined", message.playerName);
+            log.info("Player {} joined the lobby", message.playerName);
 
             playerConnection.playerData = new PlayerData(
                     playerConnection.getID(),
@@ -68,7 +68,7 @@ public class GameServer {
             players.add(playerConnection);
 
             // Send accepted to player with game data and players
-            playerConnection.sendTCP(new JoinGameAcceptedMessage(
+            playerConnection.sendTCP(new JoinLobbyAcceptedMessage(
                     playerConnection.playerData.playerId, getGameData()));
 
             // Forward player joined message to other players
@@ -76,12 +76,12 @@ public class GameServer {
                     new PlayerJoinedMessage(playerConnection.playerData));
         } else {
             log.info("Player {} is rejected from joining", message.playerName);
-            playerConnection.sendTCP(new JoinGameRejectedMessage());
+            playerConnection.sendTCP(new JoinLobbyRejectedMessage());
         }
     }
 
     public void starGame(PlayerConnection playerConnection, StartGameMessage message) {
-        if (!gameStarted) {
+        if (!gameStarted && playerConnection.hasJoined) {
             gameStarted = true;
             log.info("Starting game with map pack {}", message.mapPack);
             kryoServer.sendToAllExceptTCP(playerConnection.getID(), message);

@@ -7,9 +7,9 @@ import com.esotericsoftware.kryonet.Listener;
 import com.gaalf.network.data.ServerAddress;
 import com.gaalf.network.message.BallHitMessage;
 import com.gaalf.network.message.BallResetMessage;
-import com.gaalf.network.message.JoinGameAcceptedMessage;
-import com.gaalf.network.message.JoinGameRejectedMessage;
-import com.gaalf.network.message.JoinGameRequestMessage;
+import com.gaalf.network.message.JoinLobbyAcceptedMessage;
+import com.gaalf.network.message.JoinLobbyRejectedMessage;
+import com.gaalf.network.message.JoinLobbyRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
 import com.gaalf.network.message.LevelWonMessage;
 import com.gaalf.network.message.NextLevelMessage;
@@ -46,11 +46,11 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
     }
 
     @Override
-    public void joinGame(String playerName, String ballType) {
+    public void joinLobby(String playerName, String ballType) {
         if (state != State.NOT_JOINED) {
             throw new IllegalStateException("Game is already joined");
         }
-        kryoClient.sendTCP(new JoinGameRequestMessage(playerName, ballType));
+        kryoClient.sendTCP(new JoinLobbyRequestMessage(playerName, ballType));
     }
 
     @Override
@@ -134,18 +134,18 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
         @Override
         public void received(Connection connection, Object object) {
             // Was accepted into the lobby
-            if (object instanceof JoinGameAcceptedMessage &&
+            if (object instanceof JoinLobbyAcceptedMessage &&
                     state == State.NOT_JOINED && serversListener != null) {
-                JoinGameAcceptedMessage message = (JoinGameAcceptedMessage) object;
+                JoinLobbyAcceptedMessage message = (JoinLobbyAcceptedMessage) object;
                 state = State.LOBBY;
                 localPlayerId = message.yourPlayerId;
-                serversListener.gameJoinAccepted(message.yourPlayerId, message.gameData);
+                serversListener.lobbyJoinAccepted(message.yourPlayerId, message.gameData);
             }
 
             // Was rejected to join the lobby
-            if (object instanceof JoinGameRejectedMessage &&
+            if (object instanceof JoinLobbyRejectedMessage &&
                     state == State.NOT_JOINED && serversListener != null) {
-                serversListener.gameJoinRejected();
+                serversListener.lobbyJoinRejected();
             }
 
             // Someone joined the lobby

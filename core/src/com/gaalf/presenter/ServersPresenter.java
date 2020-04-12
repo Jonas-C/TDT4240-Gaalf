@@ -49,10 +49,10 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
         return null;
     }
 
-    public void joinGame(ServerAddress serverAddress) throws IOException {
+    public void joinLobby(ServerAddress serverAddress) throws IOException {
         mpgc = new MultiplayerGameClient(serverAddress, this);
         playerName = "Player" + new Random().nextInt(100);
-        mpgc.joinGame(playerName, game.settingsManager.getBallChoice());
+        mpgc.joinLobby(playerName, game.settingsManager.getBallChoice());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
     }
 
     @Override
-    public void gameJoinAccepted(int yourPlayerId, GameData gameData) {
+    public void lobbyJoinAccepted(int yourPlayerId, GameData gameData) {
         game.devicePlayer = new PlayerInfo(playerName, true,
                 yourPlayerId, game.settingsManager.getBallChoice());
         game.playersManager.addPlayer(game.devicePlayer);
@@ -74,7 +74,7 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
     }
 
     @Override
-    public void gameJoinRejected() {
+    public void lobbyJoinRejected() {
         System.out.println("Rejected");
     }
 }

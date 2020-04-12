@@ -30,9 +30,9 @@ public class KryoMessageRegister {
         kryo.register(BallHitMessage.class);
         kryo.register(BallResetMessage.class);
         kryo.register(GameServerStatusMessage.class);
-        kryo.register(JoinGameAcceptedMessage.class);
-        kryo.register(JoinGameRejectedMessage.class);
-        kryo.register(JoinGameRequestMessage.class);
+        kryo.register(JoinLobbyAcceptedMessage.class);
+        kryo.register(JoinLobbyRejectedMessage.class);
+        kryo.register(JoinLobbyRequestMessage.class);
         kryo.register(LeaveGameMessage.class);
         kryo.register(LevelWonMessage.class);
         kryo.register(NextLevelMessage.class);

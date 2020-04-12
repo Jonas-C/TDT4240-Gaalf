@@ -1,14 +1,14 @@
 package com.gaalf.network.message;
 
-public class JoinGameRequestMessage extends Message {
+public class JoinLobbyRequestMessage extends Message {
 
     public String playerName;
     public String ballType;
 
-    public JoinGameRequestMessage() {
+    public JoinLobbyRequestMessage() {
     }
 
-    public JoinGameRequestMessage(String playerName, String ballType) {
+    public JoinLobbyRequestMessage(String playerName, String ballType) {
         this.playerName = playerName;
         this.ballType = ballType;
     }

@@ -2,12 +2,10 @@ package com.gaalf.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.esotericsoftware.kryonet.Server;
 import com.gaalf.network.data.GameServerSpecification;
 import com.gaalf.presenter.ServersPresenter;
 import com.gaalf.view.widgets.ServerButton;
@@ -59,7 +57,7 @@ public class ServersView extends BaseMenuView {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {
                         try {
-                            ((ServersPresenter)getPresenter()).joinGame(gameServer.address);
+                            ((ServersPresenter)getPresenter()).joinLobby(gameServer.address);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
