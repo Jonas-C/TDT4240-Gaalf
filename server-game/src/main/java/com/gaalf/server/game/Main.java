@@ -31,12 +31,24 @@ public class Main {
         };
         KryoMessageRegister.registerMessages(kryoServer.getKryo());
 
-        GameServer gameServer = new GameServer(kryoServer);
+        GameServer gameServer = new GameServer(kryoServer, getServerName(port));
 
         kryoServer.addListener(new ConnectionListener(gameServer));
         kryoServer.bind(port);
         kryoServer.start();
 
         log.info("Game server started on port " + port);
+    }
+
+    /**
+     * Generates a name for this game server instance. All instances will get a unique name
+     * as long as there are more names than running server instances.
+     */
+    private static String getServerName(int port) {
+        final String[] names = {
+                "Havana", "Bangkok", "Cape Town", "Paris", "Canberra",
+                "Stockholm", "Lima", "Muscat", "Sarajevo", "Edinburgh",
+                "Santiago", "Jakarta", "Kabul", "Monaco", "Suva"};
+        return names[Math.abs(port - 7001) % names.length];
     }
 }

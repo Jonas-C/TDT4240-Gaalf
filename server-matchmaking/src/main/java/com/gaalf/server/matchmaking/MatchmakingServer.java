@@ -32,7 +32,7 @@ public class MatchmakingServer {
     }
 
     public void availableGameServersRequest(Connection connection) {
-        log.info("Available game servers requested by {}", connection.getRemoteAddressTCP().toString());
+        log.info("Available game servers requested");
         connection.sendTCP(new AvailableGameServersResponseMessage(getAvailableGameServers()));
     }
 
@@ -47,8 +47,8 @@ public class MatchmakingServer {
                         status.connectedPlayers, status.maxPlayers, status.gameStarted);
 
                 if (!status.gameStarted && status.connectedPlayers < status.maxPlayers) {
-                    servers.add(new GameServerSpecification(
-                            serverAddress, status.connectedPlayers, status.maxPlayers));
+                    servers.add(new GameServerSpecification(serverAddress, status.serverName,
+                            status.connectedPlayers, status.maxPlayers));
                 }
             } catch (IOException e) {
                 log.trace("IOException", e);

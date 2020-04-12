@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameData {
+
     public List<PlayerData> players;
-    public String level;
+    public String serverName;
 
     public GameData() {
         players = new ArrayList<>();

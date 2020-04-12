@@ -29,11 +29,13 @@ public class GameServer {
     private static final Logger log = LoggerFactory.getLogger(GameServer.class);
 
     private Server kryoServer;
+    private String serverName;
     private List<PlayerConnection> players;
     private boolean gameStarted;
 
-    public GameServer(Server kryoServer) {
+    public GameServer(Server kryoServer, String serverName) {
         this.kryoServer = kryoServer;
+        this.serverName = serverName;
         players = new ArrayList<>();
         gameStarted = false;
     }
@@ -49,8 +51,7 @@ public class GameServer {
 
     public GameData getGameData() {
         GameData data = new GameData();
-        // TODO Configure level
-        data.level = "default";
+        data.serverName = serverName;
         for (PlayerConnection playerConnection : players) {
             data.players.add(playerConnection.playerData);
         }
@@ -117,7 +118,8 @@ public class GameServer {
 
     public void statusRequest(Connection connection) {
         log.debug("Game server status requested");
-        connection.sendTCP(new GameServerStatusMessage(players.size(), MAX_PLAYERS, gameStarted));
+        connection.sendTCP(new GameServerStatusMessage(
+                serverName, players.size(), MAX_PLAYERS, gameStarted));
     }
 
     public void nextLevel(PlayerConnection playerConnection) {

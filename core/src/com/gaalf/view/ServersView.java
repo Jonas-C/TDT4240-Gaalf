@@ -52,7 +52,7 @@ public class ServersView extends BaseMenuView {
 //                serverInfo.add(new Label("Host: " + gameServer.address, getSkin()));
 //                serverInfo.add(new Label("Players: " + gameServer.connectedPlayers + "/" + gameServer.maxPlayers, getSkin()));
 //                Button button = new Button(serverInfo, getSkin());
-                ServerButton button = new ServerButton(gameServer.address.toString(), gameServer.connectedPlayers, gameServer.maxPlayers, getSkin());
+                ServerButton button = new ServerButton(gameServer.serverName, gameServer.connectedPlayers, gameServer.maxPlayers, getSkin());
                 button.addListener(new ChangeListener() {
                     @Override
                     public void changed(ChangeEvent event, Actor actor) {

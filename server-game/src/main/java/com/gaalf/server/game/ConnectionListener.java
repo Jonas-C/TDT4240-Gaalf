@@ -10,7 +10,12 @@ import com.gaalf.network.message.LevelWonMessage;
 import com.gaalf.network.message.NextLevelMessage;
 import com.gaalf.network.message.StartGameMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ConnectionListener extends Listener {
+
+    private static final Logger log = LoggerFactory.getLogger(ConnectionListener.class);
 
     private GameServer gameServer;
 
@@ -20,6 +25,7 @@ public class ConnectionListener extends Listener {
 
     @Override
     public void connected(Connection connection) {
+        log.info("Connection from {}", connection.getRemoteAddressTCP());
     }
 
     @Override

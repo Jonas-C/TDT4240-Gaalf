@@ -4,7 +4,12 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.gaalf.network.message.AvailableGameServersRequestMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ConnectionListener extends Listener {
+
+    private static final Logger log = LoggerFactory.getLogger(ConnectionListener.class);
 
     private MatchmakingServer matchmakingServer;
 
@@ -14,6 +19,7 @@ public class ConnectionListener extends Listener {
 
     @Override
     public void connected(Connection connection) {
+        log.info("Connection from {}", connection.getRemoteAddressTCP());
     }
 
     @Override
