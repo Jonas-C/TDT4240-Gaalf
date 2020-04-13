@@ -1,24 +1,28 @@
 package com.gaalf.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 import com.gaalf.presenter.BaseGamePresenter;
 
-public class GameView extends BaseGameView {
+import java.util.HashMap;
 
+public class MPGameView extends BaseGameView {
+    private HashMap<Integer, Label> playerScoreLabels = new HashMap<>();
     private final String TAG = GameView.class.getSimpleName();
 
-    public GameView(SpriteBatch batch, final BaseGamePresenter presenter) {
+    public MPGameView(SpriteBatch batch, final BaseGamePresenter presenter) {
         super(batch, presenter);
-        Array<TextButton> pauseButtons = new Array<>();
-        pauseButtons.add(resumeButton, createExitLevelSelectButton(), createExitMainMenuButton());
-        pauseWindow = createModal("Pause", pauseButtons);
+
 
         Array<TextButton> extraClearedButtons = new Array<>();
-        extraClearedButtons.add(nextLevelButton, createExitLevelSelectButton(), createExitMainMenuButton());
+        extraClearedButtons.add(nextLevelButton, createExitMainMenuButton());
         levelClearedWindow = createModal("Level cleared!", extraClearedButtons);
 
+        Array<TextButton> pauseButtons = new Array<>();
+        pauseButtons.add(resumeButton, createExitMainMenuButton());
+        pauseWindow = createModal("Pause", pauseButtons);
 
         addActor(table);
         addActor(pauseWindow);
@@ -28,11 +32,6 @@ public class GameView extends BaseGameView {
     @Override
     public void render(float delta){
         super.draw();
-    }
-
-    @Override
-    public void hide() {
-
     }
 
 }

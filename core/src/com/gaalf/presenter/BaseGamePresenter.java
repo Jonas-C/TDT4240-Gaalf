@@ -48,7 +48,7 @@ import com.gaalf.game.precreatedEntities.gameObjects.GameObjectEntity;
 import com.gaalf.game.precreatedEntities.gameObjects.GameObjectFactory;
 import com.gaalf.game.util.TextureMapObjectRenderer;
 import com.gaalf.model.PlayerInfo;
-import com.gaalf.view.GameView;
+import com.gaalf.view.BaseGameView;
 import com.gaalf.game.input.*;
 
 import java.util.ArrayList;
@@ -57,7 +57,6 @@ import static com.gaalf.game.constants.B2DConstants.*;
 
 public abstract class BaseGamePresenter extends BasePresenter implements GameObserver, GameObservable {
 
-    private GameView view;
     Engine engine;
     World world;
     private OrthographicCamera b2dCam;
@@ -74,10 +73,10 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     private GameObjectFactory gameObjectFactory;
     ShootableSystem shootableSystem;
     private float accumulator = 0;
+    private ShotInputHandler shotInputHandler;
 
     BaseGamePresenter(final GaalfGame game, FileHandle level) {
         super(game);
-        view = new GameView(game.getBatch(),this);
         engine = new Engine();
         b2dCam = new OrthographicCamera();
         b2dViewport = new ExtendViewport(GaalfGame.V_WIDTH / PPM, GaalfGame.V_HEIGHT / PPM, b2dCam);
@@ -114,12 +113,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
         engine.addSystem(goalSystem);
 
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        ShotInputHandler shotInputHandler = new ShotInputHandler();
-        multiplexer.addProcessor(view);
-        multiplexer.addProcessor(shotInputHandler);
-        Gdx.input.setInputProcessor(multiplexer);
-
+        shotInputHandler = new ShotInputHandler();
 
         shotInputHandler.addListener(shootableSystem);
         shotInputHandler.addListener(shotIndicatorSystem);
@@ -134,6 +128,14 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         if (!game.settingsManager.musicIsEnabled){
             gameMusic.pause();
         }
+    }
+
+    void setupMultiplexer(){
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(getView());
+        multiplexer.addProcessor(shotInputHandler);
+        Gdx.input.setInputProcessor(multiplexer);
+
     }
 
     private void setupGame(FileHandle level){
@@ -161,7 +163,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
                 playerInfo = player;
             }
             engine.addEntity(ball);
-            getView().addScoreLabel(player.getPlayerID(), player.getPlayerName());
         }
     }
 
@@ -224,10 +225,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         super.resize(width, height);
     }
 
-    @Override
-    public GameView getView(){
-        return view;
-    }
 
     @Override
     public void show() {
@@ -253,6 +250,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     public void dispose(){
         getView().dispose();
     }
+
+    @Override
+    public abstract BaseGameView getView();
 
     public abstract void levelCleared();
 

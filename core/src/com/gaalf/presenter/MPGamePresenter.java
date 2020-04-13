@@ -9,26 +9,44 @@ import com.gaalf.GaalfGame;
 import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.enums.GameEvent;
+import com.gaalf.model.PlayerInfo;
 import com.gaalf.network.IMultiplayerGameListener;
 import com.gaalf.network.MultiplayerGameClient;
+import com.gaalf.view.BaseGameView;
+import com.gaalf.view.MPGameView;
 
 import java.util.AbstractMap;
 
 public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGameListener {
 
     private MultiplayerGameClient mpgc;
+    private boolean shouldGoNext;
+    private boolean levelWon;
+    private MPGameView view;
     MPGamePresenter(final GaalfGame game, FileHandle level, MultiplayerGameClient mpgc){
         super(game, level);
+        view = new MPGameView(game.getBatch(), this);
+        setupMultiplexer();
         this.mpgc = mpgc;
+        shouldGoNext = false;
+        levelWon = false;
         mpgc.setMpGameListener(this);
         addListener(shootableSystem);
+        for(PlayerInfo playerInfo : game.playersManager.getPlayers()){
+            view.addScoreLabel(playerInfo.getPlayerID(), playerInfo.getPlayerName());
+        }
     }
 
     @Override
     public void ballHit(int playerId, Vector2 velocity) {
-        System.out.println(velocity);
         AbstractMap.SimpleEntry<Integer, Vector2> shot = new AbstractMap.SimpleEntry<>(playerId, velocity);
         notifyObservers(GameEvent.BALL_STROKE, shot);
+    }
+
+    @Override
+    public void goNextLevel() {
+        getView().clearWindow();
+        shouldGoNext = true;
     }
 
     @Override
@@ -61,13 +79,23 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
     }
 
     @Override
-    public void update(float delta){
+    public void gameQuit() {
 
     }
 
     @Override
-    public void gameQuit() {
+    public void update(float delta){
+        super.update(delta);
+        if(shouldGoNext){
+            newLevel(game.levelManager.nextLevel());
+            shouldGoNext = false;
+            levelWon = false;
+        }
+    }
 
+    @Override
+    public BaseGameView getView() {
+        return view;
     }
 
     @Override
@@ -86,12 +114,18 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
 
     @Override
     public void nextLevel() {
-
+        getView().clearWindow();
+        mpgc.nextLevel();
+        shouldGoNext = true;
+        levelWon = false;
     }
 
     @Override
     public void levelWon() {
-
+        if(!levelWon){
+            levelWon = true;
+            levelCleared();
+        }
     }
 
     @Override

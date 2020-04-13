@@ -16,7 +16,7 @@ public interface IMultiplayerGameListener {
     /**
      * Called when proceeding to the next level.
      */
-    void nextLevel();
+    void goNextLevel();
 
     /**
      * Called when the current level is won.

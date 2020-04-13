@@ -172,7 +172,7 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
 
             if (object instanceof NextLevelMessage
                     && state == State.GAME && mpGameListener != null) {
-                mpGameListener.nextLevel();
+                mpGameListener.goNextLevel();
             }
 
             if (object instanceof LevelWonMessage

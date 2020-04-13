@@ -3,11 +3,22 @@ package com.gaalf.presenter;
 import com.badlogic.gdx.files.FileHandle;
 import com.gaalf.GaalfGame;
 import com.gaalf.game.enums.GameEvent;
+import com.gaalf.view.BaseGameView;
+import com.gaalf.view.GameView;
 
 public class GamePresenter extends BaseGamePresenter {
+    GameView view;
 
     GamePresenter(final GaalfGame game, FileHandle level){
         super(game, level);
+        view = new GameView(game.getBatch(), this);
+        setupMultiplexer();
+        view.addScoreLabel(playerInfo.getPlayerID(), playerInfo.getPlayerName());
+    }
+
+    @Override
+    public BaseGameView getView() {
+        return view;
     }
 
     @Override

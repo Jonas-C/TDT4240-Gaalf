@@ -103,7 +103,6 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
                 prevTouch.set((Vector2)object);
                 break;
             case BALL_STROKE:
-                System.out.println("HEY");
                 mpShot = (AbstractMap.SimpleEntry)object;
                 System.out.println(((AbstractMap.SimpleEntry) object).getValue());
             default:
