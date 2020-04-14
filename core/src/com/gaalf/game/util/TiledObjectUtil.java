@@ -28,7 +28,7 @@ public class TiledObjectUtil {
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.shape = shape;
             body.setUserData(object.getProperties().get("type"));
-            System.out.println(body.getUserData());
+            //System.out.println(body.getUserData());
             body.createFixture(fixtureDef);
             shape.dispose();
             return body;
