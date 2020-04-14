@@ -34,7 +34,7 @@ public class SettingsManager {
     }
 
     public String getBallChoice(){
-        return getPreferences().getString(PREF_BALL, "Golfball");
+        return getPreferences().getString(PREF_BALL, "Golf ball");
     }
 
     public void setBallChoice(String ballChoice){
