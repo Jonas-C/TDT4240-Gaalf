@@ -1,4 +1,4 @@
-package com.gaalf.game.ecs.precreatedEntities.balls;
+package com.gaalf.game.ecs.predefinedEntities.balls;
 
 
 import com.badlogic.gdx.audio.Sound;
@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.gaalf.game.ecs.component.*;
-import com.gaalf.game.ecs.precreatedEntities.PrecreatedEntity;
+import com.gaalf.game.ecs.predefinedEntities.PredefinedEntity;
 import com.gaalf.manager.GameAssetManager;
 import com.gaalf.model.PlayerInfo;
 
@@ -17,7 +17,7 @@ import static com.gaalf.game.constants.B2DConstants.PPM;
 /**
  * Factory pattern for ball creation
  */
-abstract class Ball extends PrecreatedEntity {
+abstract class Ball extends PredefinedEntity {
 
     Ball(PlayerInfo playerInfo, GameAssetManager assetManager) {
         super();
@@ -69,6 +69,7 @@ abstract class Ball extends PrecreatedEntity {
         bodyDef.fixedRotation = false;
         bodyDef.angularDamping = 1f;
         bodyComponent.body = world.createBody(bodyDef);
+        bodyComponent.body.setUserData(this);
         bodyComponent.body.createFixture(fixtureDef);
         this.add(bodyComponent);
     }

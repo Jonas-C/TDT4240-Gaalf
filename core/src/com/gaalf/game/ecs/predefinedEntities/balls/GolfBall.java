@@ -1,4 +1,4 @@
-package com.gaalf.game.ecs.precreatedEntities.balls;
+package com.gaalf.game.ecs.predefinedEntities.balls;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;

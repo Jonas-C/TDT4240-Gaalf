@@ -1,4 +1,4 @@
-package com.gaalf.game.ecs.precreatedEntities.shotIndicators;
+package com.gaalf.game.ecs.predefinedEntities.shotIndicators;
 
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.manager.GameAssetManager;

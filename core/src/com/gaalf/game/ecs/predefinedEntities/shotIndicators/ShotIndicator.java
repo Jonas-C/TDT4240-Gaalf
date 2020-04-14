@@ -1,16 +1,16 @@
-package com.gaalf.game.ecs.precreatedEntities.shotIndicators;
+package com.gaalf.game.ecs.predefinedEntities.shotIndicators;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.gaalf.game.ecs.component.ShotIndicatorComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
-import com.gaalf.game.ecs.precreatedEntities.PrecreatedEntity;
+import com.gaalf.game.ecs.predefinedEntities.PredefinedEntity;
 import com.gaalf.manager.GameAssetManager;
 
 /**
  * Factory pattern for shot indicators
  */
-public abstract class ShotIndicator extends PrecreatedEntity {
+public abstract class ShotIndicator extends PredefinedEntity {
     ShotIndicator(String type, GameAssetManager gameAssetManager) {
         super();
         this.add(new ShotIndicatorComponent());
