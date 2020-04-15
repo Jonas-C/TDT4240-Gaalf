@@ -153,7 +153,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
             if(player.isThisDevice()){
                 playerEntity = ball;
                 playerInfo = player;
-                engine.addEntity(createShotIndicator(player));
+                engine.addEntity(ShotIndicatorFactory.createEntity(player, game.assetManager));
             }
             engine.addEntity(ball);
             getView().addScoreLabel(player.getPlayerID(), player.getPlayerName());
@@ -245,10 +245,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     }
 
     public abstract void levelCleared();
-
-    private Entity createShotIndicator(PlayerInfo player){
-        return ShotIndicatorFactory.createEntity(player, game.assetManager);
-    }
 
     private void setScoreLabel(int playerNumber, String newText){
         getView().setPlayerLabelText(playerNumber, newText);
