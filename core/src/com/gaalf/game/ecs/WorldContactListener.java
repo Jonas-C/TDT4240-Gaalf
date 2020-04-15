@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.gaalf.game.ecs.component.GoalComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
+import com.gaalf.game.ecs.component.SoundComponent;
 import com.gaalf.game.ecs.component.TerrainComponent;
 import com.gaalf.game.ecs.component.WaterComponent;
 import com.gaalf.game.enums.ECSEvent;
@@ -62,6 +63,7 @@ public class WorldContactListener implements ContactListener, ECSObservable {
         }
         if (waterMapper.has(other)){ // Collision with water
             notifyObservers(ECSEvent.BALL_OOB, playerEntity);
+            other.getComponent(SoundComponent.class).shouldBePlayed=true;
         }
 
     }
