@@ -36,7 +36,7 @@ public class CloudsManager {
         return instance;
     }
 
-    public void initClouds(){
+    private void initClouds(){
         for(int i = 0; i < clouds.size; i++){
             clouds.get(i).setPosition(rand.nextInt((MAX_CLOUD_X - MIN_CLOUD_X) + 1) + MIN_CLOUD_X,
                     rand.nextInt((MAX_CLOUD_Y - MIN_CLOUD_Y) + 1) + MIN_CLOUD_Y);

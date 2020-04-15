@@ -32,6 +32,10 @@ public class MainMenuPresenter extends BaseMenuPresenter {
         game.setScreen(new MapPackSelectPresenter(game));
     }
 
+    public void openServersView() {
+        game.setScreen(new ServersPresenter(game));
+    }
+
     public void openSettingsView() {
         game.setScreen(new SettingsPresenter(game));
     }

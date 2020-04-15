@@ -8,7 +8,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.gaalf.GaalfGame;
 import com.gaalf.view.BaseMenuView;
-import com.gaalf.view.BaseView;
 import com.gaalf.view.SettingsView;
 
 public class SettingsPresenter extends BaseMenuPresenter {

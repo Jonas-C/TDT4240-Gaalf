@@ -31,7 +31,13 @@ public class MainMenuView extends BaseMenuView {
             }
         });
 
-        addMenuButton("Start multiplayer game");
+        TextButton startMpGameButton = addMenuButton("Start multiplayer game");
+        startMpGameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                presenter.openServersView();
+            }
+        });
 
         TextButton settingsButton = addMenuButton("Settings");
         settingsButton.addListener(new ChangeListener() {
