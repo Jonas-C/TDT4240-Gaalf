@@ -18,7 +18,6 @@ public class LobbyView extends BaseMenuView {
         table.bottom();
         playerTable = new Table();
         playerTable.top();
-        playerTable.pad(TABLE_PADDING);
         playerTable.setFillParent(true);
 
         TextButton backButton = new TextButton("Exit lobby", getSkin());

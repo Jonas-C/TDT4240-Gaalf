@@ -1,11 +1,14 @@
 package com.gaalf.view;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
@@ -13,13 +16,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gaalf.presenter.SettingsPresenter;
 
 public class SettingsView extends BaseMenuView {
     private Label ballChoiceLabel;
+    SettingsPresenter presenter;
 
     public SettingsView(SpriteBatch batch, final SettingsPresenter presenter){
         super(batch, presenter);
+        this.presenter = presenter;
         Label.LabelStyle labelStyle = new Label.LabelStyle(getSkin().get(TextButton.TextButtonStyle.class).font, Color.FOREST);
 
         addTitle("Settings");
@@ -69,6 +75,23 @@ public class SettingsView extends BaseMenuView {
         });
 
         final TextField displayNameField = new TextField(presenter.getDisplayName(), getSkin());
+        displayNameField.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Gdx.input.getTextInput(new Input.TextInputListener() {
+                    @Override
+                    public void input(String text) {
+                        presenter.setDisplayName(text);
+                        displayNameField.setText(text);
+                    }
+
+                    @Override
+                    public void canceled() {
+
+                    }
+                }, "Set display name", presenter.getDisplayName(), "");
+            }
+        });
         final TextButton displayNameButton = new TextButton("Ok", getSkin());
         displayNameButton.addListener(new ChangeListener() {
             @Override
