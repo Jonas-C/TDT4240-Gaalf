@@ -1,7 +1,7 @@
 package com.gaalf.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -9,15 +9,23 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
 import com.gaalf.GaalfGame;
 import com.gaalf.presenter.BaseGamePresenter;
+
+import java.util.HashMap;
 
 public abstract class BaseGameView extends BaseView implements Screen {
 
     private final String TAG = GameView.class.getSimpleName();
     Table table;
-    private Window pauseWindow = new Window("Pause", getSkin());
-    TextButton pauseButton = new TextButton("Pause", getSkin());
+    Window pauseWindow = new Window("Pause", getSkin());
+    Window levelClearedWindow;
+
+    private TextButton pauseButton = new TextButton("Pause", getSkin());
+    TextButton nextLevelButton;
+    TextButton resumeButton;
+    private HashMap<Integer, Label> playerScoreLabels = new HashMap<>();
     private BaseGamePresenter presenter;
 
 
@@ -32,64 +40,75 @@ public abstract class BaseGameView extends BaseView implements Screen {
             }
         });
 
-        createPauseMenu();
 
         table = new Table();
         table.top();
         table.setFillParent(true);
         table.add(pauseButton).right().padTop(20);
-        addActor(table);
-    }
+        table.row();
 
-    Table getTable(){
-        return table;
-    }
-
-    private void createPauseMenu() {
-        pauseWindow.setModal(true);
-        pauseWindow.setResizable(false);
-        pauseWindow.setMovable(false);
-        pauseWindow.setHeight(GaalfGame.V_HEIGHT / 1.2f);
-        pauseWindow.setWidth(GaalfGame.V_HEIGHT / 1.2f);
-        pauseWindow.setPosition(GaalfGame.V_WIDTH / 2f - pauseWindow.getWidth() / 2,
-                GaalfGame.V_HEIGHT / 2f - pauseWindow.getHeight() / 2);
-        Label titleLabel = pauseWindow.getTitleLabel();
-        titleLabel.setFontScale(2, 2);
-        Table titleTable = pauseWindow.getTitleTable();
-        titleTable.pad(20);
-
-        TextButton resumeButton = new TextButton("Resume", getSkin());
-        resumeButton.setWidth(pauseWindow.getWidth() / 2);
+        resumeButton = new TextButton("Resume", getSkin());
         resumeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 presenter.resume();
             }
         });
-        pauseWindow.add(resumeButton).width(pauseWindow.getWidth() / 2).padBottom(15);
-        pauseWindow.row();
 
-        TextButton exitLevelSelectButton = new TextButton("Exit to Level Select", getSkin());
-        exitLevelSelectButton.setWidth(pauseWindow.getWidth() / 2);
-        exitLevelSelectButton.addListener(new ChangeListener() {
+        nextLevelButton = new TextButton("Next level", getSkin());
+        nextLevelButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                presenter.exitLevelSelectMenu();
+                presenter.nextLevel();
             }
         });
-        pauseWindow.add(exitLevelSelectButton).width(pauseWindow.getWidth() / 2).padBottom(15);
-        pauseWindow.row();
+    }
 
-        TextButton exitMainMenuButton = new TextButton("Exit to Main Menu", getSkin());
-        exitMainMenuButton.setWidth(pauseWindow.getWidth() / 2);
-        exitMainMenuButton.addListener(new ChangeListener() {
+    Table getTable(){
+        return table;
+    }
+
+    TextButton createExitMainMenuButton(){
+        TextButton button = new TextButton("Exit to Main Menu", getSkin());
+        button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 presenter.exitMainMenu();
             }
         });
-        pauseWindow.add(exitMainMenuButton).width(pauseWindow.getWidth() / 2).padBottom(15);
+        return  button;
+    }
 
+    TextButton createExitLevelSelectButton(){
+        TextButton button = new TextButton("Exit to Level Select", getSkin());
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                presenter.exitLevelSelectMenu();
+            }
+        });
+        return  button;
+    }
+
+    Window createModal(String title, Array<TextButton> buttons){
+        Window window = new Window(title, getSkin());
+        window.setModal(true);
+        window.setResizable(false);
+        window.setMovable(false);
+        window.setVisible(false);
+        window.setHeight(GaalfGame.V_HEIGHT / 1.2f);
+        window.setWidth(GaalfGame.V_WIDTH / 1.5f);
+        window.setPosition(GaalfGame.V_WIDTH / 2f - window.getHeight() / 1.5f,
+                GaalfGame.V_HEIGHT / 2f - window.getHeight() / 2);
+        window.getTitleLabel().setStyle(new Label.LabelStyle(getSkin().getFont("button"), Color.WHITE));
+        window.getTitleTable().pad(20).center();
+
+        for(TextButton button : buttons){
+            window.add(button).width(window.getWidth() / 2).padBottom(15);
+            window.row();
+        }
+        System.out.println(window.getRows());
+        return window;
     }
 
     @Override
@@ -99,14 +118,14 @@ public abstract class BaseGameView extends BaseView implements Screen {
 
     @Override
     public void pause() {
-        addActor(pauseWindow);
+        pauseWindow.setVisible(true);
         pauseButton.setVisible(false);
         pauseButton.setDisabled(true);
     }
 
     @Override
     public void resume() {
-        pauseWindow.remove();
+        pauseWindow.setVisible(false);
         pauseButton.setVisible(true);
         pauseButton.setDisabled(false);
     }
@@ -114,5 +133,32 @@ public abstract class BaseGameView extends BaseView implements Screen {
     @Override
     public void hide() {
 
+    }
+
+    public void clearWindow(){
+        levelClearedWindow.setVisible(false);
+        pauseButton.setVisible(true);
+        pauseButton.setDisabled(false);
+    }
+
+    public void addScoreLabel(int playerNumber, String playerName){
+        Label scoreLabel = new Label(playerName + ": 0", getSkin());
+        getTable().add(scoreLabel);
+        getTable().row();
+        playerScoreLabels.put(playerNumber, scoreLabel);
+    }
+
+    public void setPlayerLabelText(int playerNumber, String newText){
+        playerScoreLabels.get(playerNumber).setText(newText);
+    }
+
+    public void levelCleared(boolean hasNext){
+        if(!hasNext){
+            nextLevelButton.setVisible(false);
+            nextLevelButton.setDisabled(true);
+        }
+        levelClearedWindow.setVisible(true);
+        pauseButton.setDisabled(true);
+        pauseButton.setVisible(false);
     }
 }

@@ -24,9 +24,12 @@ public class MainMenuPresenter extends BaseMenuPresenter {
 
     public void openLevelSelectMenu() {
         game.playersManager.addPlayer("Jonas", true, game.settingsManager.getBallChoice());
-//        game.playersManager.addPlayer("E", false, "Square");
         game.devicePlayer = game.playersManager.getPlayers().get(0);
         game.setScreen(new MapPackSelectPresenter(game));
+    }
+
+    public void openServersView() {
+        game.setScreen(new ServersPresenter(game));
     }
 
     public void openSettingsView() {
