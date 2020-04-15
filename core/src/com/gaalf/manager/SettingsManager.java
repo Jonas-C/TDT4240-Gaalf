@@ -30,7 +30,7 @@ public class SettingsManager {
     }
 
     public String getShotIndicatorChoice() {
-        return getPreferences().getString(PREF_SHOT_INDICATOR, "Filled white shot indicator");
+        return getPreferences().getString(PREF_SHOT_INDICATOR, "White SI");
     }
 
     private Preferences getPreferences(){

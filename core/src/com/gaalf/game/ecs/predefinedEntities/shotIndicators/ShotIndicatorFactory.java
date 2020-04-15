@@ -9,7 +9,7 @@ public class ShotIndicatorFactory {
     public static Entity createEntity(PlayerInfo playerInfo, GameAssetManager gameAssetManager) {
         // todo: add more shotIndicators
         switch (playerInfo.getShotIndicatorChoice()) {
-            case "Excalibur":
+            case "White SI":
                 return new FilledWhiteShotIndicator(gameAssetManager);
             default:
                 return new FilledWhiteShotIndicator(gameAssetManager);

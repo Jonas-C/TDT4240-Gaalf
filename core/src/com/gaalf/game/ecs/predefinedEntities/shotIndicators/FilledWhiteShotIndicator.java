@@ -6,7 +6,7 @@ import com.gaalf.manager.GameAssetManager;
 public class FilledWhiteShotIndicator extends ShotIndicator {
 
     FilledWhiteShotIndicator(GameAssetManager gameAssetManager) {
-        super("Excalibur", gameAssetManager);
+        super("White SI", gameAssetManager);
     }
 
     @Override
