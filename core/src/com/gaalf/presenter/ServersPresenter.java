@@ -52,7 +52,7 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
     public void joinLobby(ServerAddress serverAddress) throws IOException {
         mpgc = new MultiplayerGameClient(serverAddress, this);
         playerName = "Player" + new Random().nextInt(100);
-        mpgc.joinLobby(playerName, game.settingsManager.getBallChoice());
+        mpgc.joinLobby(playerName, game.settingsManager.getBallChoice(), game.settingsManager.shotIndicatorChoice);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
     @Override
     public void lobbyJoinAccepted(int yourPlayerId, GameData gameData) {
         game.devicePlayer = new PlayerInfo(playerName, true,
-                yourPlayerId, game.settingsManager.getBallChoice());
+                yourPlayerId, game.settingsManager.getBallChoice(), game.settingsManager.getShotIndicatorChoice());
         game.playersManager.addPlayer(game.devicePlayer);
         this.gameData = gameData;
         canJoin = true;

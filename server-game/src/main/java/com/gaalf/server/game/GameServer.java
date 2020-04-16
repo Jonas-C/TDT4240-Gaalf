@@ -64,7 +64,9 @@ public class GameServer {
 
             playerConnection.playerData = new PlayerData(
                     playerConnection.getID(),
-                    message.playerName, message.ballType);
+                    message.playerName,
+                    message.ballType,
+                    message.shotIndicator);
             playerConnection.hasJoined = true;
             players.add(playerConnection);
 

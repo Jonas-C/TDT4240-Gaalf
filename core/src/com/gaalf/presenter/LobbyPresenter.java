@@ -25,7 +25,12 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
         for (PlayerData playerData : players.players) {
             // Local player is already added
             if (playerData.playerId != game.devicePlayer.getPlayerID()) {
-                PlayerInfo playerInfo = new PlayerInfo(playerData.playerName, false, playerData.playerId, playerData.ballType);
+                PlayerInfo playerInfo = new PlayerInfo(
+                        playerData.playerName,
+                        false,
+                        playerData.playerId,
+                        playerData.ballType,
+                        playerData.shotIndicator);
                 game.playersManager.addPlayer(playerInfo);
             }
         }
@@ -39,7 +44,12 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     @Override
     public void playerJoined(PlayerData playerData) {
         getView().addPlayer(playerData);
-        PlayerInfo playerInfo = new PlayerInfo(playerData.playerName, false, playerData.playerId, playerData.ballType);
+        PlayerInfo playerInfo = new PlayerInfo(
+                playerData.playerName,
+                false,
+                playerData.playerId,
+                playerData.ballType,
+                playerData.shotIndicator);
         game.playersManager.addPlayer(playerInfo);
     }
 

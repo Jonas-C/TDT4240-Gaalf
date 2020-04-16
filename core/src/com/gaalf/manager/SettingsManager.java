@@ -10,6 +10,7 @@ public class SettingsManager {
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOL = "sound";
     private static final String PREF_BALL = "ball";
+    private static final String PREF_SHOT_INDICATOR = "shot indicator";
     private static final String PREFS_NAME = "Settings.preferences";
 
     public float musicVolume;
@@ -17,6 +18,7 @@ public class SettingsManager {
     public float soundVolume;
     public boolean soundIsEnabled;
     public String ballChoice;
+    public String shotIndicatorChoice;
 
     public SettingsManager(){
         musicVolume = getMusicVolume();
@@ -24,10 +26,22 @@ public class SettingsManager {
         soundVolume = getSoundVolume();
         soundIsEnabled = isSoundEffectsEnabled();
         ballChoice = getBallChoice();
+        shotIndicatorChoice = getShotIndicatorChoice();
     }
 
     private Preferences getPreferences(){
         return Gdx.app.getPreferences(PREFS_NAME);
+    }
+
+    public String getShotIndicatorChoice() {
+        return getPreferences().getString(PREF_SHOT_INDICATOR, "White SI");
+    }
+
+    public void setShotIndicatorChoice(String newChoice) {
+        if(!newChoice.equals(getBallChoice())) {
+            getPreferences().putString(PREF_BALL, newChoice);
+            getPreferences().flush();
+        }
     }
 
     public String getBallChoice(){

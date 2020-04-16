@@ -1,4 +1,4 @@
-package com.gaalf.game.precreatedEntities.balls;
+package com.gaalf.game.ecs.predefinedEntities.balls;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -13,13 +13,12 @@ import com.gaalf.model.PlayerInfo;
 
 import static com.gaalf.game.constants.B2DConstants.PPM;
 
-class GolfBall extends Ball {
-
-    GolfBall(PlayerInfo playerInfo, TiledMap tiledMap, World world, GameAssetManager assetManager) {
+class SoccerBall extends Ball {
+    SoccerBall(PlayerInfo playerInfo, TiledMap tiledMap, World world, GameAssetManager assetManager) {
         super(playerInfo, assetManager);
         TransformComponent transformComponent = addTransformComponent(tiledMap, 1.5f);
         TextureAtlas textureAtlas = assetManager.manager.get(assetManager.ballSpriteAtlas);
-        Sprite sprite = textureAtlas.createSprite("Golf ball");
+        Sprite sprite = textureAtlas.createSprite("Soccer ball");
         SpriteComponent spriteComponent = addSpriteComponent(sprite);
 
         CircleShape cshape = new CircleShape();

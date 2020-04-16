@@ -1,4 +1,4 @@
-package com.gaalf.game.precreatedEntities.balls;
+package com.gaalf.game.ecs.predefinedEntities.balls;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -13,7 +13,7 @@ import com.gaalf.model.PlayerInfo;
 
 import static com.gaalf.game.constants.B2DConstants.PPM;
 
-class BasketBall extends Ball{
+class BasketBall extends Ball {
 
     BasketBall(PlayerInfo playerInfo, TiledMap tiledMap, World world, GameAssetManager assetManager) {
         super(playerInfo, assetManager);

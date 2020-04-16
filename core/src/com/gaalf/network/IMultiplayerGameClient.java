@@ -16,7 +16,7 @@ public interface IMultiplayerGameClient {
      * @see IServersListener#lobbyJoinAccepted(int, GameData)
      * @see IServersListener#lobbyJoinRejected()
      */
-    void joinLobby(String playerName, String ballType);
+    void joinLobby(String playerName, String ballType, String shotIndicator);
 
     /**
      * Starts the multiplayer game from a lobby.

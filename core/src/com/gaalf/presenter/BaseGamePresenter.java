@@ -31,6 +31,7 @@ import com.gaalf.game.ecs.component.ShotIndicatorComponent;
 import com.gaalf.game.ecs.component.SpriteComponent;
 import com.gaalf.game.ecs.component.TerrainComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
+import com.gaalf.game.ecs.predefinedEntities.shotIndicators.ShotIndicatorFactory;
 import com.gaalf.game.ecs.system.PhysicsDebugSystem;
 import com.gaalf.game.ecs.system.PhysicsSystem;
 import com.gaalf.game.ecs.system.RenderingSystem;
@@ -38,14 +39,14 @@ import com.gaalf.game.ecs.system.ScoreSystem;
 import com.gaalf.game.ecs.system.ShootableSystem;
 
 import com.gaalf.game.enums.GameEvent;
-import com.gaalf.game.precreatedEntities.balls.BallFactory;
+import com.gaalf.game.ecs.predefinedEntities.balls.BallFactory;
 
 import com.gaalf.game.ecs.system.SoundSystem;
 import com.gaalf.game.ecs.system.GoalSystem;
 import com.gaalf.game.ecs.system.ShotIndicatorSystem;
 
-import com.gaalf.game.precreatedEntities.gameObjects.GameObjectEntity;
-import com.gaalf.game.precreatedEntities.gameObjects.GameObjectFactory;
+import com.gaalf.game.ecs.predefinedEntities.gameObjects.GameObjectEntity;
+import com.gaalf.game.ecs.predefinedEntities.gameObjects.GameObjectFactory;
 import com.gaalf.game.util.TextureMapObjectRenderer;
 import com.gaalf.model.PlayerInfo;
 import com.gaalf.view.BaseGameView;
@@ -66,7 +67,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     boolean paused = false;
     private Entity playerEntity;
     private TextureMapObjectRenderer tmr;
-    private BallFactory ballFactory;
     protected PlayerInfo playerInfo;
     private ArrayList<GameObserver> gameObservers;
     private WorldContactListener worldContactListener;
@@ -142,7 +142,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         world = new World(new Vector2(0, -9.81f), false);
         worldContactListener = new WorldContactListener();
         world.setContactListener(worldContactListener);
-        ballFactory = new BallFactory(world, game.assetManager);
         this.tiledMap = game.levelManager.loadLevel(level);
         tmr = new TextureMapObjectRenderer(tiledMap, game.getBatch());
         tmr.setMap(tiledMap);
@@ -156,11 +155,13 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
     private void initPlayers(){
         for(PlayerInfo player : game.playersManager.getPlayers()){
-            Entity ball = ballFactory.createEntity(player, tiledMap);
             if(player.isThisDevice()){
-                engine.addEntity(createShotIndicator());
-                playerEntity = ball;
                 playerInfo = player;
+                engine.addEntity(ShotIndicatorFactory.createEntity(playerInfo, game.assetManager));
+            }
+            Entity ball = BallFactory.createEntity(playerInfo, tiledMap, world, game.assetManager);
+            if(player.isThisDevice()) {
+                playerEntity = ball;
             }
             engine.addEntity(ball);
         }
@@ -255,25 +256,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     public abstract BaseGameView getView();
 
     public abstract void levelCleared();
-
-    private Entity createShotIndicator(){
-        SpriteComponent spriteComponent = new SpriteComponent();
-        Texture texture = new Texture("arrow.png");
-        spriteComponent.sprite = new Sprite(texture);
-
-        TransformComponent transformComponent = new TransformComponent();
-        transformComponent.pos.set(3, 3);
-        transformComponent.scale.set(0.2f, 0.2f);
-        transformComponent.rotation = 0;
-        transformComponent.visible = false;
-
-        Entity e = new Entity();
-        e.add(spriteComponent);
-        e.add(transformComponent);
-        e.add(new ShotIndicatorComponent());
-        return e;
-
-    }
 
     void setScoreLabel(int playerNumber, String newText){
         getView().setPlayerLabelText(playerNumber, newText);
