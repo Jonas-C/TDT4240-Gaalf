@@ -34,5 +34,4 @@ public class GameView extends BaseGameView {
     public void hide() {
 
     }
-
 }
