@@ -8,6 +8,7 @@ import com.gaalf.game.GameObservable;
 import com.gaalf.game.GameObserver;
 import com.gaalf.game.ecs.ECSObservable;
 import com.gaalf.game.ecs.ECSObserver;
+import com.gaalf.game.ecs.component.SoundComponent;
 import com.gaalf.game.enums.ECSEvent;
 import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.enums.GameEvent;
@@ -37,8 +38,9 @@ public class ScoreSystem extends IteratingSystem implements ECSObserver, ECSObse
     protected void processEntity(Entity entity, float deltaTime) {
         PlayerComponent playerComponent = playerComponentMapper.get(entity);
         if(resetScore){
-            //functionality for storing score from previous map.
+            playerComponent.playerTotalScore += playerComponent.playerScore;
             playerComponent.playerScore = 0;
+            entity.getComponent(SoundComponent.class).sound.play();
             resetScore = false;
         }
         if(playerComponent.playerScore >= MAX_STROKE_LIMIT){
