@@ -1,5 +1,6 @@
 package com.gaalf.presenter;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.files.FileHandle;
 import com.gaalf.GaalfGame;
 import com.gaalf.game.enums.GameEvent;
@@ -41,6 +42,10 @@ public class GamePresenter extends BaseGamePresenter {
                 break;
             case LEVEL_COMPLETE:
                 levelCleared();
+                break;
+            case RESET_BALL:
+                resetBall((Entity) object);
+                break;
             default:
                 break;
         }
