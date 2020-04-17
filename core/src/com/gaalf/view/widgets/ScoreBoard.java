@@ -36,6 +36,8 @@ public class ScoreBoard extends Table{
             Label levelLabel = new Label(Integer.toString(i), skin);
             table.add(levelLabel).width(30).center();
         }
+        Label levelLabel = new Label("SUM", skin);
+        table.add(levelLabel).width(30).center();
         playerScoreTable.add(table);
     }
 
@@ -56,6 +58,9 @@ public class ScoreBoard extends Table{
             levelScore.setName(playerInfo.getPlayerID() + "_" + i);
             table.add(levelScore).width(30).expandX().center();
         }
+        Label levelScore = new Label("0", skin);
+        levelScore.setName(playerInfo.getPlayerID() + "_SUM");
+        table.add(levelScore).width(30).expandX().center();
         playerScoreTable.add(table);
     }
 
@@ -70,10 +75,12 @@ public class ScoreBoard extends Table{
         }
     }
 
-    public void updateScore(int playerID, int level, int score){
+    public void updateScore(int playerID, int level, int score, int totalScore){
         Label scoreLabel = findActor(playerID + "_" + level);
         if(scoreLabel != null){
             scoreLabel.setText(score);
         }
+        scoreLabel = findActor(playerID + "_SUM");
+        scoreLabel.setText(totalScore);
     }
 }

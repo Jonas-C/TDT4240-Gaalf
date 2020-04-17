@@ -179,7 +179,7 @@ public abstract class BaseGameView extends BaseView implements Screen {
         scoreBoard.removePlayer(playerID);
     }
 
-    public void updateScoreboard(int playerID, int level, int score){
-        scoreBoard.updateScore(playerID, level, score);
+    public void updateScoreboard(int playerID, int level, int score, int totalScore){
+        scoreBoard.updateScore(playerID, level, score, totalScore);
     }
 }

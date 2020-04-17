@@ -45,6 +45,7 @@ public class ScoreSystem extends IteratingSystem implements ECSObserver, ECSObse
         if(event == ECSEvent.BALL_FIRED){
             PlayerComponent playerComponent = playerComponentMapper.get(entity);
             playerComponent.playerScore++;
+            playerComponent.playerTotalScore++;
             notifyObservers(GameEvent.SCORE_CHANGED, playerComponent);
         }
     }

@@ -1,5 +1,6 @@
 package com.gaalf.presenter;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.files.FileHandle;
 import com.gaalf.GaalfGame;
 import com.gaalf.game.ecs.component.PlayerComponent;
@@ -39,8 +40,9 @@ public class GamePresenter extends BaseGamePresenter {
     public void onReceiveEvent(GameEvent event, Object object) {
         switch(event){
             case SCORE_CHANGED:
-                setScoreLabel(((PlayerComponent)object).playerNumber, ((PlayerComponent) object).playerName + ": " + ((PlayerComponent) object).playerScore);
-                view.updateScoreboard(((PlayerComponent) object).playerNumber, game.levelManager.getLevelInt(), ((PlayerComponent) object).playerScore);
+                PlayerComponent playerComponent = (PlayerComponent) object;
+                setScoreLabel(playerComponent.playerNumber, playerComponent.playerName + ": " + playerComponent.playerScore);
+                view.updateScoreboard(playerComponent.playerNumber, game.levelManager.getLevelInt(), playerComponent.playerScore, playerComponent.playerTotalScore);
                 break;
             case LEVEL_COMPLETE:
                 levelCleared();

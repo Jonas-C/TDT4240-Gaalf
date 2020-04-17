@@ -54,10 +54,11 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
     public void onReceiveEvent(GameEvent event, Object object) {
         switch(event){
             case SCORE_CHANGED:
-                if(((PlayerComponent)object).onThisDevice){
-                    view.setPlayerLabelText(playerInfo.getPlayerID(), playerInfo.getPlayerName() + ": " + ((PlayerComponent) object).playerScore);
+                PlayerComponent playerComponent = (PlayerComponent) object;
+                if(playerComponent.onThisDevice){
+                    view.setPlayerLabelText(playerInfo.getPlayerID(), playerInfo.getPlayerName() + ": " + (playerComponent.playerScore));
                 }
-                view.updateScoreboard(((PlayerComponent) object).playerNumber, game.levelManager.getLevelInt(), ((PlayerComponent) object).playerScore);
+                view.updateScoreboard(playerComponent.playerNumber, game.levelManager.getLevelInt(), playerComponent.playerScore, playerComponent.playerTotalScore);
                 break;
             case LEVEL_COMPLETE:
                 levelCleared();
