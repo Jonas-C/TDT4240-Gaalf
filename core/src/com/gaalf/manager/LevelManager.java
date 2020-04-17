@@ -65,5 +65,13 @@ public class LevelManager {
         return levels;
     }
 
+    public int getRemainingLevels(){
+        return levels.size() - level;
+    }
+
+    public int getLevelInt(){
+        return level;
+    }
+
 
 }

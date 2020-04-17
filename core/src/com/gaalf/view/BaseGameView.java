@@ -11,7 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.gaalf.GaalfGame;
+import com.gaalf.model.PlayerInfo;
 import com.gaalf.presenter.BaseGamePresenter;
+import com.gaalf.view.widgets.ScoreBoard;
 
 import java.util.HashMap;
 
@@ -21,6 +23,7 @@ public abstract class BaseGameView extends BaseView implements Screen {
     Table table;
     Window pauseWindow = new Window("Pause", getSkin());
     Window levelClearedWindow;
+    private ScoreBoard scoreBoard;
 
     private TextButton pauseButton = new TextButton("Pause", getSkin());
     TextButton nextLevelButton;
@@ -39,6 +42,8 @@ public abstract class BaseGameView extends BaseView implements Screen {
                 presenter.pause();
             }
         });
+
+        scoreBoard = new ScoreBoard(getSkin());
 
 
         table = new Table();
@@ -90,7 +95,7 @@ public abstract class BaseGameView extends BaseView implements Screen {
         return  button;
     }
 
-    Window createModal(String title, Array<TextButton> buttons){
+    Window createModal(String title, Array<TextButton> buttons, boolean addScoreboard){
         Window window = new Window(title, getSkin());
         window.setModal(true);
         window.setResizable(false);
@@ -102,6 +107,10 @@ public abstract class BaseGameView extends BaseView implements Screen {
                 GaalfGame.V_HEIGHT / 2f - window.getHeight() / 2);
         window.getTitleLabel().setStyle(new Label.LabelStyle(getSkin().getFont("button"), Color.WHITE));
         window.getTitleTable().pad(20).center();
+        if(addScoreboard){
+            window.add(scoreBoard);
+            window.row();
+        }
 
         for(TextButton button : buttons){
             window.add(button).width(window.getWidth() / 2).padBottom(15);
@@ -160,5 +169,17 @@ public abstract class BaseGameView extends BaseView implements Screen {
         levelClearedWindow.setVisible(true);
         pauseButton.setDisabled(true);
         pauseButton.setVisible(false);
+    }
+
+    public void addPlayer(PlayerInfo playerInfo, int currentLevel, int mapsAmount){
+        scoreBoard.addPlayer(playerInfo, currentLevel, mapsAmount);
+    }
+
+    public void removePlayer(int playerID){
+        scoreBoard.removePlayer(playerID);
+    }
+
+    public void updateScoreboard(int playerID, int level, int score){
+        scoreBoard.updateScore(playerID, level, score);
     }
 }

@@ -18,11 +18,11 @@ public class MPGameView extends BaseGameView {
 
         Array<TextButton> extraClearedButtons = new Array<>();
         extraClearedButtons.add(nextLevelButton, createExitMainMenuButton());
-        levelClearedWindow = createModal("Level cleared!", extraClearedButtons);
+        levelClearedWindow = createModal("Level cleared!", extraClearedButtons, true);
 
         Array<TextButton> pauseButtons = new Array<>();
         pauseButtons.add(resumeButton, createExitMainMenuButton());
-        pauseWindow = createModal("Pause", pauseButtons);
+        pauseWindow = createModal("Pause", pauseButtons, false);
 
         addActor(table);
         addActor(pauseWindow);
