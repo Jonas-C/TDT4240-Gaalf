@@ -62,8 +62,8 @@ public class WorldContactListener implements ContactListener, ECSObservable {
             notifyObservers(ECSEvent.BALL_GOAL, playerEntity);
         }
         if (waterMapper.has(other)){ // Collision with water
-            notifyObservers(ECSEvent.BALL_OOB, playerEntity);
             other.getComponent(SoundComponent.class).shouldBePlayed=true;
+            notifyObservers(ECSEvent.BALL_OOB, playerEntity);
         }
 
     }

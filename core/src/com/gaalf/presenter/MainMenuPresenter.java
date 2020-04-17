@@ -17,16 +17,23 @@ public class MainMenuPresenter extends BaseMenuPresenter {
     public void startTestLevel(){
         menuMusic.dispose();
 
+//      game.setScreen(new GamePresenter(game, game.levelManager.getLevels().get(0) ));
+        game.playersManager.addPlayer(game.settingsManager.displayName, true,game.settingsManager.getBallChoice());
         game.playersManager.addPlayer("Jonas", true, game.settingsManager.getBallChoice());
         game.devicePlayer = game.playersManager.getPlayers().get(0);
         game.setScreen(new GamePresenter(game, game.levelManager.getRandomLevel()));
+        System.out.println("name:" + game.settingsManager.displayName);
     }
 
     public void openLevelSelectMenu() {
-        game.playersManager.addPlayer("Jonas", true, game.settingsManager.getBallChoice());
+        game.playersManager.addPlayer(game.settingsManager.getDisplayName(), true, game.settingsManager.getBallChoice());
 //        game.playersManager.addPlayer("E", false, "Square");
         game.devicePlayer = game.playersManager.getPlayers().get(0);
         game.setScreen(new MapPackSelectPresenter(game));
+    }
+
+    public void openServersView() {
+        game.setScreen(new ServersPresenter(game));
     }
 
     public void openSettingsView() {

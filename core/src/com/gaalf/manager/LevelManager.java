@@ -48,8 +48,11 @@ public class LevelManager {
     }
 
     public ArrayList<FileHandle> getMapPacks(){
-        getRandomLevel();
         return mapPacks;
+    }
+
+    public FileHandle getFirstMapPackLevel(){
+        return Gdx.files.internal("levels/" + mapPack + "/" + "1.tmx");
     }
 
     public void setLevels(String levelPack){

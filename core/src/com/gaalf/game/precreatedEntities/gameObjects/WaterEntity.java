@@ -17,13 +17,13 @@ public class WaterEntity extends GameObjectEntity {
         WaterComponent waterComponent = new WaterComponent();
         TransformComponent transformComponent = new TransformComponent();
         transformComponent.pos.set((float)mapObject.getProperties().get("x") / PPM, (float)mapObject.getProperties().get("y") / PPM);
-        SoundComponent goalSoundComponent = new SoundComponent();
-        goalSoundComponent.sound = gameAssetManager.manager.get(gameAssetManager.splashSound);
+        SoundComponent soundComponent = new SoundComponent();
+        soundComponent.sound = gameAssetManager.manager.get(gameAssetManager.splashSound);
         BodyComponent bodyComponent = new BodyComponent();
         bodyComponent.body = TiledObjectUtil.parseTiledObjectLayer(world, mapObject);
         bodyComponent.body.getFixtureList().get(0).setSensor(true);
         bodyComponent.body.setUserData(this);
-        add(goalSoundComponent);
+        add(soundComponent);
         add(transformComponent);
         add(waterComponent);
     }

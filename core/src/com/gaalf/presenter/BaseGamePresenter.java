@@ -50,7 +50,7 @@ import com.gaalf.game.precreatedEntities.gameObjects.GameObjectEntity;
 import com.gaalf.game.precreatedEntities.gameObjects.GameObjectFactory;
 import com.gaalf.game.util.TextureMapObjectRenderer;
 import com.gaalf.model.PlayerInfo;
-import com.gaalf.view.GameView;
+import com.gaalf.view.BaseGameView;
 import com.gaalf.game.input.*;
 
 import java.util.ArrayList;
@@ -59,25 +59,26 @@ import static com.gaalf.game.constants.B2DConstants.*;
 
 public abstract class BaseGamePresenter extends BasePresenter implements GameObserver, GameObservable {
 
-    private GameView view;
-    private Engine engine;
-    private World world;
+    Engine engine;
+    World world;
     private OrthographicCamera b2dCam;
     private ExtendViewport b2dViewport;
     private TiledMap tiledMap;
-    private Music gameMusic;
+    Music gameMusic;
     boolean paused = false;
     private Entity playerEntity;
     private TextureMapObjectRenderer tmr;
     private BallFactory ballFactory;
-    private PlayerInfo playerInfo;
+    protected PlayerInfo playerInfo;
     private ArrayList<GameObserver> gameObservers;
     private WorldContactListener worldContactListener;
     private GameObjectFactory gameObjectFactory;
+    ShootableSystem shootableSystem;
+    private float accumulator = 0;
+    private ShotInputHandler shotInputHandler;
 
     BaseGamePresenter(final GaalfGame game, FileHandle level) {
         super(game);
-        view = new GameView(game.getBatch(),this);
         engine = new Engine();
         b2dCam = new OrthographicCamera();
         b2dViewport = new ExtendViewport(GaalfGame.V_WIDTH / PPM, GaalfGame.V_HEIGHT / PPM, b2dCam);
@@ -88,7 +89,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         initPlayers();
 
         RenderingSystem renderingSystem = new RenderingSystem(game.getBatch(), b2dCam, tmr);
-        ShootableSystem shootableSystem = new ShootableSystem();
+        shootableSystem = new ShootableSystem();
         PhysicsSystem physicsSystem = new PhysicsSystem();
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, b2dCam);
         ShotIndicatorSystem shotIndicatorSystem = new ShotIndicatorSystem(playerEntity.getComponent(TransformComponent.class));
@@ -98,7 +99,8 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         OutOfBoundsSystem outOfBoundsSystem = new OutOfBoundsSystem();
 
         shootableSystem.addListener(soundSystem);
-        shootableSystem.addListener(scoreSystem);
+        shootableSystem.addListener((ECSObserver) scoreSystem);
+        shootableSystem.addListener(this);
         scoreSystem.addListener(this);
         worldContactListener.addListener(goalSystem);
         worldContactListener.addListener(outOfBoundsSystem);
@@ -117,12 +119,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
         engine.addSystem(goalSystem);
 
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        ShotInputHandler shotInputHandler = new ShotInputHandler();
-        multiplexer.addProcessor(view);
-        multiplexer.addProcessor(shotInputHandler);
-        Gdx.input.setInputProcessor(multiplexer);
-
+        shotInputHandler = new ShotInputHandler();
 
         shotInputHandler.addListener(shootableSystem);
         shotInputHandler.addListener(shotIndicatorSystem);
@@ -137,12 +134,18 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         if (!game.settingsManager.musicIsEnabled){
             gameMusic.pause();
         }
+    }
 
+    void setupMultiplexer(){
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(getView());
+        multiplexer.addProcessor(shotInputHandler);
+        Gdx.input.setInputProcessor(multiplexer);
 
     }
 
     private void setupGame(FileHandle level){
-        world = new World(new Vector2(0, -9.81f), true);
+        world = new World(new Vector2(0, -9.81f), false);
         worldContactListener = new WorldContactListener();
         world.setContactListener(worldContactListener);
         ballFactory = new BallFactory(world, game.assetManager);
@@ -166,7 +169,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
                 playerInfo = player;
             }
             engine.addEntity(ball);
-            getView().addScoreLabel(player.getPlayerID(), player.getPlayerName());
         }
     }
 
@@ -195,7 +197,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         }
     }
 
-    private void resetBall(Entity ball){
+    void resetBall(Entity ball){
         TransformComponent transformComponent = ball.getComponent(TransformComponent.class);
         SpriteComponent spriteComponent = ball.getComponent(SpriteComponent.class);
         BodyComponent bodyComponent = ball.getComponent(BodyComponent.class);
@@ -204,17 +206,22 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         playerComponent.isFinished = false;
         MapProperties mapProperties = tiledMap.getLayers().get("objects").getObjects().get("startPos").getProperties();
         transformComponent.pos.set((float)mapProperties.get("x") / PPM, (float)mapProperties.get("y") / PPM);
+        bodyComponent.body.setLinearVelocity(0f, 0f);
         bodyComponent.body.setTransform((transformComponent.pos.x -
                 (spriteComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1, 0);
-        bodyComponent.body.setLinearVelocity(0f, 0f);
     }
 
     @Override
     public void update(float delta){
-        if(!paused) {
-            world.step(delta, 6, 2);
-        }
         engine.update(delta);
+        if(!paused) {
+            float frameTime = Math.min(delta, 0.25f);
+            accumulator += frameTime;
+            while(accumulator >= 1/45f) {
+                world.step(1/45f, 6, 2);
+                accumulator -= 1/45f;
+            }
+        }
         getView().update(delta);
     }
 
@@ -225,10 +232,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         super.resize(width, height);
     }
 
-    @Override
-    public GameView getView(){
-        return view;
-    }
 
     @Override
     public void show() {
@@ -255,6 +258,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         getView().dispose();
     }
 
+    @Override
+    public abstract BaseGameView getView();
+
     public abstract void levelCleared();
 
     private Entity createShotIndicator(){
@@ -276,7 +282,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
     }
 
-    private void setScoreLabel(int playerNumber, String newText){
+    void setScoreLabel(int playerNumber, String newText){
         getView().setPlayerLabelText(playerNumber, newText);
     }
 
@@ -285,30 +291,9 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         game.setScreen(new LevelSelectMenuPresenter(game));
     }
 
-    public void exitMainMenu(){
-        gameMusic.dispose();
-        game.playersManager.removePlayer(game.devicePlayer);
-        game.setScreen(new MainMenuPresenter(game));
-    }
+    public abstract void exitMainMenu();
 
     public abstract void nextLevel();
-
-    @Override
-    public void onReceiveEvent(GameEvent event, Object object) {
-        switch(event){
-            case SCORE_CHANGED:
-                setScoreLabel(playerInfo.getPlayerID(), playerInfo.getPlayerName() + ": " + object);
-                break;
-            case LEVEL_COMPLETE:
-                levelCleared();
-                break;
-            case RESET_BALL:
-                resetBall((Entity) object);
-                break;
-            default:
-                break;
-        }
-    }
 
     @Override
     public void addListener(GameObserver observer) {

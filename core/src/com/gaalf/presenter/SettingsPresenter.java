@@ -2,9 +2,12 @@ package com.gaalf.presenter;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.gaalf.GaalfGame;
 import com.gaalf.view.BaseMenuView;
-import com.gaalf.view.BaseView;
 import com.gaalf.view.SettingsView;
 
 public class SettingsPresenter extends BaseMenuPresenter {
@@ -68,11 +71,22 @@ public class SettingsPresenter extends BaseMenuPresenter {
     }
 
     public boolean isSoundEffectsEnabled(){
+
         return game.settingsManager.soundIsEnabled;
     }
     public void setSoundEffectsEnabled(boolean soundEffectsEnabled) {
         game.settingsManager.setSoundEffectsEnabled(soundEffectsEnabled);
     }
+
+    public String getDisplayName(){
+        return game.settingsManager.displayName;
+    }
+
+    public void setDisplayName(String displayName){
+        System.out.println(displayName);
+        game.settingsManager.setDisplayName(displayName);
+    }
+
 
     public void handleBallChange(String button){
         if(button.equals("left_arrow")){

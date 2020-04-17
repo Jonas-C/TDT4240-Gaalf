@@ -13,7 +13,11 @@ public class PlayersManager {
     }
 
     public void addPlayer(String displayName, boolean thisDevice, String ballChoice){
-        players.add(new PlayerInfo(displayName, thisDevice, ballChoice));
+        players.add(new PlayerInfo(displayName, thisDevice, 0, ballChoice));
+    }
+
+    public void addPlayer(PlayerInfo playerInfo){
+        players.add(playerInfo);
     }
 
     public void removePlayer(PlayerInfo removePlayer){
@@ -21,6 +25,16 @@ public class PlayersManager {
         while(playerInfoIterator.hasNext()){
             PlayerInfo player = playerInfoIterator.next();
             if(player.equals(removePlayer)){
+                playerInfoIterator.remove();
+            }
+        }
+    }
+
+    public void removePlayer(int playerID){
+        Iterator<PlayerInfo> playerInfoIterator = players.iterator();
+        while(playerInfoIterator.hasNext()){
+            PlayerInfo player = playerInfoIterator.next();
+            if(player.getPlayerID() == playerID){
                 playerInfoIterator.remove();
             }
         }

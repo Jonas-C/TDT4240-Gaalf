@@ -11,11 +11,13 @@ public class SettingsManager {
     private static final String PREF_SOUND_VOL = "sound";
     private static final String PREF_BALL = "ball";
     private static final String PREFS_NAME = "Settings.preferences";
+    private static final String PREF_DISPLAY_NAME = "displayName";
 
     public float musicVolume;
     public boolean musicIsEnabled;
     public float soundVolume;
     public boolean soundIsEnabled;
+    public String displayName;
     public String ballChoice;
 
     public SettingsManager(){
@@ -23,6 +25,7 @@ public class SettingsManager {
         musicIsEnabled = isMusicEnabled();
         soundVolume = getSoundVolume();
         soundIsEnabled = isSoundEffectsEnabled();
+        displayName = getDisplayName();
         ballChoice = getBallChoice();
     }
 
@@ -31,7 +34,7 @@ public class SettingsManager {
     }
 
     public String getBallChoice(){
-        return getPreferences().getString(PREF_BALL, "Golfball");
+        return getPreferences().getString(PREF_BALL, "Golf ball");
     }
 
     public void setBallChoice(String ballChoice){
@@ -47,7 +50,7 @@ public class SettingsManager {
 
     public void setMusicVolume(float volume){
         getPreferences().putFloat(PREF_MUSIC_VOLUME, volume);
-        getPreferences().flush(); //written to disk and saved (forhåpentligvis)
+        getPreferences().flush(); //written to disk and saved
         musicVolume = volume;
     }
 
@@ -79,5 +82,15 @@ public class SettingsManager {
         getPreferences().putBoolean(PREF_SOUND_ENABLED, soundEffectsEnabled);
         getPreferences().flush();
         soundIsEnabled = soundEffectsEnabled;
+    }
+
+    public String getDisplayName(){
+        return getPreferences().getString(PREF_DISPLAY_NAME);
+    }
+
+    public void setDisplayName(String displayName){
+        getPreferences().putString(PREF_DISPLAY_NAME, displayName);
+        getPreferences().flush();
+        this.displayName = displayName;
     }
 }

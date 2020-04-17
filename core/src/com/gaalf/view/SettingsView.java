@@ -1,23 +1,35 @@
 package com.gaalf.view;
 
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gaalf.presenter.SettingsPresenter;
 
 public class SettingsView extends BaseMenuView {
     private Label ballChoiceLabel;
+    SettingsPresenter presenter;
 
     public SettingsView(SpriteBatch batch, final SettingsPresenter presenter){
         super(batch, presenter);
+        this.presenter = presenter;
+        Label.LabelStyle labelStyle = new Label.LabelStyle(getSkin().get(TextButton.TextButtonStyle.class).font, Color.FOREST);
 
         addTitle("Settings");
+        Table settingsTable = new Table();
 
         final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, getSkin());
         volumeMusicSlider.setValue(presenter.getMusicVolume());
@@ -25,10 +37,10 @@ public class SettingsView extends BaseMenuView {
             @Override
             public boolean handle(Event event) {
                 presenter.setMusicVolume(volumeMusicSlider.getValue());
-
                 return false;
             }
         });
+
 
         final Slider volumeSoundSlider = new Slider(0f, 1f, 0.1f, false, getSkin());
         volumeSoundSlider.setValue(presenter.getSoundVolume());
@@ -62,12 +74,40 @@ public class SettingsView extends BaseMenuView {
             }
         });
 
-        Label volumeMusicLabel = new Label("Music volume", getSkin());
-        Label musicOnOffLabel = new Label("Music", getSkin());
-        Label volumeSoundLabel = new Label("Sound effects volume", getSkin());
-        Label soundOnOffLabel = new Label("Sound effects", getSkin());
-        Label ballLabel = new Label("Chosen ball", getSkin());
-        ballChoiceLabel = new Label("", getSkin());
+        final TextField displayNameField = new TextField(presenter.getDisplayName(), getSkin());
+        displayNameField.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y){
+                Gdx.input.getTextInput(new Input.TextInputListener() {
+                    @Override
+                    public void input(String text) {
+                        presenter.setDisplayName(text);
+                        displayNameField.setText(text);
+                    }
+
+                    @Override
+                    public void canceled() {
+
+                    }
+                }, "Set display name", presenter.getDisplayName(), "");
+            }
+        });
+        final TextButton displayNameButton = new TextButton("Ok", getSkin());
+        displayNameButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                presenter.setDisplayName(displayNameField.getText());
+            }
+        });
+
+
+
+        Label volumeMusicLabel = new Label("Music volume", labelStyle);
+        Label musicOnOffLabel = new Label("Music", labelStyle);
+        Label volumeSoundLabel = new Label("SFX volume", labelStyle);
+        Label soundOnOffLabel = new Label("Sound effects", labelStyle);
+        Label ballLabel = new Label("Choose ball", labelStyle);
+        ballChoiceLabel = new Label("", labelStyle);
         TextButton leftArrowButton = new TextButton("<", getSkin());
         leftArrowButton.addListener(new ChangeListener() {
             @Override
@@ -83,26 +123,38 @@ public class SettingsView extends BaseMenuView {
             }
         });
 
-        table.row();
-        table.add(volumeMusicLabel);
-        table.add(volumeMusicSlider);
-        table.row();
-        table.add(musicOnOffLabel);
-        table.add(musicCheckbox);
-        table.row();
-        table.add(volumeSoundLabel);
-        table.add(volumeSoundSlider);
-        table.row();
-        table.add(soundOnOffLabel);
-        table.add(soundCheckbox);
-        table.row();
-        table.add(ballLabel);
-        table.row();
-        table.add(leftArrowButton);
-        table.add(ballChoiceLabel);
-        table.add(rightArrowButton);
+        Label displayNameLabel = new Label("Choose Display Name", labelStyle);
 
+        settingsTable.row().padBottom(20);
+        settingsTable.add(volumeMusicLabel).expandX().fill().left().padRight(10);
+        settingsTable.add(volumeMusicSlider).left();
+        settingsTable.row().padBottom(20);
+        settingsTable.add(musicOnOffLabel).expandX().fill().left();
+        settingsTable.add(musicCheckbox).left();
+        settingsTable.row().padBottom(20);
+        settingsTable.add(volumeSoundLabel).expandX().fill().left();
+        settingsTable.add(volumeSoundSlider).left();
+        settingsTable.row().padBottom(20);
+        settingsTable.add(soundOnOffLabel).expandX().fill().left();
+        settingsTable.add(soundCheckbox).left();
+        settingsTable.row().padBottom(10);
+        settingsTable.add(ballLabel).colspan(3).center();
+        settingsTable.row().padBottom(20);
+        Table ballSettingsTable = new Table();
+        ballSettingsTable.add(leftArrowButton).left();
+        ballSettingsTable.add(ballChoiceLabel).center().expand();
+        ballSettingsTable.add(rightArrowButton).right();
+        settingsTable.add(ballSettingsTable).colspan(3).expand().fill();
+        settingsTable.row().padTop(10);
+        settingsTable.add(displayNameLabel).colspan(2).center();
+        settingsTable.row().padTop(10);
+        settingsTable.add(displayNameField).right();
+        settingsTable.add(displayNameButton).center();
 
+        table.row();
+
+        table.add(settingsTable);
+        table.row();
         TextButton backButton = addBackButton();
         backButton.addListener(new ChangeListener() {
             @Override
@@ -110,6 +162,7 @@ public class SettingsView extends BaseMenuView {
                 presenter.openMainMenuView();
             }
         });
+        table.row();
         addActor(table);
     }
 

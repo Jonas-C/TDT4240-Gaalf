@@ -14,17 +14,16 @@ public abstract class BaseMenuView extends BaseView {
 
     Table table;
 
-    private final float BUTTON_WIDTH = getViewport().getScreenWidth() / 5;
-    private final float TABLE_PADDING = 20;
-    private final float TITLE_BTM_PADDING = 50; // BTM is BOTTOM if you didn't catch that
-    private final float BUTTON_BTM_PADDING = 15;
-    private final float BACK_BUTTON_TOP_PADDING = 30;
+    final float BUTTON_WIDTH = getViewport().getScreenWidth() / 5;
+    final float TITLE_BTM_PADDING = 50; // BTM is BOTTOM if you didn't catch that
+    final float BUTTON_BTM_PADDING = 15;
+    final float BACK_BUTTON_TOP_PADDING = 30;
 
     BaseMenuView(SpriteBatch batch, BaseMenuPresenter presenter){
         super(batch, presenter);
         table = new Table();
         table.top();
-        table.pad(TABLE_PADDING);
+        table.padTop(GaalfGame.V_HEIGHT / 6);
         table.setFillParent(true);
     }
 
