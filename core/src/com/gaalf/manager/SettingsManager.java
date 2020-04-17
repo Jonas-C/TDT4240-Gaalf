@@ -5,6 +5,8 @@ import com.badlogic.gdx.Preferences;
 
 public class SettingsManager {
 
+    private Preferences preferences;
+
     private static final String PREF_MUSIC_VOLUME = "volume";
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
@@ -33,7 +35,11 @@ public class SettingsManager {
     }
 
     private Preferences getPreferences(){
-        return Gdx.app.getPreferences(PREFS_NAME);
+        if(preferences == null){
+            preferences = Gdx.app.getPreferences(PREFS_NAME);
+            preferences.flush();
+        }
+        return preferences;
     }
 
     public String getShotIndicatorChoice() {
