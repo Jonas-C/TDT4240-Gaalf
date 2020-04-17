@@ -1,5 +1,6 @@
 package com.gaalf.presenter;
 
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -65,6 +66,11 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
                 break;
             case BALL_STROKE:
                 mpgc.sendBallHit((Vector2)object);
+                break;
+            case RESET_BALL:
+                resetBall((Entity) object);
+                ballReset(((Entity) object).getComponent(PlayerComponent.class).playerNumber);
+                break;
             default:
                 break;
         }
