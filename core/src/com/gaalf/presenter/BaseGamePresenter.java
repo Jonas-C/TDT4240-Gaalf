@@ -102,6 +102,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         worldContactListener.addListener(goalSystem);
         goalSystem.addListener(this);
         scoreSystem.addListener((ECSObserver) goalSystem);
+        this.addListener(goalSystem);
 
         engine.addSystem(shootableSystem);
         engine.addSystem(physicsSystem);

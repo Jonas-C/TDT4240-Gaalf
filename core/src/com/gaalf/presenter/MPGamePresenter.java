@@ -69,6 +69,9 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
 
     @Override
     public void playerQuit(int playerId) {
+        game.playersManager.removePlayer(playerId);
+        view.removePlayer(playerId);
+        notifyObservers(GameEvent.PLAYER_LEFT, playerId);
         ImmutableArray<Entity> balls = engine.getEntitiesFor(Family.all(PlayerComponent.class).get());
         for(Entity ball : balls){
             PlayerComponent playerComponent = ball.getComponent(PlayerComponent.class);
