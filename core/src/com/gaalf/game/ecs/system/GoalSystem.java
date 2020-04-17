@@ -17,10 +17,10 @@ import java.util.ArrayList;
 
 public class GoalSystem extends IteratingSystem implements ECSObserver, GameObservable, GameObserver {
     private int playerCount;
-    private int playersFinished = 0;
     private ArrayList<GameObserver> gameObservers;
     private ArrayList<PlayerInfo> players;
     private TiledMap tiledMap;
+    private ArrayList<Integer> finishedPlayers;
 
 
     public GoalSystem(ArrayList<PlayerInfo> players){
@@ -28,34 +28,16 @@ public class GoalSystem extends IteratingSystem implements ECSObserver, GameObse
         this.players = players;
         this.playerCount = players.size();
         gameObservers = new ArrayList<>();
+        finishedPlayers = new ArrayList<>();
 
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
-        if(playersFinished >= playerCount){
+        if(finishedPlayers.size() >= playerCount){
             notifyObservers(GameEvent.LEVEL_COMPLETE, null);
-            playersFinished = 0;
+            finishedPlayers.clear();
         }
-//        if(goalEntity == null && entity.getComponent(GoalComponent.class) != null){
-//            goalEntity = entity;
-//        } else if(goalEntity != null) {
-//            TransformComponent transformComponentPlayer = transformMapper.get(entity);
-//            TransformComponent transformComponentGoal = goalEntity.getComponent(TransformComponent.class);
-//            Vector2 posPlayer = transformComponentPlayer.pos;
-//            Vector2 posGoal = transformComponentGoal.pos;
-//            if ((posPlayer.x < posGoal.x + 0.2f) && (posPlayer.x > posGoal.x - 0.2f)) {
-//                if ((posPlayer.y < posGoal.y + 0.2f) && (posPlayer.y > posGoal.y - 0.2f)) {
-//                    if (!playerMapper.get(entity).isFinished) {
-//                        playerMapper.get(entity).isFinished = true;
-//                        goalEntity.getComponent(SoundComponent.class).shouldBePlayed = true;
-//                        System.out.println("Goal");
-////                    Body playerBody = entity.getComponent(BodyComponent.class).body;
-////                    playerBody.setAwake(false);
-//                    }
-//                }
-//            }
-//        }
     }
 
     @Override
@@ -75,9 +57,8 @@ public class GoalSystem extends IteratingSystem implements ECSObserver, GameObse
     private void playerFinished(Entity entity){
         PlayerComponent playerComponent = entity.getComponent(PlayerComponent.class);
         if(!playerComponent.isFinished) {
-            System.out.println(playerComponent.playerName + " finished!");
             playerComponent.isFinished = true;
-            playersFinished++;
+            finishedPlayers.add(playerComponent.playerNumber);
         }
     }
 
@@ -102,7 +83,13 @@ public class GoalSystem extends IteratingSystem implements ECSObserver, GameObse
     public void onReceiveEvent(GameEvent event, Object object) {
         switch(event){
             case LEVEL_NEW:
+                finishedPlayers.clear();
                 playerCount = players.size();
+                break;
+            case PLAYER_LEFT:
+                playerCount = players.size();
+                finishedPlayers.remove(object);
+                System.out.println(finishedPlayers.toString());
                 break;
             default:
                 break;

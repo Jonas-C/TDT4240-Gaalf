@@ -13,11 +13,11 @@ public class GameView extends BaseGameView {
         super(batch, presenter);
         Array<TextButton> pauseButtons = new Array<>();
         pauseButtons.add(resumeButton, createExitLevelSelectButton(), createExitMainMenuButton());
-        pauseWindow = createModal("Pause", pauseButtons);
+        pauseWindow = createModal("Pause", pauseButtons, false);
 
         Array<TextButton> extraClearedButtons = new Array<>();
         extraClearedButtons.add(nextLevelButton, createExitLevelSelectButton(), createExitMainMenuButton());
-        levelClearedWindow = createModal("Level cleared!", extraClearedButtons);
+        levelClearedWindow = createModal("Level cleared!", extraClearedButtons, true);
 
 
         addActor(table);

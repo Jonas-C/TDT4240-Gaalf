@@ -22,7 +22,6 @@ public class ScoreSystem extends IteratingSystem implements ECSObserver, ECSObse
 
     private ArrayList<ECSObserver> ecsObservers;
     private ArrayList<GameObserver> gameObservers;
-    private boolean resetScore;
 
     private ComponentMapper<PlayerComponent> playerComponentMapper;
 
@@ -31,16 +30,10 @@ public class ScoreSystem extends IteratingSystem implements ECSObserver, ECSObse
         playerComponentMapper = ComponentMapper.getFor(PlayerComponent.class);
         ecsObservers = new ArrayList<>();
         gameObservers = new ArrayList<>();
-        resetScore = false;
     }
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         PlayerComponent playerComponent = playerComponentMapper.get(entity);
-        if(resetScore){
-            //functionality for storing score from previous map.
-            playerComponent.playerScore = 0;
-            resetScore = false;
-        }
         if(playerComponent.playerScore >= MAX_STROKE_LIMIT){
             notifyObservers(ECSEvent.STROKE_LIMIT_REACHED, entity);
         }
@@ -52,7 +45,8 @@ public class ScoreSystem extends IteratingSystem implements ECSObserver, ECSObse
         if(event == ECSEvent.BALL_FIRED){
             PlayerComponent playerComponent = playerComponentMapper.get(entity);
             playerComponent.playerScore++;
-            notifyObservers(GameEvent.SCORE_CHANGED, playerComponent.playerScore);
+            playerComponent.playerTotalScore++;
+            notifyObservers(GameEvent.SCORE_CHANGED, playerComponent);
         }
     }
 
@@ -94,7 +88,10 @@ public class ScoreSystem extends IteratingSystem implements ECSObserver, ECSObse
     public void onReceiveEvent(GameEvent event, Object object) {
         switch(event){
             case LEVEL_NEW:
-                resetScore = true;
+                for(Entity entity : getEngine().getEntitiesFor(Family.all((PlayerComponent.class)).get())){
+                    PlayerComponent playerComponent = entity.getComponent(PlayerComponent.class);
+                    playerComponent.playerScore = 0;
+                }
                 break;
             default:
                 break;

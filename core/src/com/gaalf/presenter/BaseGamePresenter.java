@@ -107,6 +107,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         outOfBoundsSystem.addListener(this);
         goalSystem.addListener(this);
         scoreSystem.addListener((ECSObserver) goalSystem);
+        this.addListener(goalSystem);
 
         engine.addSystem(shootableSystem);
         engine.addSystem(physicsSystem);
@@ -173,6 +174,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     }
 
     void newLevel(TiledMap level){
+        getView().setPlayerLabelText(playerInfo.getPlayerID(), playerInfo.getPlayerName() + ": 0");
         this.tiledMap = level;
         tmr.setMap(tiledMap);
         Array<Body> bodies = new Array<>();
@@ -186,6 +188,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
                     world.destroyBody(body);
                     MapObjects mapObjects = tiledMap.getLayers().get("collision").getObjects();
                     for(MapObject mapObject : mapObjects){
+                        gameObjectFactory.createEntity(mapObject);
                         gameObjectFactory.createEntity(mapObject);
                     }
                 }
