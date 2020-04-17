@@ -32,9 +32,9 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
         levelWon = false;
         mpgc.setMpGameListener(this);
         addListener(shootableSystem);
+        view.addScoreLabel(playerInfo.getPlayerID(), playerInfo.getPlayerName());
         for(PlayerInfo playerInfo : game.playersManager.getPlayers()){
             view.addPlayer(playerInfo, game.levelManager.getLevelInt(), game.levelManager.getLevels().size());
-            view.addScoreLabel(playerInfo.getPlayerID(), playerInfo.getPlayerName());
         }
     }
 
@@ -54,7 +54,9 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
     public void onReceiveEvent(GameEvent event, Object object) {
         switch(event){
             case SCORE_CHANGED:
-                setScoreLabel(((PlayerComponent)object).playerNumber, ((PlayerComponent) object).playerName + ": " + ((PlayerComponent) object).playerScore);
+                if(((PlayerComponent)object).onThisDevice){
+                    view.setPlayerLabelText(playerInfo.getPlayerID(), playerInfo.getPlayerName() + ": " + ((PlayerComponent) object).playerScore);
+                }
                 view.updateScoreboard(((PlayerComponent) object).playerNumber, game.levelManager.getLevelInt(), ((PlayerComponent) object).playerScore);
                 break;
             case LEVEL_COMPLETE:

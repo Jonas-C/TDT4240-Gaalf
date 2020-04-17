@@ -83,6 +83,7 @@ public class GoalSystem extends IteratingSystem implements ECSObserver, GameObse
     public void onReceiveEvent(GameEvent event, Object object) {
         switch(event){
             case LEVEL_NEW:
+                finishedPlayers.clear();
                 playerCount = players.size();
                 break;
             case PLAYER_LEFT:
