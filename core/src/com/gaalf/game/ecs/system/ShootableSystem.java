@@ -105,10 +105,13 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
             case BALL_STROKE:
                 mpShot = (AbstractMap.SimpleEntry)object;
                 System.out.println(((AbstractMap.SimpleEntry) object).getValue());
+                break;
             default:
                 break;
         }
     }
+
+
 
     @Override
     public void addListener(GameObserver observer) {
