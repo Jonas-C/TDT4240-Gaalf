@@ -185,7 +185,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
                     world.destroyBody(body);
                     MapObjects mapObjects = tiledMap.getLayers().get("collision").getObjects();
                     for(MapObject mapObject : mapObjects){
-                        gameObjectFactory.createEntity(mapObject);
+                        engine.addEntity(gameObjectFactory.createEntity(mapObject));
                     }
                 }
             }

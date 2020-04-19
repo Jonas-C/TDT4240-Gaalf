@@ -53,7 +53,6 @@ public class ResetSystem extends IteratingSystem implements ECSObserver, GameObs
         bodyComponent.body.setAngularVelocity(0);
         bodyComponent.body.setTransform((transformComponent.pos.x -
                 (spriteComponent.sprite.getRegionWidth() / 2f / PPM) * transformComponent.scale.x), transformComponent.pos.y + 1, 0);
-
         entity.remove(ResetComponent.class);
     }
 
