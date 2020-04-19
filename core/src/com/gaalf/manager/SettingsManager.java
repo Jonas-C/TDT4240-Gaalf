@@ -5,11 +5,14 @@ import com.badlogic.gdx.Preferences;
 
 public class SettingsManager {
 
+    private Preferences preferences;
+
     private static final String PREF_MUSIC_VOLUME = "volume";
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOL = "sound";
     private static final String PREF_BALL = "ball";
+    private static final String PREF_SHOT_INDICATOR = "shot indicator";
     private static final String PREFS_NAME = "Settings.preferences";
     private static final String PREF_DISPLAY_NAME = "displayName";
 
@@ -19,6 +22,7 @@ public class SettingsManager {
     public boolean soundIsEnabled;
     public String displayName;
     public String ballChoice;
+    public String shotIndicatorChoice;
 
     public SettingsManager(){
         musicVolume = getMusicVolume();
@@ -27,10 +31,26 @@ public class SettingsManager {
         soundIsEnabled = isSoundEffectsEnabled();
         displayName = getDisplayName();
         ballChoice = getBallChoice();
+        shotIndicatorChoice = getShotIndicatorChoice();
     }
 
     private Preferences getPreferences(){
-        return Gdx.app.getPreferences(PREFS_NAME);
+        if(preferences == null){
+            preferences = Gdx.app.getPreferences(PREFS_NAME);
+            preferences.flush();
+        }
+        return preferences;
+    }
+
+    public String getShotIndicatorChoice() {
+        return getPreferences().getString(PREF_SHOT_INDICATOR, "White SI");
+    }
+
+    public void setShotIndicatorChoice(String newChoice) {
+        if(!newChoice.equals(getBallChoice())) {
+            getPreferences().putString(PREF_SHOT_INDICATOR, newChoice);
+            getPreferences().flush();
+        }
     }
 
     public String getBallChoice(){

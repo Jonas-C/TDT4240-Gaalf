@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
 import com.gaalf.game.GameObserver;
+import com.gaalf.game.ecs.component.DevicePlayerComponent;
 import com.gaalf.game.ecs.component.ShotIndicatorComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.game.enums.GameEvent;
@@ -16,19 +17,22 @@ public class ShotIndicatorSystem extends IteratingSystem implements GameObserver
     private Vector2 originalTouchPos;
     private Vector2 distanceDragged;
 
-    public ShotIndicatorSystem(TransformComponent playerTransform){
-        super(Family.all(ShotIndicatorComponent.class).get());
-        this.playerTransform = playerTransform;
+    public ShotIndicatorSystem(){
+        super(Family.all(DevicePlayerComponent.class).get());
+
         originalTouchPos = new Vector2();
         distanceDragged = new Vector2();
     }
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         if(shotIndicatorTransform == null){
-            shotIndicatorTransform = entity.getComponent(TransformComponent.class);
+            playerTransform = getEngine().getEntitiesFor(Family.all(DevicePlayerComponent.class).get()).get(0).getComponent(TransformComponent.class);
+            shotIndicatorTransform = getEngine().getEntitiesFor(Family.all(ShotIndicatorComponent.class).get()).get(0).getComponent(TransformComponent.class);
         }
-        shotIndicatorTransform.pos.set(playerTransform.pos.x, playerTransform.pos.y + 0.4f);
-
+        if(shotIndicatorTransform.visible) {
+            shotIndicatorTransform.pos.set(playerTransform.pos.x, playerTransform.pos.y + 0.4f);
+        }
+        playerTransform = entity.getComponent(TransformComponent.class);
     }
 
     private void updateShotIndicator(Vector2 touchPos){

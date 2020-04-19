@@ -5,7 +5,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.gaalf.game.ecs.ECSObserver;
-import com.gaalf.game.ecs.component.WaterComponent;
 import com.gaalf.game.enums.ECSEvent;
 import com.gaalf.game.ecs.component.SoundComponent;
 import com.gaalf.manager.SettingsManager;

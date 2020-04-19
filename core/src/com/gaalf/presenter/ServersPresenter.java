@@ -73,7 +73,8 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
     @Override
     public void lobbyJoinAccepted(int yourPlayerId, GameData gameData) {
         game.devicePlayer = new PlayerInfo(playerName, true,
-                yourPlayerId, game.settingsManager.getBallChoice());
+                yourPlayerId, game.settingsManager.getBallChoice(),
+                game.settingsManager.getShotIndicatorChoice());
         game.playersManager.addPlayer(game.devicePlayer);
         this.gameData = gameData;
         canJoin = true;

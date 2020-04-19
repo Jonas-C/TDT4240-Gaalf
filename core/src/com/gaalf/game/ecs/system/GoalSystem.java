@@ -89,7 +89,6 @@ public class GoalSystem extends IteratingSystem implements ECSObserver, GameObse
             case PLAYER_LEFT:
                 playerCount = players.size();
                 finishedPlayers.remove(object);
-                System.out.println(finishedPlayers.toString());
                 break;
             default:
                 break;

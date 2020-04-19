@@ -66,10 +66,6 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
                 BallStrokeEventArgs ballStroke = (BallStrokeEventArgs) object;
                 mpgc.sendBallHit(ballStroke.startPosition, ballStroke.velocity);
                 break;
-            case RESET_BALL:
-                resetBall((Entity) object);
-                ballReset(((Entity) object).getComponent(PlayerComponent.class).playerNumber);
-                break;
             default:
                 break;
         }

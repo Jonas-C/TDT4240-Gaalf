@@ -15,7 +15,7 @@ public abstract class BaseMenuView extends BaseView {
     Table table;
 
     final float BUTTON_WIDTH = getViewport().getScreenWidth() / 5;
-    final float TITLE_BTM_PADDING = 50; // BTM is BOTTOM if you didn't catch that
+    final float TITLE_BTM_PADDING = 20; // BTM is BOTTOM if you didn't catch that
     final float BUTTON_BTM_PADDING = 15;
     final float BACK_BUTTON_TOP_PADDING = 30;
 
@@ -23,7 +23,7 @@ public abstract class BaseMenuView extends BaseView {
         super(batch, presenter);
         table = new Table();
         table.top();
-        table.padTop(GaalfGame.V_HEIGHT / 6);
+        table.padTop(GaalfGame.V_HEIGHT / 12);
         table.setFillParent(true);
     }
 

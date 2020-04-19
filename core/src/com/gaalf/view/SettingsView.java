@@ -20,7 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.gaalf.presenter.SettingsPresenter;
 
 public class SettingsView extends BaseMenuView {
-    private Label ballChoiceLabel;
+    private final Label ballChoiceLabel;
+    private final Label sIChoiceLabel;
     SettingsPresenter presenter;
 
     public SettingsView(SpriteBatch batch, final SettingsPresenter presenter){
@@ -106,20 +107,38 @@ public class SettingsView extends BaseMenuView {
         Label musicOnOffLabel = new Label("Music", labelStyle);
         Label volumeSoundLabel = new Label("SFX volume", labelStyle);
         Label soundOnOffLabel = new Label("Sound effects", labelStyle);
+
         Label ballLabel = new Label("Choose ball", labelStyle);
         ballChoiceLabel = new Label("", labelStyle);
-        TextButton leftArrowButton = new TextButton("<", getSkin());
-        leftArrowButton.addListener(new ChangeListener() {
+        TextButton ballLeftArrowButton = new TextButton("<", getSkin());
+        ballLeftArrowButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 presenter.handleBallChange("left_arrow");
             }
         });
-        TextButton rightArrowButton = new TextButton(">", getSkin());
-        rightArrowButton.addListener(new ChangeListener() {
+        TextButton ballRightArrowButton = new TextButton(">", getSkin());
+        ballRightArrowButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 presenter.handleBallChange("right_arrow");
+            }
+        });
+
+        Label sILabel = new Label("Choose shot indicator", labelStyle);
+        sIChoiceLabel = new Label("", labelStyle);
+        TextButton sILeftArrowButton = new TextButton("<", getSkin());
+        sILeftArrowButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                presenter.handleShotIndicatorChange("left_arrow");
+            }
+        });
+        TextButton sIrightArrowButton = new TextButton(">", getSkin());
+        sIrightArrowButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                presenter.handleShotIndicatorChange("right_arrow");
             }
         });
 
@@ -138,14 +157,25 @@ public class SettingsView extends BaseMenuView {
         settingsTable.add(soundOnOffLabel).expandX().fill().left();
         settingsTable.add(soundCheckbox).left();
         settingsTable.row().padBottom(10);
+
         settingsTable.add(ballLabel).colspan(3).center();
         settingsTable.row().padBottom(20);
         Table ballSettingsTable = new Table();
-        ballSettingsTable.add(leftArrowButton).left();
+        ballSettingsTable.add(ballLeftArrowButton).left();
         ballSettingsTable.add(ballChoiceLabel).center().expand();
-        ballSettingsTable.add(rightArrowButton).right();
+        ballSettingsTable.add(ballRightArrowButton).right();
         settingsTable.add(ballSettingsTable).colspan(3).expand().fill();
         settingsTable.row().padTop(10);
+
+        settingsTable.add(sILabel).colspan(3).center();
+        settingsTable.row().padBottom(20);
+        Table shotIndicatorSettingsTable = new Table();
+        shotIndicatorSettingsTable.add(sILeftArrowButton).left();
+        shotIndicatorSettingsTable.add(sIChoiceLabel).center().expand();
+        shotIndicatorSettingsTable.add(sIrightArrowButton).right();
+        settingsTable.add(shotIndicatorSettingsTable).colspan(3).expand().fill();
+        settingsTable.row().padTop(10);
+
         settingsTable.add(displayNameLabel).colspan(2).center();
         settingsTable.row().padTop(10);
         settingsTable.add(displayNameField).right();
@@ -174,5 +204,9 @@ public class SettingsView extends BaseMenuView {
 
     public void setBallChoiceLabel(String ballChoice){
         ballChoiceLabel.setText(ballChoice);
+    }
+
+    public void setSIChoiceLabel(String shotIndicatorChoice) {
+        sIChoiceLabel.setText(shotIndicatorChoice);
     }
 }
