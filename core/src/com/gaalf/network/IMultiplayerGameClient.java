@@ -26,9 +26,10 @@ public interface IMultiplayerGameClient {
 
     /**
      * Signals that the local player's ball has been hit.
+     * @param startPosition the position of the ball at the time is was hit
      * @param velocity the velocity of the ball hit
      */
-    void sendBallHit(Vector2 velocity);
+    void sendBallHit(Vector2 startPosition, Vector2 velocity);
 
     /**
      * Proceeds to the next level.

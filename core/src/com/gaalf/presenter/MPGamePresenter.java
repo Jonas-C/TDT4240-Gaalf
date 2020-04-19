@@ -40,7 +40,8 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
     }
 
     @Override
-    public void ballHit(int playerId, Vector2 velocity) {
+    public void ballHit(int playerId, Vector2 startPosition, Vector2 velocity) {
+        // TODO: startPosition of ball
         AbstractMap.SimpleEntry<Integer, Vector2> shot = new AbstractMap.SimpleEntry<>(playerId, velocity);
         notifyObservers(GameEvent.BALL_STROKE, shot);
     }
@@ -65,7 +66,8 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
                 levelCleared();
                 break;
             case BALL_STROKE:
-                mpgc.sendBallHit((Vector2)object);
+                // TODO: startPosition of ball
+                mpgc.sendBallHit(null, (Vector2)object);
                 break;
             case RESET_BALL:
                 resetBall((Entity) object);

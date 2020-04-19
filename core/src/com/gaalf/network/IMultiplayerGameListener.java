@@ -9,9 +9,10 @@ public interface IMultiplayerGameListener {
     /**
      * Called when an opponent has hit its ball.
      * @param playerId the id of the player/ball which was hit
+     * @param startPosition the position of the ball at the time is was hit
      * @param velocity the velocity of the hit
      */
-    void ballHit(int playerId, Vector2 velocity);
+    void ballHit(int playerId, Vector2 startPosition, Vector2 velocity);
 
     /**
      * Called when proceeding to the next level.

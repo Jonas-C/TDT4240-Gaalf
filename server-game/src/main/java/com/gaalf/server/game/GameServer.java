@@ -95,7 +95,8 @@ public class GameServer {
             log.debug("Player {} hit ball", playerConnection.playerData.playerName);
             // Forward ball hit message to other players
             kryoServer.sendToAllExceptTCP(playerConnection.getID(),
-                    new BallHitMessage(playerConnection.getID(), message.velocity));
+                    new BallHitMessage(playerConnection.getID(),
+                            message.startPosition, message.velocity));
         }
     }
 
