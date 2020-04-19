@@ -46,11 +46,11 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
     }
 
     @Override
-    public void joinLobby(String playerName, String ballType, String shotIndicator) {
+    public void joinLobby(String playerName, String ballType) {
         if (state != State.NOT_JOINED) {
             throw new IllegalStateException("Game is already joined");
         }
-        kryoClient.sendTCP(new JoinLobbyRequestMessage(playerName, ballType, shotIndicator));
+        kryoClient.sendTCP(new JoinLobbyRequestMessage(playerName, ballType));
     }
 
     @Override

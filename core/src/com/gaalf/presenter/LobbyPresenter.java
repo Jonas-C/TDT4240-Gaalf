@@ -30,7 +30,7 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
                         false,
                         playerData.playerId,
                         playerData.ballType,
-                        playerData.shotIndicator);
+                        null); // Don't need to know the shot indicators of opponents
                 game.playersManager.addPlayer(playerInfo);
             }
         }
@@ -49,7 +49,7 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
                 false,
                 playerData.playerId,
                 playerData.ballType,
-                playerData.shotIndicator);
+                null); // Don't need to know the shot indicators of opponents
         game.playersManager.addPlayer(playerInfo);
     }
 
