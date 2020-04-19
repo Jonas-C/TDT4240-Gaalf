@@ -93,7 +93,6 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
         switch(event){
             case TOUCH_UP:
                 touchUp = true;
-                System.out.println(distanceDragged);
                 break;
             case TOUCH_DRAG:
                 if(prevTouch.isZero()){
@@ -104,7 +103,6 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
                 break;
             case BALL_STROKE:
                 mpShot = (AbstractMap.SimpleEntry)object;
-                System.out.println(((AbstractMap.SimpleEntry) object).getValue());
                 break;
             default:
                 break;

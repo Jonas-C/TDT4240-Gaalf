@@ -1,0 +1,20 @@
+
+shotIndicators.png
+size: 512,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Red SI
+  rotate: false
+  xy: 2, 52
+  size: 258, 195
+  orig: 258, 195
+  offset: 0, 0
+  index: -1
+White SI
+  rotate: false
+  xy: 2, 2
+  size: 91, 48
+  orig: 91, 48
+  offset: 0, 0
+  index: -1

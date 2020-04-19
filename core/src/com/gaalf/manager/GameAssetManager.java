@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.gaalf.game.ecs.predefinedEntities.shotIndicators.ShotIndicator;
 
 public class GameAssetManager {
     public final AssetManager manager = new AssetManager();
@@ -20,6 +21,7 @@ public class GameAssetManager {
 
 
     public final String ballSpriteAtlas = "balls/balls.atlas";
+    public final String shotIndicatorSpriteAtlas = "shotIndicators/shotIndicators.atlas";
 
     public final String cloudsAtlas = "clouds.atlas";
 
@@ -38,6 +40,7 @@ public class GameAssetManager {
 
     public void loadSprites(){
         manager.load(ballSpriteAtlas, TextureAtlas.class);
+        manager.load(shotIndicatorSpriteAtlas, TextureAtlas.class);
     }
 
     public void loadBackground(){
