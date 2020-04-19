@@ -8,8 +8,6 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
@@ -25,9 +23,9 @@ import com.gaalf.game.GameObserver;
 import com.gaalf.game.ecs.ECSObserver;
 import com.gaalf.game.ecs.WorldContactListener;
 import com.gaalf.game.ecs.component.BodyComponent;
+import com.gaalf.game.ecs.component.DevicePlayerComponent;
 import com.gaalf.game.ecs.component.GoalComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
-import com.gaalf.game.ecs.component.ShotIndicatorComponent;
 import com.gaalf.game.ecs.component.SpriteComponent;
 import com.gaalf.game.ecs.component.TerrainComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
@@ -67,7 +65,6 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     private TiledMap tiledMap;
     Music gameMusic;
     boolean paused = false;
-    private Entity playerEntity;
     private TextureMapObjectRenderer tmr;
     protected PlayerInfo playerInfo;
     private ArrayList<GameObserver> gameObservers;
@@ -92,7 +89,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         shootableSystem = new ShootableSystem();
         PhysicsSystem physicsSystem = new PhysicsSystem();
         PhysicsDebugSystem physicsDebugSystem = new PhysicsDebugSystem(world, b2dCam);
-        ShotIndicatorSystem shotIndicatorSystem = new ShotIndicatorSystem(playerEntity.getComponent(TransformComponent.class));
+        ShotIndicatorSystem shotIndicatorSystem = new ShotIndicatorSystem();
         SoundSystem soundSystem = new SoundSystem(game.settingsManager);
         ScoreSystem scoreSystem = new ScoreSystem();
         GoalSystem goalSystem = new GoalSystem(game.playersManager.getPlayers());
@@ -162,13 +159,11 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
 
     private void initPlayers(){
         for(PlayerInfo player : game.playersManager.getPlayers()){
-            if(player.isThisDevice()){
-                playerInfo = player;
-                engine.addEntity(ShotIndicatorFactory.createEntity(playerInfo, game.assetManager));
-            }
-            Entity ball = BallFactory.createEntity(playerInfo, tiledMap, world, game.assetManager);
+            Entity ball = BallFactory.createEntity(player, tiledMap, world, game.assetManager);
             if(player.isThisDevice()) {
-                playerEntity = ball;
+                ball.add(new DevicePlayerComponent());
+                playerInfo = player;
+                engine.addEntity(ShotIndicatorFactory.createEntity(player, game.assetManager));
             }
             engine.addEntity(ball);
         }
