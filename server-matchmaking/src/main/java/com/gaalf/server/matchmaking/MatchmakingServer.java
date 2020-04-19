@@ -21,11 +21,11 @@ public class MatchmakingServer {
     private Server kryoServer;
     private List<ServerAddress> gameServers;
 
-    public MatchmakingServer(Server kryoServer) {
+    public MatchmakingServer(Server kryoServer, boolean local) {
         this.kryoServer = kryoServer;
         gameServers = new ArrayList<>();
 
-        if ("local".equals(System.getProperty("gaalf.env"))) {
+        if (local) {
             gameServers.add(new ServerAddress("localhost", 7001));
         }
         else {
