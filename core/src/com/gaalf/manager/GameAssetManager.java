@@ -17,6 +17,8 @@ public class GameAssetManager {
     // Sounds
     public final String jumpSound = "sounds/JumpSound.wav";
     public final String finishSound = "sounds/FinishSound.wav";
+    public final String splashSound = "sounds/WaterSplashSound.wav";
+
 
     public final String ballSpriteAtlas = "balls/balls.atlas";
     public final String shotIndicatorSpriteAtlas = "shotIndicators/shotIndicators.atlas";
@@ -33,6 +35,7 @@ public class GameAssetManager {
     public void loadSound(){
         manager.load(jumpSound, Sound.class);
         manager.load(finishSound, Sound.class);
+        manager.load(splashSound, Sound.class);
     }
 
     public void loadSprites(){

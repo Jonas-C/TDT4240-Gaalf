@@ -1,5 +1,6 @@
 package com.gaalf.presenter;
 
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
@@ -32,8 +33,9 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
         levelWon = false;
         mpgc.setMpGameListener(this);
         addListener(shootableSystem);
+        view.addScoreLabel(playerInfo.getPlayerID(), playerInfo.getPlayerName());
         for(PlayerInfo playerInfo : game.playersManager.getPlayers()){
-            view.addScoreLabel(playerInfo.getPlayerID(), playerInfo.getPlayerName());
+            view.addPlayer(playerInfo, game.levelManager.getLevelInt(), game.levelManager.getLevels().size());
         }
     }
 
@@ -53,13 +55,22 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
     public void onReceiveEvent(GameEvent event, Object object) {
         switch(event){
             case SCORE_CHANGED:
-                setScoreLabel(playerInfo.getPlayerID(), playerInfo.getPlayerName() + ": " + object);
+                PlayerComponent playerComponent = (PlayerComponent) object;
+                if(playerComponent.onThisDevice){
+                    view.setPlayerLabelText(playerInfo.getPlayerID(), playerInfo.getPlayerName() + ": " + (playerComponent.playerScore));
+                }
+                view.updateScoreboard(playerComponent.playerNumber, game.levelManager.getLevelInt(), playerComponent.playerScore, playerComponent.playerTotalScore);
                 break;
             case LEVEL_COMPLETE:
                 levelCleared();
                 break;
             case BALL_STROKE:
                 mpgc.sendBallHit((Vector2)object);
+                break;
+            case RESET_BALL:
+                resetBall((Entity) object);
+                ballReset(((Entity) object).getComponent(PlayerComponent.class).playerNumber);
+                break;
             default:
                 break;
         }
@@ -67,6 +78,9 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
 
     @Override
     public void playerQuit(int playerId) {
+        game.playersManager.removePlayer(playerId);
+        view.removePlayer(playerId);
+        notifyObservers(GameEvent.PLAYER_LEFT, playerId);
         ImmutableArray<Entity> balls = engine.getEntitiesFor(Family.all(PlayerComponent.class).get());
         for(Entity ball : balls){
             PlayerComponent playerComponent = ball.getComponent(PlayerComponent.class);

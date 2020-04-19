@@ -9,5 +9,7 @@ public enum GameEvent {
     SCORE_CHANGED,
     MP_GAME_CREATED,
     LOBBY_CREATED,
-    BALL_STROKE
+    PLAYER_LEFT,
+    BALL_STROKE,
+    RESET_BALL
 }

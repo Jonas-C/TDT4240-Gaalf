@@ -1,7 +1,9 @@
 package com.gaalf.presenter;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.files.FileHandle;
 import com.gaalf.GaalfGame;
+import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.enums.GameEvent;
 import com.gaalf.view.BaseGameView;
 import com.gaalf.view.GameView;
@@ -14,6 +16,7 @@ public class GamePresenter extends BaseGamePresenter {
         view = new GameView(game.getBatch(), this);
         setupMultiplexer();
         view.addScoreLabel(playerInfo.getPlayerID(), playerInfo.getPlayerName());
+        view.addPlayer(playerInfo, game.levelManager.getLevelInt(), game.levelManager.getLevels().size());
     }
 
     @Override
@@ -37,10 +40,16 @@ public class GamePresenter extends BaseGamePresenter {
     public void onReceiveEvent(GameEvent event, Object object) {
         switch(event){
             case SCORE_CHANGED:
-                setScoreLabel(playerInfo.getPlayerID(), playerInfo.getPlayerName() + ": " + object);
+                PlayerComponent playerComponent = (PlayerComponent) object;
+                setScoreLabel(playerComponent.playerNumber, playerComponent.playerName + ": " + playerComponent.playerScore);
+                view.updateScoreboard(playerComponent.playerNumber, game.levelManager.getLevelInt(), playerComponent.playerScore, playerComponent.playerTotalScore);
                 break;
             case LEVEL_COMPLETE:
                 levelCleared();
+                break;
+            case RESET_BALL:
+                resetBall((Entity) object);
+                break;
             default:
                 break;
         }

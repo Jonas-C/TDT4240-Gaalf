@@ -21,6 +21,8 @@ public class GameObjectFactory {
                 return new GoalEntity(world, mapObject, gameAssetManager);
             case "terrain":
                 return new TerrainEntity(world, mapObject);
+            case "water":
+                return new WaterEntity(world, mapObject, gameAssetManager);
             default:
                 return null;
         }

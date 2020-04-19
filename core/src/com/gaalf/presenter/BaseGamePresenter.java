@@ -31,6 +31,8 @@ import com.gaalf.game.ecs.component.ShotIndicatorComponent;
 import com.gaalf.game.ecs.component.SpriteComponent;
 import com.gaalf.game.ecs.component.TerrainComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
+import com.gaalf.game.ecs.component.WaterComponent;
+import com.gaalf.game.ecs.system.OutOfBoundsSystem;
 import com.gaalf.game.ecs.predefinedEntities.shotIndicators.ShotIndicatorFactory;
 import com.gaalf.game.ecs.system.PhysicsDebugSystem;
 import com.gaalf.game.ecs.system.PhysicsSystem;
@@ -94,14 +96,18 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         SoundSystem soundSystem = new SoundSystem(game.settingsManager);
         ScoreSystem scoreSystem = new ScoreSystem();
         GoalSystem goalSystem = new GoalSystem(game.playersManager.getPlayers());
+        OutOfBoundsSystem outOfBoundsSystem = new OutOfBoundsSystem();
 
         shootableSystem.addListener(soundSystem);
         shootableSystem.addListener((ECSObserver) scoreSystem);
         shootableSystem.addListener(this);
         scoreSystem.addListener(this);
         worldContactListener.addListener(goalSystem);
+        worldContactListener.addListener(outOfBoundsSystem);
+        outOfBoundsSystem.addListener(this);
         goalSystem.addListener(this);
         scoreSystem.addListener((ECSObserver) goalSystem);
+        this.addListener(goalSystem);
 
         engine.addSystem(shootableSystem);
         engine.addSystem(physicsSystem);
@@ -110,6 +116,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         engine.addSystem(physicsDebugSystem);
         engine.addSystem(shotIndicatorSystem);
         engine.addSystem(scoreSystem);
+        engine.addSystem(outOfBoundsSystem);
 
         engine.addSystem(goalSystem);
 
@@ -168,6 +175,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
     }
 
     void newLevel(TiledMap level){
+        getView().setPlayerLabelText(playerInfo.getPlayerID(), playerInfo.getPlayerName() + ": 0");
         this.tiledMap = level;
         tmr.setMap(tiledMap);
         Array<Body> bodies = new Array<>();
@@ -175,11 +183,13 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         for(Body body : bodies){
             if(body.getUserData() != null && body.getUserData() instanceof GameObjectEntity){
                 if(((Entity)body.getUserData()).getComponent(TerrainComponent.class) != null ||
-                        ((Entity)body.getUserData()).getComponent(GoalComponent.class) != null){
+                        ((Entity)body.getUserData()).getComponent(GoalComponent.class) != null||
+                        ((Entity)body.getUserData()).getComponent(WaterComponent.class) != null){
                     engine.removeEntity((Entity)body.getUserData());
                     world.destroyBody(body);
                     MapObjects mapObjects = tiledMap.getLayers().get("collision").getObjects();
                     for(MapObject mapObject : mapObjects){
+                        gameObjectFactory.createEntity(mapObject);
                         gameObjectFactory.createEntity(mapObject);
                     }
                 }
@@ -191,7 +201,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         }
     }
 
-    private void resetBall(Entity ball){
+    void resetBall(Entity ball){
         TransformComponent transformComponent = ball.getComponent(TransformComponent.class);
         SpriteComponent spriteComponent = ball.getComponent(SpriteComponent.class);
         BodyComponent bodyComponent = ball.getComponent(BodyComponent.class);

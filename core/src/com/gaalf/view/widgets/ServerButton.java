@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Align;
+import com.gaalf.GaalfGame;
 
 public class ServerButton extends Button {
 
@@ -32,7 +33,7 @@ public class ServerButton extends Button {
         infoTable.add(serverNameLabel).padRight(30);
         infoTable.add(playersLabel);
         infoTable.pad(10);
-        add(infoTable).expand().fill();
+        add(infoTable).expand().fill().width(GaalfGame.V_WIDTH / 4);
         setSize(getPrefWidth(), getPrefHeight());
     }
 
