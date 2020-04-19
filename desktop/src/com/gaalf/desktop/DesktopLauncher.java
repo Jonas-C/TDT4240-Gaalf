@@ -6,6 +6,10 @@ import com.gaalf.GaalfGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
+		if (arg.length > 0 && System.getProperty("gaalf.env") == null) {
+			System.setProperty("gaalf.env", arg[0]);
+		}
+
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		// config.width = GaalfGame.V_WIDTH;
 		// config.height = GaalfGame.V_HEIGHT;
