@@ -11,9 +11,7 @@ import com.gaalf.game.ecs.ECSObserver;
 import com.gaalf.game.enums.ECSEvent;
 import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.enums.GameEvent;
-import com.gaalf.model.PlayerInfo;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 
 import static com.gaalf.game.constants.GameConstants.MAX_STROKE_LIMIT;
@@ -89,7 +87,7 @@ public class ScoreSystem extends IteratingSystem implements ECSObserver, ECSObse
         switch(event){
             case LEVEL_NEW:
                 for(Entity entity : getEngine().getEntitiesFor(Family.all((PlayerComponent.class)).get())){
-                    PlayerComponent playerComponent = entity.getComponent(PlayerComponent.class);
+                    PlayerComponent playerComponent = playerComponentMapper.get(entity);
                     playerComponent.playerScore = 0;
                 }
                 break;

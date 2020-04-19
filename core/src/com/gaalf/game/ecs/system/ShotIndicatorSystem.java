@@ -32,7 +32,6 @@ public class ShotIndicatorSystem extends IteratingSystem implements GameObserver
         if(shotIndicatorTransform.visible) {
             shotIndicatorTransform.pos.set(playerTransform.pos.x, playerTransform.pos.y + 0.4f);
         }
-        playerTransform = entity.getComponent(TransformComponent.class);
     }
 
     private void updateShotIndicator(Vector2 touchPos){
