@@ -2,10 +2,6 @@ package com.gaalf.presenter;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.gaalf.GaalfGame;
 import com.gaalf.view.BaseMenuView;
 import com.gaalf.view.SettingsView;
@@ -14,23 +10,37 @@ public class SettingsPresenter extends BaseMenuPresenter {
 
     private SettingsView view;
     private Array<String> ballNames;
+    private Array<String> shotIndicatorNames;
     private int currentBallIndex;
+    private int currentShotIndicatorIndex;
 
     SettingsPresenter(final GaalfGame game){
         super(game);
         ballNames = new Array<>();
-        TextureAtlas textureAtlas = game.assetManager.manager.get(game.assetManager.ballSpriteAtlas);
-        Array<TextureAtlas.AtlasRegion> regions = textureAtlas.getRegions();
-        for(TextureAtlas.AtlasRegion region : regions){
+        shotIndicatorNames = new Array<>();
+        TextureAtlas ballTextureAtlas = game.assetManager.manager.get(game.assetManager.ballSpriteAtlas);
+        Array<TextureAtlas.AtlasRegion> ballRegions = ballTextureAtlas.getRegions();
+        for(TextureAtlas.AtlasRegion region : ballRegions){
             ballNames.add(region.name);
         }
+        TextureAtlas sITextureAtlas = game.assetManager.manager.get(game.assetManager.shotIndicatorSpriteAtlas);
+        Array<TextureAtlas.AtlasRegion> sIRegions = sITextureAtlas.getRegions();
+        for (TextureAtlas.AtlasRegion region : sIRegions) {
+            shotIndicatorNames.add(region.name);
+        }
+
         view = new SettingsView(game.getBatch(), this);
         currentBallIndex = ballNames.indexOf(game.settingsManager.getBallChoice(), false);
+        currentShotIndicatorIndex = shotIndicatorNames.indexOf(
+                game.settingsManager.getShotIndicatorChoice(),
+                false);
         view.setBallChoiceLabel(game.settingsManager.getBallChoice());
+        view.setSIChoiceLabel(game.settingsManager.getShotIndicatorChoice());
     }
 
     public void openMainMenuView() {
         game.settingsManager.setBallChoice(ballNames.get(currentBallIndex));
+        game.settingsManager.setShotIndicatorChoice(shotIndicatorNames.get(currentShotIndicatorIndex));
         game.setScreen(new MainMenuPresenter(game));
     }
 
@@ -103,5 +113,22 @@ public class SettingsPresenter extends BaseMenuPresenter {
             }
         }
         view.setBallChoiceLabel(ballNames.get(currentBallIndex));
+    }
+
+    public void handleShotIndicatorChange(String button) {
+        if(button.equals("left_arrow")){
+            if(currentShotIndicatorIndex <= 0){
+                currentShotIndicatorIndex = shotIndicatorNames.size - 1;
+            } else {
+                currentShotIndicatorIndex--;
+            }
+        } else{
+            if(currentShotIndicatorIndex >= shotIndicatorNames.size -1) {
+                currentShotIndicatorIndex = 0;
+            } else {
+                currentShotIndicatorIndex++;
+            }
+        }
+        view.setSIChoiceLabel(shotIndicatorNames.get(currentShotIndicatorIndex));
     }
 }

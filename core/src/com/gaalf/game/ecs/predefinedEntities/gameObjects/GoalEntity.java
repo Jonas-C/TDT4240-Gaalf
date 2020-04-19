@@ -1,4 +1,4 @@
-package com.gaalf.game.precreatedEntities.gameObjects;
+package com.gaalf.game.ecs.predefinedEntities.gameObjects;
 
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.physics.box2d.World;
@@ -11,7 +11,7 @@ import com.gaalf.manager.GameAssetManager;
 
 import static com.gaalf.game.constants.B2DConstants.PPM;
 
-public class GoalEntity extends GameObjectEntity{
+public class GoalEntity extends GameObjectEntity {
 
     public GoalEntity(World world, MapObject mapObject, GameAssetManager gameAssetManager){
         GoalComponent goalComponent = new GoalComponent();

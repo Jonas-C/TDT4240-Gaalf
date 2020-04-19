@@ -1,4 +1,4 @@
-package com.gaalf.game.precreatedEntities.gameObjects;
+package com.gaalf.game.ecs.predefinedEntities.gameObjects;
 
 import com.badlogic.ashley.core.Entity;
 
