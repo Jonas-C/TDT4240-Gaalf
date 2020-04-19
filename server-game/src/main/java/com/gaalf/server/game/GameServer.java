@@ -81,7 +81,7 @@ public class GameServer {
         }
     }
 
-    public void starGame(PlayerConnection playerConnection, StartGameMessage message) {
+    public void startGame(PlayerConnection playerConnection, StartGameMessage message) {
         if (!gameStarted && playerConnection.hasJoined) {
             gameStarted = true;
             log.info("Starting game with map pack {}", message.mapPack);
@@ -137,7 +137,7 @@ public class GameServer {
         }
     }
 
-    public void ballReset(PlayerConnection playerConnection, BallResetMessage message) {
+    public void ballReset(PlayerConnection playerConnection) {
         if (gameStarted && playerConnection.hasJoined) {
             log.debug("The ball of player {} was reset", playerConnection.playerData.playerName);
             kryoServer.sendToAllExceptTCP(playerConnection.getID(),

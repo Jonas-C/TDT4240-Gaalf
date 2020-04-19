@@ -13,6 +13,7 @@ public interface IMultiplayerGameClient {
      * The server either accepts or rejects the request to join. If the server rejects,
      * this method is meant to be retried with a different nick name.
      * @param playerName the nick name to use in-game
+     * @param ballType the ball type to use
      * @see IServersListener#lobbyJoinAccepted(int, GameData)
      * @see IServersListener#lobbyJoinRejected()
      */

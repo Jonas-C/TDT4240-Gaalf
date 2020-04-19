@@ -31,6 +31,9 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
     }
 
     public void openMainMenuView() {
+        if (mpgc != null) {
+            mpgc.close();
+        }
         game.setScreen(new MainMenuPresenter(game));
     }
 
@@ -50,6 +53,9 @@ public class ServersPresenter extends BaseMenuPresenter implements IServersListe
     }
 
     public void joinLobby(ServerAddress serverAddress) throws IOException {
+        if (mpgc != null) {
+            mpgc.close();
+        }
         mpgc = new MultiplayerGameClient(serverAddress, this);
         playerName = "Player" + new Random().nextInt(100);
         mpgc.joinLobby(playerName, game.settingsManager.getBallChoice());
