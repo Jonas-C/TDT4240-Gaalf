@@ -8,18 +8,23 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.gaalf.game.GameObserver;
 import com.gaalf.game.ecs.component.SpriteComponent;
 import com.gaalf.game.ecs.component.TransformComponent;
+import com.gaalf.game.enums.GameEvent;
 import com.gaalf.game.util.TextureMapObjectRenderer;
 import static com.gaalf.game.constants.B2DConstants.*;
 
-public class RenderingSystem extends IteratingSystem {
+public class RenderingSystem extends IteratingSystem implements GameObserver {
 
     private ComponentMapper<SpriteComponent> spriteComponentMapper;
     private ComponentMapper<TransformComponent> transformMapper;
 
     private OrthographicCamera b2dCam;
     private TextureMapObjectRenderer tmr;
+    private int red = 135;
+    private int green = 206;
+    private int blue = 235;
 
 
 
@@ -34,6 +39,7 @@ public class RenderingSystem extends IteratingSystem {
 
         this.tmr = tmr;
         this.b2dCam = b2dCam;
+        updateColors();
     }
 
     @Override
@@ -58,8 +64,28 @@ public class RenderingSystem extends IteratingSystem {
         tmr.setView(b2dCam);
         tmr.render();
         batch.begin();
-        Gdx.gl.glClearColor(135/255f, 206/255f, 235/255f, 1);
+        Gdx.gl.glClearColor(red/255f, green/255f, blue/255f, 1);
         super.update(delta);
         batch.end();
+    }
+
+    @Override
+    public void onReceiveEvent(GameEvent event, Object object) {
+        switch(event){
+            case LEVEL_NEW:
+                try {
+                    updateColors();
+                }catch (NullPointerException e){
+                    System.out.println("// Map does not have properties red, green, and blue //");
+                }
+            default:
+                break;
+        }
+    }
+
+    private void updateColors() {
+        red = tmr.getMap().getProperties().get("red", 135, Integer.TYPE);
+        green = tmr.getMap().getProperties().get("green", 206, Integer.TYPE);
+        blue = tmr.getMap().getProperties().get("blue", 235, Integer.TYPE);
     }
 }

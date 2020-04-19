@@ -124,6 +124,7 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
         shotInputHandler.addListener(this);
         this.addListener(scoreSystem);
         this.addListener(scoreSystem);
+        this.addListener(renderingSystem);
 
         gameMusic = game.assetManager.manager.get(game.assetManager.levelOneMusic);
         gameMusic.setLooping(true);
