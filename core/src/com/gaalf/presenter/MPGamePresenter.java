@@ -7,6 +7,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.gaalf.GaalfGame;
+import com.gaalf.game.events.BallStrokeEventArgs;
 import com.gaalf.game.ecs.component.BodyComponent;
 import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.enums.GameEvent;
@@ -15,8 +16,6 @@ import com.gaalf.network.IMultiplayerGameListener;
 import com.gaalf.network.MultiplayerGameClient;
 import com.gaalf.view.BaseGameView;
 import com.gaalf.view.MPGameView;
-
-import java.util.AbstractMap;
 
 public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGameListener {
 
@@ -41,9 +40,7 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
 
     @Override
     public void ballHit(int playerId, Vector2 startPosition, Vector2 velocity) {
-        // TODO: startPosition of ball
-        AbstractMap.SimpleEntry<Integer, Vector2> shot = new AbstractMap.SimpleEntry<>(playerId, velocity);
-        notifyObservers(GameEvent.BALL_STROKE, shot);
+        notifyObservers(GameEvent.BALL_STROKE, new BallStrokeEventArgs(playerId, startPosition, velocity));
     }
 
     @Override
@@ -66,8 +63,8 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
                 levelCleared();
                 break;
             case BALL_STROKE:
-                // TODO: startPosition of ball
-                mpgc.sendBallHit(null, (Vector2)object);
+                BallStrokeEventArgs ballStroke = (BallStrokeEventArgs) object;
+                mpgc.sendBallHit(ballStroke.startPosition, ballStroke.velocity);
                 break;
             case RESET_BALL:
                 resetBall((Entity) object);
