@@ -3,19 +3,23 @@ package com.gaalf.view;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.gaalf.GaalfGame;
 import com.gaalf.network.data.GameData;
 import com.gaalf.network.data.PlayerData;
 import com.gaalf.presenter.LobbyPresenter;
+import com.gaalf.view.widgets.MapPackDropdown;
 
 public class LobbyView extends BaseMenuView {
 
     private Table playerTable;
 
-    public LobbyView(SpriteBatch batch, final LobbyPresenter presenter, GameData players){
+    public LobbyView(SpriteBatch batch, final LobbyPresenter presenter, GameData players, Array<String> mapPacks){
         super(batch, presenter);
         table.bottom();
         playerTable = new Table();
@@ -25,14 +29,24 @@ public class LobbyView extends BaseMenuView {
         playerTable.row();
         playerTable.setFillParent(true);
 
+        Table mapPackTable = new Table();
+        mapPackTable.add(new Label("Map pack:", getSkin(), "largeWhite"))
+                .padRight(15).align(Align.center);
+        final MapPackDropdown mapPackDropdown = new MapPackDropdown(getSkin());
+        mapPackDropdown.setItems(mapPacks);
+        mapPackDropdown.setAlignment(Align.center);
+        mapPackTable.add(mapPackDropdown).width(GaalfGame.V_WIDTH / 6f).align(Align.center);
+        table.add(mapPackTable).width(GaalfGame.V_WIDTH / 3f).padBottom(15);
+        table.row();
+
         TextButton startButton = new TextButton("Start Game", getSkin());
         startButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                presenter.startGame();
+                presenter.startGame(mapPackDropdown.getSelected());
             }
         });
-        table.add(startButton).width(GaalfGame.V_WIDTH / 3).padBottom(15);
+        table.add(startButton).width(GaalfGame.V_WIDTH / 3f).padBottom(15);
         table.row();
 
         TextButton backButton = new TextButton("Exit lobby", getSkin());
@@ -42,27 +56,17 @@ public class LobbyView extends BaseMenuView {
                     presenter.goBack();
             }
         });
-        table.add(backButton).width(GaalfGame.V_WIDTH / 3).padBottom(15);
+        table.add(backButton).width(GaalfGame.V_WIDTH / 3f).padBottom(15);
         table.row();
-
-
 
         for(PlayerData playerData : players.players){
             addPlayer(playerData);
             table.row();
         }
 
-
         addActor(playerTable);
         addActor(table);
     }
-
-
-//    @Override
-//    public void update(float delta) {
-//
-//    }
-
 
     public void addPlayer(PlayerData playerData){
         TextButton textButton = new TextButton(playerData.playerName, getSkin());
@@ -80,6 +84,4 @@ public class LobbyView extends BaseMenuView {
             playerTable.removeActor(actor);
         }
     }
-
-
 }
