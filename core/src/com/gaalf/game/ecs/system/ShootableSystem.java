@@ -59,8 +59,6 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
             BallStrokeEventArgs ballStroke = mpShot;
 
             // Ensure synchronized position by setting starting position of ball before applying force
-//            bodyComponent.body.setAngularVelocity(0);
-//            bodyComponent.body.setLinearVelocity(0, 0);
             bodyComponent.body.setTransform(ballStroke.startPosition,
                     bodyComponent.body.getTransform().getRotation());
 
@@ -69,7 +67,7 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
             mpShot = null;
 
         } else if(playerComponent.onThisDevice){
-            if(touchUp && !playerComponent.isFinished && !distanceDragged.isZero()){
+            if(touchUp && !distanceDragged.isZero()){
                 shootableComponent.force.set(distanceDragged);
                 notifyObservers(GameEvent.BALL_STROKE, new BallStrokeEventArgs(
                         bodyComponent.body.getTransform().getPosition(), shootableComponent.force));
