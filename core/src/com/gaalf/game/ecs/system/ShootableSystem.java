@@ -46,10 +46,21 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
         BodyComponent bodyComponent = bodyMapper.get(entity);
         ShootableComponent shootableComponent = shootableMapper.get(entity);
         PlayerComponent playerComponent = playerMapper.get(entity);
+
+        if(playerComponent.isFinished && touchUp){
+            distanceDragged.setZero();
+            prevTouch.setZero();
+            touchUp = false;
+            shootableComponent.force.setZero();
+            return;
+        }
+
         if(mpShot != null && playerComponent.playerNumber == mpShot.playerId){
             BallStrokeEventArgs ballStroke = mpShot;
 
             // Ensure synchronized position by setting starting position of ball before applying force
+//            bodyComponent.body.setAngularVelocity(0);
+//            bodyComponent.body.setLinearVelocity(0, 0);
             bodyComponent.body.setTransform(ballStroke.startPosition,
                     bodyComponent.body.getTransform().getRotation());
 
