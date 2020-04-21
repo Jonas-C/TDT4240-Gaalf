@@ -19,6 +19,12 @@ public interface IMultiplayerGameClient {
     void joinLobby(String playerName, String ballType);
 
     /**
+     * Signals that a change to the lobby settings was made.
+     * @param selectedMapPack the current selected map pack index
+     */
+    void updateLobbyState(int selectedMapPack);
+
+    /**
      * Starts the multiplayer game from a lobby.
      * @param mapPack the map pack to play
      */

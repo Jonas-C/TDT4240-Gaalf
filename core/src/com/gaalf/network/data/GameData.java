@@ -7,6 +7,7 @@ public class GameData {
 
     public List<PlayerData> players;
     public String serverName;
+    public int selectedMapPack;
 
     public GameData() {
         players = new ArrayList<>();

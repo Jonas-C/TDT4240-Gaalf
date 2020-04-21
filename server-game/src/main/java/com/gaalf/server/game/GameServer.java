@@ -12,6 +12,7 @@ import com.gaalf.network.message.JoinLobbyRejectedMessage;
 import com.gaalf.network.message.JoinLobbyRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
 import com.gaalf.network.message.LevelWonMessage;
+import com.gaalf.network.message.LobbyStateChangedMessage;
 import com.gaalf.network.message.NextLevelMessage;
 import com.gaalf.network.message.PlayerJoinedMessage;
 import com.gaalf.network.message.StartGameMessage;
@@ -25,18 +26,20 @@ import java.util.List;
 public class GameServer {
 
     public static final int MAX_PLAYERS = 4;
-
     private static final Logger log = LoggerFactory.getLogger(GameServer.class);
 
     private Server kryoServer;
     private String serverName;
+
     private List<PlayerConnection> players;
+    private int selectedMapPack;
     private boolean gameStarted;
 
     public GameServer(Server kryoServer, String serverName) {
         this.kryoServer = kryoServer;
         this.serverName = serverName;
         players = new ArrayList<>();
+        selectedMapPack = 0;
         gameStarted = false;
     }
 
@@ -52,6 +55,7 @@ public class GameServer {
     public GameData getGameData() {
         GameData data = new GameData();
         data.serverName = serverName;
+        data.selectedMapPack = selectedMapPack;
         for (PlayerConnection playerConnection : players) {
             data.players.add(playerConnection.playerData);
         }
@@ -79,6 +83,16 @@ public class GameServer {
         } else {
             log.info("Player {} is rejected from joining", message.playerName);
             playerConnection.sendTCP(new JoinLobbyRejectedMessage());
+        }
+    }
+
+    public void lobbyStateChanged(PlayerConnection playerConnection, LobbyStateChangedMessage message) {
+        if (!gameStarted && playerConnection.hasJoined
+                && selectedMapPack != message.selectedMapPack) {
+            selectedMapPack = message.selectedMapPack;
+            log.debug("Player {} changed the map pack setting to {}",
+                    playerConnection.playerData.playerName, selectedMapPack);
+            kryoServer.sendToAllExceptTCP(playerConnection.getID(), message);
         }
     }
 
@@ -112,7 +126,8 @@ public class GameServer {
 
             if (players.isEmpty()) {
                 gameStarted = false;
-                log.info("All players have disconnected, resetting game started");
+                selectedMapPack = 0;
+                log.info("All players have disconnected, resetting game state");
             }
         }
     }
@@ -137,7 +152,7 @@ public class GameServer {
         }
     }
 
-    public void ballReset(PlayerConnection playerConnection, BallResetMessage message) {
+    public void ballReset(PlayerConnection playerConnection) {
         if (gameStarted && playerConnection.hasJoined) {
             log.debug("The ball of player {} was reset", playerConnection.playerData.playerName);
             kryoServer.sendToAllExceptTCP(playerConnection.getID(),

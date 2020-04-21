@@ -35,6 +35,7 @@ public class KryoMessageRegister {
         kryo.register(JoinLobbyRequestMessage.class);
         kryo.register(LeaveGameMessage.class);
         kryo.register(LevelWonMessage.class);
+        kryo.register(LobbyStateChangedMessage.class);
         kryo.register(NextLevelMessage.class);
         kryo.register(PlayerJoinedMessage.class);
         kryo.register(StartGameMessage.class);

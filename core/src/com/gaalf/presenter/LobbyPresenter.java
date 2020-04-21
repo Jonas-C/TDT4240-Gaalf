@@ -66,6 +66,11 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     }
 
     @Override
+    public void lobbyStateChanged(int selectedMapPack) {
+        view.setSelectedMapPack(selectedMapPack);
+    }
+
+    @Override
     public void update(float delta){
         super.update(delta);
         if(shouldStartGame){
@@ -94,4 +99,7 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
         shouldStartGame = true;
     }
 
+    public void setSelectedMapPack(int selectedMapPack) {
+        mpgc.updateLobbyState(selectedMapPack);
+    }
 }

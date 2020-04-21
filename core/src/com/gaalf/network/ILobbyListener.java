@@ -16,6 +16,12 @@ public interface ILobbyListener {
     void playerLeft(int playerId);
 
     /**
+     * Called when someone changed a setting in the lobby.
+     * @param selectedMapPack the currently selected map pack
+     */
+    void lobbyStateChanged(int selectedMapPack);
+
+    /**
      * Called when someone started the game.
      * @param mapPack an identifier for the map pack of the game which is starting
      */

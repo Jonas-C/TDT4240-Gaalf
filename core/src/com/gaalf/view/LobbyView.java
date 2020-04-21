@@ -18,12 +18,13 @@ import com.gaalf.view.widgets.MapPackDropdown;
 public class LobbyView extends BaseMenuView {
 
     private Table playerTable;
+    private final MapPackDropdown mapPackDropdown;
 
-    public LobbyView(SpriteBatch batch, final LobbyPresenter presenter, GameData players, Array<String> mapPacks){
+    public LobbyView(SpriteBatch batch, final LobbyPresenter presenter, GameData gameData, Array<String> mapPacks){
         super(batch, presenter);
         table.bottom();
         playerTable = new Table();
-        Label title = new Label(players.serverName, new Label.LabelStyle(getSkin().getFont("title"), getSkin().getColor("color")));
+        Label title = new Label(gameData.serverName, new Label.LabelStyle(getSkin().getFont("title"), getSkin().getColor("color")));
         playerTable.top();
         playerTable.add(title).padBottom(40).padTop(60);
         playerTable.row();
@@ -32,9 +33,15 @@ public class LobbyView extends BaseMenuView {
         Table mapPackTable = new Table();
         mapPackTable.add(new Label("Map pack:", getSkin(), "largeWhite"))
                 .padRight(15).align(Align.center);
-        final MapPackDropdown mapPackDropdown = new MapPackDropdown(getSkin());
+        mapPackDropdown = new MapPackDropdown(getSkin(), new Runnable() {
+            @Override
+            public void run() {
+                presenter.setSelectedMapPack(mapPackDropdown.getSelectedIndex());
+            }
+        });
         mapPackDropdown.setItems(mapPacks);
         mapPackDropdown.setAlignment(Align.center);
+        mapPackDropdown.setSelectedIndex(gameData.selectedMapPack);
         mapPackTable.add(mapPackDropdown).width(GaalfGame.V_WIDTH / 6f).align(Align.center);
         table.add(mapPackTable).width(GaalfGame.V_WIDTH / 3f).padBottom(15);
         table.row();
@@ -59,7 +66,7 @@ public class LobbyView extends BaseMenuView {
         table.add(backButton).width(GaalfGame.V_WIDTH / 3f).padBottom(15);
         table.row();
 
-        for(PlayerData playerData : players.players){
+        for(PlayerData playerData : gameData.players){
             addPlayer(playerData);
             table.row();
         }
@@ -83,5 +90,9 @@ public class LobbyView extends BaseMenuView {
         if(actor != null){
             playerTable.removeActor(actor);
         }
+    }
+
+    public void setSelectedMapPack(int selectedMapPack) {
+        mapPackDropdown.setSelectedIndex(selectedMapPack);
     }
 }
