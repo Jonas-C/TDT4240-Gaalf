@@ -11,7 +11,7 @@ import com.gaalf.network.message.JoinLobbyAcceptedMessage;
 import com.gaalf.network.message.JoinLobbyRejectedMessage;
 import com.gaalf.network.message.JoinLobbyRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
-import com.gaalf.network.message.LevelWonMessage;
+import com.gaalf.network.message.PlayerFinishedLevelMessage;
 import com.gaalf.network.message.NextLevelMessage;
 import com.gaalf.network.message.PlayerJoinedMessage;
 import com.gaalf.network.message.StartGameMessage;
@@ -79,11 +79,11 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
     }
 
     @Override
-    public void levelWon() {
+    public void levelFinished() {
         if (state != State.GAME) {
             throw new IllegalStateException("Must be in game");
         }
-        kryoClient.sendTCP(new LevelWonMessage());
+        kryoClient.sendTCP(new PlayerFinishedLevelMessage());
     }
 
     @Override
@@ -175,9 +175,10 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
                 mpGameListener.goNextLevel();
             }
 
-            if (object instanceof LevelWonMessage
+            if (object instanceof PlayerFinishedLevelMessage
                     && state == State.GAME && mpGameListener != null) {
-                mpGameListener.levelWon();
+                PlayerFinishedLevelMessage message = (PlayerFinishedLevelMessage) object;
+                mpGameListener.playerFinishedLevel(message.playerId);
             }
 
             if (object instanceof BallResetMessage

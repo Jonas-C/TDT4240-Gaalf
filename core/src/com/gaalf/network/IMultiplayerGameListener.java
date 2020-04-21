@@ -20,9 +20,10 @@ public interface IMultiplayerGameListener {
     void goNextLevel();
 
     /**
-     * Called when the current level is won.
+     * Called when a player finished the current level.
+     * @param playerId the id of the player who finished the level
      */
-    void levelWon();
+    void playerFinishedLevel(int playerId);
 
     /**
      * Called when an opponent's ball's position is reset.

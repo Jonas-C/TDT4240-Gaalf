@@ -38,9 +38,9 @@ public interface IMultiplayerGameClient {
     void nextLevel();
 
     /**
-     * Signals that the current level is won.
+     * Signals that the local player has finished the current level.
      */
-    void levelWon();
+    void levelFinished();
 
     /**
      * Signals that the local player's ball's position is reset.

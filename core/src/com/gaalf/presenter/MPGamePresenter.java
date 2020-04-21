@@ -59,6 +59,11 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
                 }
                 view.updateScoreboard(playerComponent.playerNumber, game.levelManager.getLevelInt(), playerComponent.playerScore, playerComponent.playerTotalScore);
                 break;
+            case LOCAL_PLAYER_FINISHED:
+                if (!levelWon) {
+                    mpgc.levelFinished();
+                }
+                break;
             case LEVEL_COMPLETE:
                 levelCleared();
                 break;
@@ -107,9 +112,15 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
         return view;
     }
 
+    /**
+     * Called locally when all players have finished the level
+     */
     @Override
     public void levelCleared() {
-        getView().levelCleared(game.levelManager.hasNext());
+        if (!levelWon) {
+            levelWon = true;
+            getView().levelCleared(game.levelManager.hasNext());
+        }
     }
 
     @Override
@@ -129,11 +140,14 @@ public class MPGamePresenter extends BaseGamePresenter implements IMultiplayerGa
         levelWon = false;
     }
 
+    /**
+     * Called by the multiplayer game server when a remote player has finished the level.
+     */
     @Override
-    public void levelWon() {
-        if(!levelWon){
-            levelWon = true;
-            levelCleared();
+    public void playerFinishedLevel(int playerId) {
+        if (!levelWon) {
+            // GoalSystem gets notified and registers the player as finished
+            notifyObservers(GameEvent.REMOTE_PLAYER_FINISHED, playerId);
         }
     }
 

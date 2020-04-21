@@ -11,7 +11,7 @@ import com.gaalf.network.message.JoinLobbyAcceptedMessage;
 import com.gaalf.network.message.JoinLobbyRejectedMessage;
 import com.gaalf.network.message.JoinLobbyRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
-import com.gaalf.network.message.LevelWonMessage;
+import com.gaalf.network.message.PlayerFinishedLevelMessage;
 import com.gaalf.network.message.NextLevelMessage;
 import com.gaalf.network.message.PlayerJoinedMessage;
 import com.gaalf.network.message.StartGameMessage;
@@ -131,10 +131,11 @@ public class GameServer {
         }
     }
 
-    public void levelWon(PlayerConnection playerConnection) {
+    public void playerFinishedLevel(PlayerConnection playerConnection) {
         if (gameStarted && playerConnection.hasJoined) {
-            log.debug("Current level won");
-            kryoServer.sendToAllExceptTCP(playerConnection.getID(), new LevelWonMessage());
+            log.debug("Player {} finished the current level", playerConnection.playerData.playerName);
+            kryoServer.sendToAllExceptTCP(playerConnection.getID(),
+                    new PlayerFinishedLevelMessage(playerConnection.playerData.playerId));
         }
     }
 

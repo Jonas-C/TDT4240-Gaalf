@@ -14,22 +14,21 @@ import com.gaalf.game.enums.GameEvent;
 import com.gaalf.model.PlayerInfo;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public class GoalSystem extends IteratingSystem implements ECSObserver, GameObservable, GameObserver {
     private int playerCount;
     private ArrayList<GameObserver> gameObservers;
     private ArrayList<PlayerInfo> players;
     private TiledMap tiledMap;
-    private ArrayList<Integer> finishedPlayers;
-
+    private HashSet<Integer> finishedPlayers;
 
     public GoalSystem(ArrayList<PlayerInfo> players){
         super(Family.all(PlayerComponent.class, TransformComponent.class).get());
         this.players = players;
         this.playerCount = players.size();
         gameObservers = new ArrayList<>();
-        finishedPlayers = new ArrayList<>();
-
+        finishedPlayers = new HashSet<>();
     }
 
     @Override
@@ -56,9 +55,15 @@ public class GoalSystem extends IteratingSystem implements ECSObserver, GameObse
 
     private void playerFinished(Entity entity){
         PlayerComponent playerComponent = entity.getComponent(PlayerComponent.class);
-        if(!playerComponent.isFinished) {
+        if (!playerComponent.isFinished) {
             playerComponent.isFinished = true;
-            finishedPlayers.add(playerComponent.playerNumber);
+            if (playerComponent.onThisDevice) {
+                // MPGamePresenter receives this event so it can forward it to the MP game server
+                notifyObservers(GameEvent.LOCAL_PLAYER_FINISHED, null);
+                // Only register the local player as finished from here.
+                // Remote players gets registered by the REMOTE_PLAYER_FINISHED event
+                finishedPlayers.add(playerComponent.playerNumber);
+            }
         }
     }
 
@@ -89,6 +94,9 @@ public class GoalSystem extends IteratingSystem implements ECSObserver, GameObse
             case PLAYER_LEFT:
                 playerCount = players.size();
                 finishedPlayers.remove(object);
+                break;
+            case REMOTE_PLAYER_FINISHED:
+                finishedPlayers.add((Integer) object);
                 break;
             default:
                 break;

@@ -7,7 +7,7 @@ import com.gaalf.network.message.BallResetMessage;
 import com.gaalf.network.message.GameServerStatusMessage;
 import com.gaalf.network.message.JoinLobbyRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
-import com.gaalf.network.message.LevelWonMessage;
+import com.gaalf.network.message.PlayerFinishedLevelMessage;
 import com.gaalf.network.message.NextLevelMessage;
 import com.gaalf.network.message.StartGameMessage;
 
@@ -62,8 +62,8 @@ public class ConnectionListener extends Listener {
             gameServer.nextLevel(playerConnection);
         }
 
-        if (object instanceof LevelWonMessage) {
-            gameServer.levelWon(playerConnection);
+        if (object instanceof PlayerFinishedLevelMessage) {
+            gameServer.playerFinishedLevel(playerConnection);
         }
 
         if (object instanceof BallResetMessage) {
