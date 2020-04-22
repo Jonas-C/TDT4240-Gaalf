@@ -29,6 +29,7 @@ public class MatchmakingServer {
             gameServers.add(new ServerAddress("localhost", 7001));
         }
         else {
+            gameServers.add(new ServerAddress("mchyll.no", 7001));
             gameServers.add(new ServerAddress("mchyll.no", 7002));
             gameServers.add(new ServerAddress("mchyll.no", 7003));
             gameServers.add(new ServerAddress("mchyll.no", 7004));
