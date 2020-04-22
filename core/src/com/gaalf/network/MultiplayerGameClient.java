@@ -11,7 +11,7 @@ import com.gaalf.network.message.JoinLobbyAcceptedMessage;
 import com.gaalf.network.message.JoinLobbyRejectedMessage;
 import com.gaalf.network.message.JoinLobbyRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
-import com.gaalf.network.message.LevelWonMessage;
+import com.gaalf.network.message.PlayerFinishedLevelMessage;
 import com.gaalf.network.message.LobbyStateChangedMessage;
 import com.gaalf.network.message.NextLevelMessage;
 import com.gaalf.network.message.PlayerJoinedMessage;
@@ -72,11 +72,11 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
     }
 
     @Override
-    public void sendBallHit(Vector2 velocity) {
+    public void sendBallHit(Vector2 startPosition, Vector2 velocity) {
         if (state != State.GAME) {
             throw new IllegalStateException("Must be in game to send ball hit");
         }
-        kryoClient.sendTCP(new BallHitMessage(localPlayerId, velocity));
+        kryoClient.sendTCP(new BallHitMessage(localPlayerId, startPosition, velocity));
     }
 
     @Override
@@ -88,11 +88,11 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
     }
 
     @Override
-    public void levelWon() {
+    public void levelFinished() {
         if (state != State.GAME) {
             throw new IllegalStateException("Must be in game");
         }
-        kryoClient.sendTCP(new LevelWonMessage());
+        kryoClient.sendTCP(new PlayerFinishedLevelMessage());
     }
 
     @Override
@@ -183,7 +183,7 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
             if (object instanceof BallHitMessage &&
                     state == State.GAME && mpGameListener != null) {
                 BallHitMessage message = (BallHitMessage) object;
-                mpGameListener.ballHit(message.playerId, message.velocity);
+                mpGameListener.ballHit(message.playerId, message.startPosition, message.velocity);
             }
 
             if (object instanceof NextLevelMessage
@@ -191,9 +191,10 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
                 mpGameListener.goNextLevel();
             }
 
-            if (object instanceof LevelWonMessage
+            if (object instanceof PlayerFinishedLevelMessage
                     && state == State.GAME && mpGameListener != null) {
-                mpGameListener.levelWon();
+                PlayerFinishedLevelMessage message = (PlayerFinishedLevelMessage) object;
+                mpGameListener.playerFinishedLevel(message.playerId);
             }
 
             if (object instanceof BallResetMessage

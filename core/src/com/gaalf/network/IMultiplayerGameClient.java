@@ -13,6 +13,7 @@ public interface IMultiplayerGameClient {
      * The server either accepts or rejects the request to join. If the server rejects,
      * this method is meant to be retried with a different nick name.
      * @param playerName the nick name to use in-game
+     * @param ballType the ball type to use
      * @see IServersListener#lobbyJoinAccepted(int, GameData)
      * @see IServersListener#lobbyJoinRejected()
      */
@@ -32,9 +33,10 @@ public interface IMultiplayerGameClient {
 
     /**
      * Signals that the local player's ball has been hit.
+     * @param startPosition the position of the ball at the time is was hit
      * @param velocity the velocity of the ball hit
      */
-    void sendBallHit(Vector2 velocity);
+    void sendBallHit(Vector2 startPosition, Vector2 velocity);
 
     /**
      * Proceeds to the next level.
@@ -42,9 +44,9 @@ public interface IMultiplayerGameClient {
     void nextLevel();
 
     /**
-     * Signals that the current level is won.
+     * Signals that the local player has finished the current level.
      */
-    void levelWon();
+    void levelFinished();
 
     /**
      * Signals that the local player's ball's position is reset.

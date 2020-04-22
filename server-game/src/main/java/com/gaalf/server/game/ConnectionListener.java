@@ -6,7 +6,8 @@ import com.gaalf.network.message.BallHitMessage;
 import com.gaalf.network.message.BallResetMessage;
 import com.gaalf.network.message.GameServerStatusMessage;
 import com.gaalf.network.message.JoinLobbyRequestMessage;
-import com.gaalf.network.message.LevelWonMessage;
+import com.gaalf.network.message.LeaveGameMessage;
+import com.gaalf.network.message.PlayerFinishedLevelMessage;
 import com.gaalf.network.message.LobbyStateChangedMessage;
 import com.gaalf.network.message.NextLevelMessage;
 import com.gaalf.network.message.StartGameMessage;
@@ -52,7 +53,7 @@ public class ConnectionListener extends Listener {
         }
 
         if (object instanceof StartGameMessage) {
-            gameServer.starGame(playerConnection, (StartGameMessage) object);
+            gameServer.startGame(playerConnection, (StartGameMessage) object);
         }
 
         if (object instanceof BallHitMessage) {
@@ -63,12 +64,16 @@ public class ConnectionListener extends Listener {
             gameServer.nextLevel(playerConnection);
         }
 
-        if (object instanceof LevelWonMessage) {
-            gameServer.levelWon(playerConnection);
+        if (object instanceof PlayerFinishedLevelMessage) {
+            gameServer.playerFinishedLevel(playerConnection);
         }
 
         if (object instanceof BallResetMessage) {
             gameServer.ballReset(playerConnection);
+        }
+
+        if (object instanceof LeaveGameMessage) {
+            gameServer.playerDisconnected(playerConnection);
         }
     }
 }

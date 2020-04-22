@@ -30,7 +30,14 @@ public class MatchmakingClient implements Closeable {
 
         kryoClient.addListener(new InternalConnectionListener());
         kryoClient.start();
-        kryoClient.connect(5000, "mchyll.no", 7000);
+
+        // Big hack energy
+        if ("local".equals(System.getProperty("gaalf.env"))) {
+            kryoClient.connect(5000, "localhost", 7000);
+        }
+        else {
+            kryoClient.connect(5000, "mchyll.no", 7000);
+        }
     }
 
     /**

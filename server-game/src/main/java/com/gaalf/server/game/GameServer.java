@@ -11,7 +11,7 @@ import com.gaalf.network.message.JoinLobbyAcceptedMessage;
 import com.gaalf.network.message.JoinLobbyRejectedMessage;
 import com.gaalf.network.message.JoinLobbyRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
-import com.gaalf.network.message.LevelWonMessage;
+import com.gaalf.network.message.PlayerFinishedLevelMessage;
 import com.gaalf.network.message.LobbyStateChangedMessage;
 import com.gaalf.network.message.NextLevelMessage;
 import com.gaalf.network.message.PlayerJoinedMessage;
@@ -96,7 +96,7 @@ public class GameServer {
         }
     }
 
-    public void starGame(PlayerConnection playerConnection, StartGameMessage message) {
+    public void startGame(PlayerConnection playerConnection, StartGameMessage message) {
         if (!gameStarted && playerConnection.hasJoined) {
             gameStarted = true;
             log.info("Starting game with map pack {}", message.mapPack);
@@ -110,7 +110,8 @@ public class GameServer {
             log.debug("Player {} hit ball", playerConnection.playerData.playerName);
             // Forward ball hit message to other players
             kryoServer.sendToAllExceptTCP(playerConnection.getID(),
-                    new BallHitMessage(playerConnection.getID(), message.velocity));
+                    new BallHitMessage(playerConnection.getID(),
+                            message.startPosition, message.velocity));
         }
     }
 
@@ -145,10 +146,11 @@ public class GameServer {
         }
     }
 
-    public void levelWon(PlayerConnection playerConnection) {
+    public void playerFinishedLevel(PlayerConnection playerConnection) {
         if (gameStarted && playerConnection.hasJoined) {
-            log.debug("Current level won");
-            kryoServer.sendToAllExceptTCP(playerConnection.getID(), new LevelWonMessage());
+            log.debug("Player {} finished the current level", playerConnection.playerData.playerName);
+            kryoServer.sendToAllExceptTCP(playerConnection.getID(),
+                    new PlayerFinishedLevelMessage(playerConnection.playerData.playerId));
         }
     }
 
