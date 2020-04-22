@@ -9,9 +9,10 @@ public interface IMultiplayerGameListener {
     /**
      * Called when an opponent has hit its ball.
      * @param playerId the id of the player/ball which was hit
+     * @param startPosition the position of the ball at the time is was hit
      * @param velocity the velocity of the hit
      */
-    void ballHit(int playerId, Vector2 velocity);
+    void ballHit(int playerId, Vector2 startPosition, Vector2 velocity);
 
     /**
      * Called when proceeding to the next level.
@@ -19,9 +20,10 @@ public interface IMultiplayerGameListener {
     void goNextLevel();
 
     /**
-     * Called when the current level is won.
+     * Called when a player finished the current level.
+     * @param playerId the id of the player who finished the level
      */
-    void levelWon();
+    void playerFinishedLevel(int playerId);
 
     /**
      * Called when an opponent's ball's position is reset.

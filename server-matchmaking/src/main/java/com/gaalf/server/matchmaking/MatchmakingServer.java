@@ -21,14 +21,20 @@ public class MatchmakingServer {
     private Server kryoServer;
     private List<ServerAddress> gameServers;
 
-    public MatchmakingServer(Server kryoServer) {
+    public MatchmakingServer(Server kryoServer, boolean local) {
         this.kryoServer = kryoServer;
         gameServers = new ArrayList<>();
-        gameServers.add(new ServerAddress("mchyll.no", 7001));
-        gameServers.add(new ServerAddress("mchyll.no", 7002));
-        gameServers.add(new ServerAddress("mchyll.no", 7003));
-        gameServers.add(new ServerAddress("mchyll.no", 7004));
-        gameServers.add(new ServerAddress("mchyll.no", 7005));
+
+        if (local) {
+            gameServers.add(new ServerAddress("localhost", 7001));
+        }
+        else {
+            gameServers.add(new ServerAddress("mchyll.no", 7001));
+            gameServers.add(new ServerAddress("mchyll.no", 7002));
+            gameServers.add(new ServerAddress("mchyll.no", 7003));
+            gameServers.add(new ServerAddress("mchyll.no", 7004));
+            gameServers.add(new ServerAddress("mchyll.no", 7005));
+        }
     }
 
     public void availableGameServersRequest(Connection connection) {
