@@ -12,6 +12,7 @@ import com.gaalf.network.message.JoinLobbyRejectedMessage;
 import com.gaalf.network.message.JoinLobbyRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
 import com.gaalf.network.message.PlayerFinishedLevelMessage;
+import com.gaalf.network.message.LobbyStateChangedMessage;
 import com.gaalf.network.message.NextLevelMessage;
 import com.gaalf.network.message.PlayerJoinedMessage;
 import com.gaalf.network.message.StartGameMessage;
@@ -51,6 +52,14 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
             throw new IllegalStateException("Game is already joined");
         }
         kryoClient.sendTCP(new JoinLobbyRequestMessage(playerName, ballType));
+    }
+
+    @Override
+    public void updateLobbyState(int selectedMapPack) {
+        if (state != State.LOBBY) {
+            throw new IllegalStateException("Must be in lobby");
+        }
+        kryoClient.sendTCP(new LobbyStateChangedMessage(selectedMapPack));
     }
 
     @Override
@@ -153,6 +162,13 @@ public class MultiplayerGameClient implements IMultiplayerGameClient, Closeable 
                     state == State.LOBBY && lobbyListener != null) {
                 PlayerJoinedMessage message = (PlayerJoinedMessage) object;
                 lobbyListener.playerJoined(message.player);
+            }
+
+            // Someone changed a setting in the lobby
+            if (object instanceof LobbyStateChangedMessage &&
+                    state == State.LOBBY && lobbyListener != null) {
+                LobbyStateChangedMessage message = (LobbyStateChangedMessage) object;
+                lobbyListener.lobbyStateChanged(message.selectedMapPack);
             }
 
             // Someone started the game

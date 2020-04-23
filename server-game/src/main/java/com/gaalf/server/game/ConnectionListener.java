@@ -8,6 +8,7 @@ import com.gaalf.network.message.GameServerStatusMessage;
 import com.gaalf.network.message.JoinLobbyRequestMessage;
 import com.gaalf.network.message.LeaveGameMessage;
 import com.gaalf.network.message.PlayerFinishedLevelMessage;
+import com.gaalf.network.message.LobbyStateChangedMessage;
 import com.gaalf.network.message.NextLevelMessage;
 import com.gaalf.network.message.StartGameMessage;
 
@@ -44,18 +45,19 @@ public class ConnectionListener extends Listener {
         }
 
         if (object instanceof JoinLobbyRequestMessage) {
-            JoinLobbyRequestMessage message = (JoinLobbyRequestMessage) object;
-            gameServer.playerJoinRequest(playerConnection, message);
+            gameServer.playerJoinRequest(playerConnection, (JoinLobbyRequestMessage) object);
+        }
+
+        if (object instanceof LobbyStateChangedMessage) {
+            gameServer.lobbyStateChanged(playerConnection, (LobbyStateChangedMessage) object);
         }
 
         if (object instanceof StartGameMessage) {
-            StartGameMessage message = (StartGameMessage) object;
-            gameServer.startGame(playerConnection, message);
+            gameServer.startGame(playerConnection, (StartGameMessage) object);
         }
 
         if (object instanceof BallHitMessage) {
-            BallHitMessage message = (BallHitMessage) object;
-            gameServer.ballHit(playerConnection, message);
+            gameServer.ballHit(playerConnection, (BallHitMessage) object);
         }
 
         if (object instanceof NextLevelMessage) {

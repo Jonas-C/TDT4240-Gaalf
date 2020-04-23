@@ -1,5 +1,7 @@
 package com.gaalf.presenter;
 
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 import com.gaalf.model.PlayerInfo;
 import com.gaalf.network.ILobbyListener;
 import com.gaalf.network.MultiplayerGameClient;
@@ -7,8 +9,6 @@ import com.gaalf.network.data.GameData;
 import com.gaalf.network.data.PlayerData;
 import com.gaalf.GaalfGame;
 import com.gaalf.view.LobbyView;
-
-import java.io.IOException;
 
 public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener {
 
@@ -18,10 +18,16 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
 
     LobbyPresenter(final GaalfGame game, GameData players, MultiplayerGameClient mpgc) {
         super(game);
-        mpgc.setLobbyListener(this);
-        view = new LobbyView(game.getBatch(), this, players);
         this.mpgc = mpgc;
+        mpgc.setLobbyListener(this);
         shouldStartGame = false;
+
+        Array<String> mapPacks = new Array<>();
+        for (final FileHandle mapPackFileHandle : game.levelManager.getMapPacks()) {
+            mapPacks.add(mapPackFileHandle.name().split("\\.")[0]);
+        }
+        view = new LobbyView(game.getBatch(), this, players, mapPacks);
+
         for (PlayerData playerData : players.players) {
             // Local player is already added
             if (playerData.playerId != game.devicePlayer.getPlayerID()) {
@@ -60,6 +66,11 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
     }
 
     @Override
+    public void lobbyStateChanged(int selectedMapPack) {
+        view.setSelectedMapPack(selectedMapPack);
+    }
+
+    @Override
     public void update(float delta){
         super.update(delta);
         if(shouldStartGame){
@@ -71,7 +82,7 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
 
     @Override
     public void onGameStarted(String mapPack) {
-        game.levelManager.setLevels("forest");
+        game.levelManager.setLevels(mapPack);
         shouldStartGame = true;
     }
 
@@ -82,11 +93,13 @@ public class LobbyPresenter extends BaseMenuPresenter implements ILobbyListener 
         game.setScreen(new MainMenuPresenter(game));
     }
 
-    public void startGame() {
-        // TODO map pack
-        mpgc.startGame("forest");
-        game.levelManager.setLevels("forest");
+    public void startGame(String mapPack) {
+        mpgc.startGame(mapPack);
+        game.levelManager.setLevels(mapPack);
         shouldStartGame = true;
     }
 
+    public void setSelectedMapPack(int selectedMapPack) {
+        mpgc.updateLobbyState(selectedMapPack);
+    }
 }
