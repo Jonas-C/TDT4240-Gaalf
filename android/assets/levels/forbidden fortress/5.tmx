@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="64" height="36" tilewidth="20" tileheight="20" infinite="0" backgroundcolor="#5e5d6c" nextlayerid="8" nextobjectid="2227">
+<map version="1.2" tiledversion="1.3.3" orientation="orthogonal" renderorder="right-down" width="64" height="36" tilewidth="20" tileheight="20" infinite="0" backgroundcolor="#5e5d6c" nextlayerid="8" nextobjectid="2240">
  <properties>
   <property name="blue" type="int" value="108"/>
   <property name="green" type="int" value="93"/>
@@ -46,28 +46,16 @@
   <object id="1799" gid="56" x="620.11" y="60.8" width="61.0795" height="61.1136"/>
   <object id="1800" gid="56" x="20.1562" y="61.1877" width="61.0795" height="61.1136"/>
   <object id="1801" gid="56" x="-39.7357" y="61.1987" width="61.0795" height="61.1136"/>
-  <object id="1802" gid="56" x="-40.1439" y="121.152" width="61.0795" height="61.1136"/>
-  <object id="1803" gid="56" x="-40.1356" y="181.133" width="61.0795" height="61.1136"/>
-  <object id="1804" gid="56" x="-40.5438" y="241.087" width="61.0795" height="61.1136"/>
-  <object id="1805" gid="56" x="-40.6412" y="301.197" width="61.0795" height="61.1136"/>
   <object id="1930" gid="56" x="1220.1" y="540" width="61.0795" height="61.1136"/>
   <object id="1931" gid="56" x="1220.2" y="600.131" width="61.0795" height="61.1136"/>
   <object id="1932" gid="56" x="1220" y="660.239" width="61.0795" height="61.1136"/>
   <object id="1933" gid="56" x="1220.35" y="720.37" width="61.0795" height="61.1136"/>
   <object id="1934" gid="56" x="1220.13" y="780.179" width="61.0795" height="61.1136"/>
-  <object id="1935" gid="56" x="-39.9" y="360" width="61.0795" height="61.1136"/>
-  <object id="1936" gid="56" x="-39.8" y="420.131" width="61.0795" height="61.1136"/>
-  <object id="1937" gid="56" x="-40" y="480.239" width="61.0795" height="61.1136"/>
-  <object id="1938" gid="56" x="-39.65" y="540.37" width="60.7317" height="61.1136"/>
-  <object id="1939" gid="56" x="-39.87" y="600.179" width="61.0795" height="61.1136"/>
-  <object id="1940" gid="56" x="-39.78" y="660" width="61.0795" height="61.1136"/>
-  <object id="1941" gid="56" x="-40" y="719.809" width="61.0795" height="61.1136"/>
-  <object id="1942" gid="56" x="-40" y="780" width="61.0795" height="61.1136"/>
   <object id="1951" gid="56" x="1159.93" y="640.05" width="61.1673" height="61.2015"/>
   <object id="1955" gid="56" x="259.657" y="640.182" width="61.1673" height="61.2015"/>
   <object id="1958" gid="56" x="319.682" y="640.152" width="61.0795" height="61.1136"/>
   <object id="1959" gid="56" x="499.484" y="640" width="61.1673" height="61.2015"/>
-  <object id="1960" gid="56" x="439.514" y="640.011" width="61.1673" height="61.2015"/>
+  <object id="1960" gid="56" x="435.332" y="640.011" width="65.3491" height="61.2015"/>
   <object id="1961" gid="56" x="559.934" y="640.043" width="61.1673" height="61.2015"/>
   <object id="1962" gid="56" x="619.954" y="640.013" width="61.0795" height="61.1136"/>
   <object id="1973" gid="56" x="1159.93" y="700.05" width="61.1673" height="61.2015"/>
@@ -77,7 +65,7 @@
   <object id="1977" gid="56" x="199.679" y="700.193" width="61.1673" height="61.2015"/>
   <object id="1979" gid="56" x="319.682" y="700.152" width="61.0795" height="61.1136"/>
   <object id="1980" gid="56" x="499.484" y="700" width="61.1673" height="61.2015"/>
-  <object id="1981" gid="56" x="439.514" y="700.011" width="61.1673" height="61.2015"/>
+  <object id="1981" gid="56" x="435.327" y="700.011" width="65.3548" height="61.264"/>
   <object id="1982" gid="56" x="559.934" y="700.043" width="61.1673" height="61.2015"/>
   <object id="1983" gid="56" x="619.954" y="700.013" width="61.0795" height="61.1136"/>
   <object id="1984" gid="56" x="20" y="700.401" width="61.0795" height="61.1136"/>
@@ -88,7 +76,7 @@
   <object id="1997" gid="56" x="199.679" y="760.193" width="61.1673" height="61.2015"/>
   <object id="1999" gid="56" x="319.682" y="760.152" width="61.0795" height="61.1136"/>
   <object id="2000" gid="56" x="499.484" y="760" width="61.1673" height="61.2015"/>
-  <object id="2001" gid="56" x="439.514" y="760.011" width="61.1673" height="61.2015"/>
+  <object id="2001" gid="56" x="435.352" y="760.011" width="65.3292" height="61.2328"/>
   <object id="2002" gid="56" x="559.934" y="760.043" width="61.1673" height="61.2015"/>
   <object id="2003" gid="56" x="619.954" y="760.013" width="61.0795" height="61.1136"/>
   <object id="2004" gid="56" x="20" y="760.401" width="61.0795" height="61.1136"/>
@@ -102,9 +90,9 @@
   <object id="2027" gid="56" x="1160.1" y="582" width="61.0795" height="103.114"/>
   <object id="2105" gid="56" x="320.2" y="400" width="61.0795" height="61.1136"/>
   <object id="2106" gid="56" x="320" y="460.108" width="61.0795" height="61.1136"/>
-  <object id="2107" gid="56" x="320.35" y="520.239" width="61.0795" height="61.1136"/>
+  <object id="2107" gid="56" x="320.35" y="520.239" width="60.7159" height="61.1136"/>
   <object id="2108" gid="56" x="320.13" y="580.048" width="61.0795" height="61.1136"/>
-  <object id="2109" gid="56" x="260.2" y="400" width="61.0795" height="61.1136"/>
+  <object id="2109" gid="56" x="260.005" y="400" width="61.2748" height="61.1058"/>
   <object id="2110" gid="56" x="260" y="460.108" width="61.0795" height="61.1136"/>
   <object id="2111" gid="56" x="260.35" y="520.239" width="61.0795" height="61.1136"/>
   <object id="2112" gid="56" x="260.13" y="580.048" width="61.0795" height="61.1136"/>
@@ -189,12 +177,24 @@
   <object id="2212" gid="118" x="607.65" y="179.317" width="96.0333" height="18.7" rotation="90"/>
   <object id="2213" gid="1073741942" x="607.65" y="179.317" width="96.0333" height="18.7" rotation="90"/>
   <object id="2226" gid="1073741908" x="320.84" y="218.881" width="61.55" height="70" rotation="180"/>
+  <object id="2228" gid="56" x="-39.78" y="120" width="61.0795" height="61.1136"/>
+  <object id="2229" gid="56" x="-39.68" y="180.131" width="60.8295" height="61.1136"/>
+  <object id="2230" gid="56" x="-39.9" y="239.94" width="61.0795" height="61.1136"/>
+  <object id="2231" gid="56" x="-39.8" y="300.071" width="61.0795" height="61.1136"/>
+  <object id="2232" gid="56" x="-40" y="360.179" width="61.0795" height="61.1136"/>
+  <object id="2233" gid="56" x="-39.65" y="420.31" width="60.7514" height="61.0941"/>
+  <object id="2234" gid="56" x="-39.87" y="480.119" width="61.0795" height="61.1136"/>
+  <object id="2235" gid="56" x="-39.9" y="540" width="61.0795" height="61.1136"/>
+  <object id="2236" gid="56" x="-39.8" y="600.131" width="61.0795" height="61.1136"/>
+  <object id="2237" gid="56" x="-40" y="660.239" width="61.0795" height="61.1136"/>
+  <object id="2238" gid="56" x="-39.65" y="720.37" width="61.0795" height="61.1136"/>
+  <object id="2239" gid="56" x="-39.87" y="780.179" width="61.0795" height="61.1136"/>
  </objectgroup>
- <objectgroup id="5" name="objects" visible="0">
+ <objectgroup id="5" name="objects" visible="0" locked="1">
   <object id="1658" name="startPos" x="65.428" y="552.632" width="29.6818" height="30.5455"/>
   <object id="1660" name="endPos" x="700" y="630" width="48" height="67"/>
  </objectgroup>
- <objectgroup id="7" name="lights">
+ <objectgroup id="7" name="lights" locked="1">
   <object id="1823" gid="26" x="1152.84" y="631.666" width="62" height="66"/>
   <object id="1825" gid="26" x="249.5" y="461.167" width="62" height="66"/>
   <object id="1826" gid="26" x="1103.66" y="464.334" width="62" height="66"/>
@@ -255,7 +255,7 @@
   <object id="2219" gid="1073741969" x="1060" y="660" width="41" height="41"/>
   <object id="2220" gid="145" x="1120" y="600" width="41" height="41"/>
  </objectgroup>
- <objectgroup id="2" name="collision">
+ <objectgroup id="2" name="collision" visible="0" locked="1">
   <object id="1888" type="goal" x="700" y="700">
    <polyline points="0,0 0,-86 26.9773,-86 26.9773,0"/>
   </object>

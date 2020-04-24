@@ -11,7 +11,7 @@
    eJztwQENAAAAwqD3T20ON6AAAAAAAAAAAIBXAyQAAAE=
   </data>
  </layer>
- <objectgroup id="4" name="sprites" opacity="0.78">
+ <objectgroup id="4" name="sprites" locked="1" opacity="0.78">
   <object id="1645" gid="46" x="60.4167" y="511.75" width="70" height="70"/>
   <object id="1646" gid="70" x="140.356" y="195" width="70" height="70"/>
   <object id="1647" gid="82" x="140.25" y="262.242" width="70" height="70"/>
@@ -221,12 +221,12 @@
   <object id="2103" gid="1073741974" x="24.3421" y="69.8688" width="12.4864" height="47.4393" rotation="-230.993"/>
   <object id="2104" gid="1073741974" x="25.8637" y="55.783" width="12.4864" height="47.4393" rotation="-216.467"/>
  </objectgroup>
- <objectgroup id="2" name="collision" locked="1">
+ <objectgroup id="2" name="collision">
   <object id="1888" type="goal" x="70.6666" y="579.334">
    <polyline points="0,0 0,-86 22.7273,-86 22.7273,0"/>
   </object>
   <object id="2094" type="terrain" x="80" y="260">
-   <polyline points="0,0 520,0 580,-60 640,0 700,0 700,120 820,120 820,-120 880,-120 880,-80 940,-20 880,-20 880,40 940,100 880,100 880,180 640,180 639.5,70 -30.3333,68.5 -31.5,-159 5.5,-159.5 5,18"/>
+   <polyline points="0,0 520,0 580,-60 640,0 700,0 700,120 820,120 820,-120 880,-120 880,-80 940,-20 880,-20 880,40 940,100 880,100 880,180 640,180 639.5,70 -27.3333,68.5 -28.5,-159 5.5,-159.5 5,18"/>
   </object>
   <object id="2095" type="terrain" x="700" y="760">
    <polyline points="-4.34783,-0.0869565 -4.34783,-180.087 -680,-180 -680,-700 460,-700 460,-500 400,-440 460,-440 460,-240 400,-180 80,-180 80,0"/>
