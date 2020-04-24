@@ -46,7 +46,7 @@ public class ServersView extends BaseMenuView {
 
         Table serversTable = new Table();
 
-        if (gameServers != null) {
+        if (gameServers != null && gameServers.size() > 0) {
             for (final GameServerSpecification gameServer : gameServers) {
 //                Table serverInfo = new Table();
 //                serverInfo.add(new Label("Host: " + gameServer.address, getSkin()));

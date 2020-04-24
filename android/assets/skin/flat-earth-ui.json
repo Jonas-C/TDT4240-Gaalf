@@ -323,6 +323,10 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 		font: button
 		fontColor: color
 	}
+	largeWhite: {
+		font: button
+		fontColor: white
+	}
 	title: {
 		font: title
 		fontColor: color
@@ -331,6 +335,13 @@ com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
 com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
 	default: {
 		font: font
+		fontColorSelected: white
+		fontColorUnselected: white
+		selection: selection
+		background: list-c
+	}
+	mapPack: {
+		font: button
 		fontColorSelected: white
 		fontColorUnselected: white
 		selection: selection
@@ -368,6 +379,15 @@ com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
 		background: select-box-c
 		scrollStyle: default
 		listStyle: default
+		backgroundOver: select-box-h
+		backgroundOpen: select-box-pressed-c
+	}
+	mapPack: {
+		font: button
+		fontColor: white
+		background: select-box-c
+		scrollStyle: default
+		listStyle: mapPack
 		backgroundOver: select-box-h
 		backgroundOpen: select-box-pressed-c
 	}

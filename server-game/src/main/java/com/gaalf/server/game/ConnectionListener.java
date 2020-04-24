@@ -6,7 +6,9 @@ import com.gaalf.network.message.BallHitMessage;
 import com.gaalf.network.message.BallResetMessage;
 import com.gaalf.network.message.GameServerStatusMessage;
 import com.gaalf.network.message.JoinLobbyRequestMessage;
-import com.gaalf.network.message.LevelWonMessage;
+import com.gaalf.network.message.LeaveGameMessage;
+import com.gaalf.network.message.PlayerFinishedLevelMessage;
+import com.gaalf.network.message.LobbyStateChangedMessage;
 import com.gaalf.network.message.NextLevelMessage;
 import com.gaalf.network.message.StartGameMessage;
 
@@ -43,31 +45,35 @@ public class ConnectionListener extends Listener {
         }
 
         if (object instanceof JoinLobbyRequestMessage) {
-            JoinLobbyRequestMessage message = (JoinLobbyRequestMessage) object;
-            gameServer.playerJoinRequest(playerConnection, message);
+            gameServer.playerJoinRequest(playerConnection, (JoinLobbyRequestMessage) object);
+        }
+
+        if (object instanceof LobbyStateChangedMessage) {
+            gameServer.lobbyStateChanged(playerConnection, (LobbyStateChangedMessage) object);
         }
 
         if (object instanceof StartGameMessage) {
-            StartGameMessage message = (StartGameMessage) object;
-            gameServer.starGame(playerConnection, message);
+            gameServer.startGame(playerConnection, (StartGameMessage) object);
         }
 
         if (object instanceof BallHitMessage) {
-            BallHitMessage message = (BallHitMessage) object;
-            gameServer.ballHit(playerConnection, message);
+            gameServer.ballHit(playerConnection, (BallHitMessage) object);
         }
 
         if (object instanceof NextLevelMessage) {
             gameServer.nextLevel(playerConnection);
         }
 
-        if (object instanceof LevelWonMessage) {
-            gameServer.levelWon(playerConnection);
+        if (object instanceof PlayerFinishedLevelMessage) {
+            gameServer.playerFinishedLevel(playerConnection);
         }
 
         if (object instanceof BallResetMessage) {
-            BallResetMessage message = (BallResetMessage) object;
-            gameServer.ballReset(playerConnection, message);
+            gameServer.ballReset(playerConnection);
+        }
+
+        if (object instanceof LeaveGameMessage) {
+            gameServer.playerDisconnected(playerConnection);
         }
     }
 }

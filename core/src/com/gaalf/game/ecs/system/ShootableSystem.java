@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.Vector2;
+import com.gaalf.game.events.BallStrokeEventArgs;
 import com.gaalf.game.GameObservable;
 import com.gaalf.game.GameObserver;
 import com.gaalf.game.ecs.ECSObservable;
@@ -15,7 +16,6 @@ import com.gaalf.game.ecs.component.PlayerComponent;
 import com.gaalf.game.ecs.component.ShootableComponent;
 import com.gaalf.game.enums.GameEvent;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 
 public class ShootableSystem extends IteratingSystem implements ECSObservable, GameObserver, GameObservable {
@@ -28,7 +28,7 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
     private Vector2 distanceDragged;
     private ArrayList<ECSObserver> ecsObservers;
     private ArrayList<GameObserver> gameObservers;
-    private AbstractMap.SimpleEntry mpShot;
+    private BallStrokeEventArgs mpShot;
 
 
     public ShootableSystem(){
@@ -46,15 +46,31 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
         BodyComponent bodyComponent = bodyMapper.get(entity);
         ShootableComponent shootableComponent = shootableMapper.get(entity);
         PlayerComponent playerComponent = playerMapper.get(entity);
-        if(mpShot != null && playerComponent.playerNumber == (int)mpShot.getKey()){
-            shootableComponent.force.set((Vector2)mpShot.getValue());
+
+        if(playerComponent.isFinished && touchUp){
+            distanceDragged.setZero();
+            prevTouch.setZero();
+            touchUp = false;
+            shootableComponent.force.setZero();
+            return;
+        }
+
+        if(mpShot != null && playerComponent.playerNumber == mpShot.playerId){
+            BallStrokeEventArgs ballStroke = mpShot;
+
+            // Ensure synchronized position by setting starting position of ball before applying force
+            bodyComponent.body.setTransform(ballStroke.startPosition,
+                    bodyComponent.body.getTransform().getRotation());
+
+            shootableComponent.force.set(ballStroke.velocity);
             shoot(bodyComponent, shootableComponent, entity);
             mpShot = null;
 
         } else if(playerComponent.onThisDevice){
-            if(touchUp && !playerComponent.isFinished && !distanceDragged.isZero()){
+            if(touchUp && !distanceDragged.isZero()){
                 shootableComponent.force.set(distanceDragged);
-                notifyObservers(GameEvent.BALL_STROKE, shootableComponent.force);
+                notifyObservers(GameEvent.BALL_STROKE, new BallStrokeEventArgs(
+                        bodyComponent.body.getTransform().getPosition(), shootableComponent.force));
                 shoot(bodyComponent, shootableComponent, entity);
                 prevTouch.set(0, 0);
                 distanceDragged.set(0, 0);
@@ -102,14 +118,12 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
                 prevTouch.set((Vector2)object);
                 break;
             case BALL_STROKE:
-                mpShot = (AbstractMap.SimpleEntry)object;
+                mpShot = (BallStrokeEventArgs) object;
                 break;
             default:
                 break;
         }
     }
-
-
 
     @Override
     public void addListener(GameObserver observer) {
