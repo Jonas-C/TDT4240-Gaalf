@@ -3,7 +3,7 @@ package com.gaalf.game.ecs.predefinedEntities.shotIndicators;
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.manager.GameAssetManager;
 
-public class WhiteSI extends ShotIndicator {
+class WhiteSI extends ShotIndicator {
 
     WhiteSI(GameAssetManager gameAssetManager) {
         super("White SI", gameAssetManager);

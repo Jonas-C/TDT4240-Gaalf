@@ -11,9 +11,9 @@ import com.gaalf.manager.GameAssetManager;
 
 import static com.gaalf.game.constants.B2DConstants.PPM;
 
-public class WaterEntity extends GameObjectEntity {
+class WaterEntity extends GameObjectEntity {
 
-    public WaterEntity(World world, MapObject mapObject, GameAssetManager gameAssetManager){
+    WaterEntity(World world, MapObject mapObject, GameAssetManager gameAssetManager){
         WaterComponent waterComponent = new WaterComponent();
         TransformComponent transformComponent = new TransformComponent();
         transformComponent.pos.set((float)mapObject.getProperties().get("x") / PPM, (float)mapObject.getProperties().get("y") / PPM);

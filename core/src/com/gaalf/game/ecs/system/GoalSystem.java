@@ -1,9 +1,9 @@
 package com.gaalf.game.ecs.system;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.gaalf.game.GameObservable;
 import com.gaalf.game.GameObserver;
 import com.gaalf.game.ecs.ECSObserver;
@@ -20,8 +20,8 @@ public class GoalSystem extends IteratingSystem implements ECSObserver, GameObse
     private int playerCount;
     private ArrayList<GameObserver> gameObservers;
     private ArrayList<PlayerInfo> players;
-    private TiledMap tiledMap;
     private HashSet<Integer> finishedPlayers;
+    private ComponentMapper<PlayerComponent> playerMapper;
 
     public GoalSystem(ArrayList<PlayerInfo> players){
         super(Family.all(PlayerComponent.class, TransformComponent.class).get());
@@ -29,6 +29,7 @@ public class GoalSystem extends IteratingSystem implements ECSObserver, GameObse
         this.playerCount = players.size();
         gameObservers = new ArrayList<>();
         finishedPlayers = new HashSet<>();
+        playerMapper = ComponentMapper.getFor(PlayerComponent.class);
     }
 
     @Override
@@ -54,7 +55,7 @@ public class GoalSystem extends IteratingSystem implements ECSObserver, GameObse
     }
 
     private void playerFinished(Entity entity){
-        PlayerComponent playerComponent = entity.getComponent(PlayerComponent.class);
+        PlayerComponent playerComponent = playerMapper.get(entity);
         if (!playerComponent.isFinished) {
             playerComponent.isFinished = true;
             if (playerComponent.onThisDevice) {

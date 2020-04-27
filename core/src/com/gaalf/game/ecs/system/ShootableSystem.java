@@ -82,7 +82,6 @@ public class ShootableSystem extends IteratingSystem implements ECSObservable, G
     private void shoot(BodyComponent bodyComponent, ShootableComponent shootableComponent, Entity entity){
         bodyComponent.body.applyForceToCenter(-(shootableComponent.force.x), -(shootableComponent.force.y), true);
         shootableComponent.force.set(0, 0);
-        shootableComponent.shouldBeShot = false;
         notifyObservers(ECSEvent.BALL_FIRED, entity);
     }
 

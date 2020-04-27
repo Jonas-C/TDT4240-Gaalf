@@ -11,9 +11,9 @@ import com.gaalf.manager.GameAssetManager;
 
 import static com.gaalf.game.constants.B2DConstants.PPM;
 
-public class GoalEntity extends GameObjectEntity {
+class GoalEntity extends GameObjectEntity {
 
-    public GoalEntity(World world, MapObject mapObject, GameAssetManager gameAssetManager){
+    GoalEntity(World world, MapObject mapObject, GameAssetManager gameAssetManager){
         GoalComponent goalComponent = new GoalComponent();
         TransformComponent transformComponent = new TransformComponent();
         transformComponent.pos.set((float)mapObject.getProperties().get("x") / PPM, (float)mapObject.getProperties().get("y") / PPM);
