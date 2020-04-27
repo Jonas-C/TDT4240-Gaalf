@@ -105,10 +105,13 @@ public class SettingsManager {
     }
 
     public String getDisplayName(){
-        return getPreferences().getString(PREF_DISPLAY_NAME);
+        return getPreferences().getString(PREF_DISPLAY_NAME, "Player");
     }
 
     public void setDisplayName(String displayName){
+        if(displayName.length() < 1){
+            displayName = "Player";
+        }
         getPreferences().putString(PREF_DISPLAY_NAME, displayName);
         getPreferences().flush();
         this.displayName = displayName;
