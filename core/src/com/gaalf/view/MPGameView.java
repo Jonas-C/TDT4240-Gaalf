@@ -1,15 +1,11 @@
 package com.gaalf.view;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 import com.gaalf.presenter.BaseGamePresenter;
 
-import java.util.HashMap;
-
 public class MPGameView extends BaseGameView {
-    private HashMap<Integer, Label> playerScoreLabels = new HashMap<>();
     private final String TAG = GameView.class.getSimpleName();
 
     public MPGameView(SpriteBatch batch, final BaseGamePresenter presenter) {

@@ -178,14 +178,14 @@ public abstract class BaseGamePresenter extends BasePresenter implements GameObs
                         ((Entity)body.getUserData()).getComponent(WaterComponent.class) != null){
                     engine.removeEntity((Entity)body.getUserData());
                     world.destroyBody(body);
-                    MapObjects mapObjects = tiledMap.getLayers().get("collision").getObjects();
-                    for(MapObject mapObject : mapObjects){
-                        engine.addEntity(gameObjectFactory.createEntity(mapObject));
-                    }
                 }
             }
-            notifyObservers(GameEvent.LEVEL_NEW, tiledMap);
         }
+        MapObjects mapObjects = tiledMap.getLayers().get("collision").getObjects();
+        for(MapObject mapObject : mapObjects){
+            engine.addEntity(gameObjectFactory.createEntity(mapObject));
+        }
+        notifyObservers(GameEvent.LEVEL_NEW, tiledMap);
     }
 
     @Override

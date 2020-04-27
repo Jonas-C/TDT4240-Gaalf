@@ -15,7 +15,7 @@ public class MainMenuView extends BaseMenuView {
 
         addTitle("GALF");
 
-        TextButton startTestLevelButton = addMenuButton("Start test level");
+        TextButton startTestLevelButton = addMenuButton("Play random level");
         startTestLevelButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

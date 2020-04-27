@@ -3,7 +3,7 @@ package com.gaalf.game.ecs.predefinedEntities.shotIndicators;
 import com.gaalf.game.ecs.component.TransformComponent;
 import com.gaalf.manager.GameAssetManager;
 
-public class RedSI extends ShotIndicator{
+class RedSI extends ShotIndicator{
 
     RedSI(GameAssetManager gameAssetManager) {
         super("Red SI", gameAssetManager);

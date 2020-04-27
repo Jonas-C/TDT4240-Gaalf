@@ -22,6 +22,7 @@ public class WorldContactListener implements ContactListener, ECSObservable {
     private ComponentMapper<GoalComponent> goalMapper;
     private ComponentMapper<TerrainComponent> terrainMapper;
     private ComponentMapper<WaterComponent> waterMapper;
+    private ComponentMapper<SoundComponent> soundMapper;
     private ArrayList<ECSObserver> ecsObservers;
 
     public WorldContactListener(){
@@ -30,6 +31,7 @@ public class WorldContactListener implements ContactListener, ECSObservable {
         goalMapper = ComponentMapper.getFor(GoalComponent.class);
         terrainMapper = ComponentMapper.getFor(TerrainComponent.class);
         waterMapper = ComponentMapper.getFor(WaterComponent.class);
+        soundMapper = ComponentMapper.getFor(SoundComponent.class);
         ecsObservers = new ArrayList<>();
     }
 
@@ -62,7 +64,7 @@ public class WorldContactListener implements ContactListener, ECSObservable {
             notifyObservers(ECSEvent.BALL_GOAL, playerEntity);
         }
         if (waterMapper.has(other)){ // Collision with water
-            other.getComponent(SoundComponent.class).shouldBePlayed=true;
+            soundMapper.get(other).shouldBePlayed=true;
             notifyObservers(ECSEvent.BALL_OOB, playerEntity);
         }
 

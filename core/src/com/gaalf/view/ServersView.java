@@ -42,7 +42,7 @@ public class ServersView extends BaseMenuView {
 
     }
 
-    public Table createServerSelectMenu(List<GameServerSpecification> gameServers) {
+    private Table createServerSelectMenu(List<GameServerSpecification> gameServers) {
 
         Table serversTable = new Table();
 
@@ -64,22 +64,6 @@ public class ServersView extends BaseMenuView {
                     }
                 });
                 serversTable.add(button).padBottom(15);
-
-//                serversTable.add(new Label("Host: " + gameServer.address, getSkin()));
-//                serversTable.add(new Label("players: " + gameServer.connectedPlayers +
-//                        "/" + gameServer.maxPlayers, getSkin())).pad(20);
-//                TextButton joinServerButton = new TextButton("join", getSkin());
-//                joinServerButton.addListener(new ChangeListener() {
-//                    @Override
-//                    public void changed(ChangeEvent event, Actor actor) {
-//                        try {
-//                            ((ServersPresenter)getPresenter()).joinGame(gameServer.address);
-//                        } catch (IOException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                });
-//                serversTable.add(joinServerButton);
 
                 serversTable.row();
             }

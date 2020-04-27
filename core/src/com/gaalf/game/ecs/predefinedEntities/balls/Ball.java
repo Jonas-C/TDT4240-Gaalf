@@ -1,9 +1,7 @@
 package com.gaalf.game.ecs.predefinedEntities.balls;
 
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.*;
