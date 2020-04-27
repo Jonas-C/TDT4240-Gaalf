@@ -1,7 +1,7 @@
 package com.gaalf.game.ecs.predefinedEntities.gameObjects;
 
-import com.badlogic.ashley.core.Entity;
+import com.gaalf.game.ecs.predefinedEntities.PredefinedEntity;
 
-public abstract class GameObjectEntity extends Entity {
+public abstract class GameObjectEntity extends PredefinedEntity {
 
 }
